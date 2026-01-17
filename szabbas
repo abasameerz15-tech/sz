@@ -1,0 +1,210 @@
+-- Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+local Root = Character:WaitForChild("HumanoidRootPart")
+
+-- ===== Default values =====
+local defaultSpeed = Humanoid.WalkSpeed
+local defaultJump = Humanoid.JumpPower
+
+-- Re-setup Humanoid on respawn
+Player.CharacterAdded:Connect(function(Char)
+	Character = Char
+	Humanoid = Char:WaitForChild("Humanoid")
+	Root = Char:WaitForChild("HumanoidRootPart")
+	defaultSpeed = Humanoid.WalkSpeed
+	defaultJump = Humanoid.JumpPower
+end)
+
+-- ===== GUI =====
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "AbbasGui"
+Gui.ResetOnSpawn = false
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+Gui.Parent = PlayerGui
+
+-- Toggle Button
+local MainToggle = Instance.new("TextButton")
+MainToggle.Parent = Gui
+MainToggle.Size = UDim2.new(0,70,0,35)
+MainToggle.Position = UDim2.new(0,20,0,200)
+MainToggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
+MainToggle.Text = "OFF"
+MainToggle.TextColor3 = Color3.new(1,1,1)
+MainToggle.Font = Enum.Font.GothamBold
+MainToggle.TextSize = 14
+MainToggle.Active = true
+MainToggle.Draggable = true
+MainToggle.ZIndex = 10
+
+-- Main Frame
+local Frame = Instance.new("Frame")
+Frame.Parent = Gui
+Frame.AnchorPoint = Vector2.new(0.5,0.5)
+Frame.Position = UDim2.new(0.5,0,0.5,0)
+Frame.Size = UDim2.new(0,0,0,0)
+Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Frame.Visible = false
+Frame.Active = true
+Frame.Draggable = true
+Frame.ZIndex = 5
+
+local OpenSize = UDim2.new(0,300,0,240)
+
+-- Title
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1,0,0,35)
+Title.BackgroundTransparency = 1
+Title.Text = "المطور | عمك عبيس"
+Title.TextColor3 = Color3.fromRGB(120,200,255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 16
+Title.ZIndex = 6
+
+-- Animation Functions
+local function OpenMenu()
+	Frame.Visible = true
+	Frame.Size = UDim2.new(0,0,0,0)
+	Frame.BackgroundTransparency = 1
+	TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{Size=OpenSize,BackgroundTransparency=0}):Play()
+end
+
+local function CloseMenu()
+	local t = TweenService:Create(Frame,TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),{Size=UDim2.new(0,0,0,0),BackgroundTransparency=1})
+	t:Play()
+	t.Completed:Connect(function() Frame.Visible=false end)
+end
+
+-- ===== Toggle Switch =====
+local function CreateSwitch(y,text)
+	local Label = Instance.new("TextLabel", Frame)
+	Label.Position = UDim2.new(0,10,0,y)
+	Label.Size = UDim2.new(0,140,0,20)
+	Label.BackgroundTransparency = 1
+	Label.Text = text
+	Label.TextColor3 = Color3.new(1,1,1)
+	Label.Font = Enum.Font.Gotham
+	Label.ZIndex = 6
+
+	local Switch = Instance.new("Frame", Frame)
+	Switch.Position = UDim2.new(0,200,0,y)
+	Switch.Size = UDim2.new(0,40,0,18)
+	Switch.BackgroundColor3 = Color3.fromRGB(50,50,50)
+	Switch.BorderSizePixel = 0
+	Switch.ZIndex = 6
+	Instance.new("UICorner",Switch)
+
+	local Circle = Instance.new("Frame", Switch)
+	Circle.Size = UDim2.new(0,16,0,16)
+	Circle.Position = UDim2.new(0,1,0,1)
+	Circle.BackgroundColor3 = Color3.fromRGB(230,230,230)
+	Circle.ZIndex = 7
+	Instance.new("UICorner",Circle)
+
+	local Btn = Instance.new("TextButton", Switch)
+	Btn.Size = UDim2.new(1,0,1,0)
+	Btn.BackgroundTransparency = 1
+	Btn.Text = ""
+	Btn.ZIndex = 8
+
+	local state = false
+	Btn.MouseButton1Click:Connect(function()
+		state = not state
+		Circle:TweenPosition(
+			state and UDim2.new(1,-17,0,1) or UDim2.new(0,1,0,1),
+			"Out","Quad",0.15,true
+		)
+		Switch.BackgroundColor3 = state and Color3.fromRGB(120,200,255) or Color3.fromRGB(50,50,50)
+	end)
+
+	return function() return state end
+end
+
+-- ===== Slider =====
+local function CreateSlider(y,text,max)
+	local value = 0
+	local Label = Instance.new("TextLabel", Frame)
+	Label.Position = UDim2.new(0,10,0,y)
+	Label.Size = UDim2.new(0,200,0,20)
+	Label.BackgroundTransparency = 1
+	Label.Text = text.." : 0"
+	Label.TextColor3 = Color3.new(1,1,1)
+	Label.Font = Enum.Font.Gotham
+	Label.ZIndex = 6
+
+	local Bar = Instance.new("Frame", Frame)
+	Bar.Position = UDim2.new(0,10,0,y+22)
+	Bar.Size = UDim2.new(0,220,0,6)
+	Bar.BackgroundColor3 = Color3.fromRGB(60,60,60)
+	Bar.ZIndex = 6
+
+	local Fill = Instance.new("Frame", Bar)
+	Fill.Size = UDim2.new(0,0,1,0)
+	Fill.BackgroundColor3 = Color3.fromRGB(120,200,255)
+	Fill.ZIndex = 7
+
+	local dragging = false
+
+	local function update(x)
+		local pos = math.clamp((x-Bar.AbsolutePosition.X)/Bar.AbsoluteSize.X,0,1)
+		Fill.Size = UDim2.new(pos,0,1,0)
+		value = math.floor(pos*max)
+		Label.Text = text.." : "..value
+	end
+
+	Bar.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			Frame.Draggable = false
+			update(i.Position.X)
+		end
+	end)
+
+	UIS.InputChanged:Connect(function(i)
+		if dragging then update(i.Position.X) end
+	end)
+
+	UIS.InputEnded:Connect(function()
+		if dragging then
+			dragging = false
+			Frame.Draggable = true
+		end
+	end)
+
+	return function() return value end
+end
+
+-- ===== Create GUI elements =====
+local getSpeed = CreateSlider(50,"Speed",300)
+local getJump = CreateSlider(120,"Jump",300)
+
+local speedOn = CreateSwitch(180,"Change Speed")
+local jumpOn = CreateSwitch(205,"Change Jump")
+
+-- ===== Apply Speed & Jump correctly =====
+RunService.RenderStepped:Connect(function()
+	if Humanoid then
+		-- Speed
+		Humanoid.WalkSpeed = speedOn() and getSpeed() or defaultSpeed
+		-- Jump
+		Humanoid.JumpPower = jumpOn() and getJump() or defaultJump
+	end
+end)
+
+-- ===== Toggle Menu =====
+MainToggle.MouseButton1Click:Connect(function()
+	if Frame.Visible then
+		MainToggle.Text = "OFF"
+		CloseMenu()
+	else
+		MainToggle.Text = "ON"
+		OpenMenu()
+	end
+end)
