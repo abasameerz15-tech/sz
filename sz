@@ -1,52 +1,104 @@
--- Services
+-- ================= CONFIG =================
+local KEY_VALUE = "SZABBAS-KEY"
+local GET_KEY_URL = "https://link-hub.net/3012148/LzrIeP9P5HYe"
+local FILE_NAME = "Abbas_Config_2026.json"
+-- ==========================================
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
 
 local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
-local Character = Player.Character or Player.CharacterAdded:Wait()
-local Humanoid = Character:WaitForChild("Humanoid")
-local Root = Character:WaitForChild("HumanoidRootPart")
 
--- ===== Default values =====
-local defaultSpeed = Humanoid.WalkSpeed
-local defaultJump = Humanoid.JumpPower
+-- دالة حفظ التحقق (24 ساعة)
+local function SaveVerification()
+    if writefile then
+        local data = {LastVerify = os.time()}
+        writefile(FILE_NAME, HttpService:JSONEncode(data))
+    end
+end
 
--- Re-setup Humanoid on respawn
-Player.CharacterAdded:Connect(function(Char)
-	Character = Char
-	Humanoid = Char:WaitForChild("Humanoid")
-	Root = Char:WaitForChild("HumanoidRootPart")
-	defaultSpeed = Humanoid.WalkSpeed
-	defaultJump = Humanoid.JumpPower
-end)
+-- دالة فحص هل التحقق ما زال صالحاً؟
+local function IsVerified()
+    if isfile and isfile(FILE_NAME) then
+        local success, content = pcall(function() return readfile(FILE_NAME) end)
+        if success then
+            local data = HttpService:JSONDecode(content)
+            if os.time() - data.LastVerify < 86400 then return true end
+        end
+    end
+    return false
+end
 
--- ===== GUI =====
+local KeyVerified = IsVerified()
+
+-- ===== GUI ROOT =====
 local Gui = Instance.new("ScreenGui")
-Gui.Name = "AbbasGui"
+Gui.Name = "AbbasGui_V3"
 Gui.ResetOnSpawn = false
-Gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 Gui.Parent = PlayerGui
 
--- Toggle Button
-local MainToggle = Instance.new("TextButton")
-MainToggle.Parent = Gui
+-- [ قائمة المفاتيح ]
+local KeyFrame = Instance.new("Frame", Gui)
+KeyFrame.Size = UDim2.new(0, 320, 0, 200)
+KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+KeyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+KeyFrame.Visible = not KeyVerified
+KeyFrame.Active = true
+KeyFrame.Draggable = true
+Instance.new("UICorner", KeyFrame)
+
+local KeyTitle = Instance.new("TextLabel", KeyFrame)
+KeyTitle.Size = UDim2.new(1, 0, 0, 40)
+KeyTitle.Text = "نظام المفاتيح | عبيس"
+KeyTitle.TextColor3 = Color3.fromRGB(120, 200, 255)
+KeyTitle.Font = Enum.Font.GothamBold
+KeyTitle.TextSize = 18
+KeyTitle.BackgroundTransparency = 1
+
+local KeyInput = Instance.new("TextBox", KeyFrame)
+KeyInput.Size = UDim2.new(0, 260, 0, 40)
+KeyInput.Position = UDim2.new(0.5, 0, 0.45, 0)
+KeyInput.AnchorPoint = Vector2.new(0.5, 0.5)
+KeyInput.PlaceholderText = "ضع المفتاح هنا..."
+KeyInput.Text = ""
+KeyInput.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+KeyInput.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", KeyInput)
+
+local VerifyBtn = Instance.new("TextButton", KeyFrame)
+VerifyBtn.Size = UDim2.new(0, 120, 0, 35)
+VerifyBtn.Position = UDim2.new(0.75, 0, 0.8, 0)
+VerifyBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+VerifyBtn.Text = "تحقق"
+VerifyBtn.BackgroundColor3 = Color3.fromRGB(120, 200, 255)
+Instance.new("UICorner", VerifyBtn)
+
+local GetKeyBtn = Instance.new("TextButton", KeyFrame)
+GetKeyBtn.Size = UDim2.new(0, 120, 0, 35)
+GetKeyBtn.Position = UDim2.new(0.25, 0, 0.8, 0)
+GetKeyBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+GetKeyBtn.Text = "جلب المفتاح"
+GetKeyBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+GetKeyBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", GetKeyBtn)
+
+-- [ قائمة التفعيلات - سكربتك الأصلي ]
+local MainToggle = Instance.new("TextButton", Gui)
 MainToggle.Size = UDim2.new(0,70,0,35)
 MainToggle.Position = UDim2.new(0,20,0,200)
 MainToggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
 MainToggle.Text = "OFF"
 MainToggle.TextColor3 = Color3.new(1,1,1)
 MainToggle.Font = Enum.Font.GothamBold
-MainToggle.TextSize = 14
 MainToggle.Active = true
 MainToggle.Draggable = true
-MainToggle.ZIndex = 10
 
--- Main Frame
-local Frame = Instance.new("Frame")
-Frame.Parent = Gui
+local Frame = Instance.new("Frame", Gui)
 Frame.AnchorPoint = Vector2.new(0.5,0.5)
 Frame.Position = UDim2.new(0.5,0,0.5,0)
 Frame.Size = UDim2.new(0,0,0,0)
@@ -54,11 +106,7 @@ Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
 Frame.Visible = false
 Frame.Active = true
 Frame.Draggable = true
-Frame.ZIndex = 5
 
-local OpenSize = UDim2.new(0,300,0,240)
-
--- Title
 local Title = Instance.new("TextLabel", Frame)
 Title.Size = UDim2.new(1,0,0,35)
 Title.BackgroundTransparency = 1
@@ -66,14 +114,11 @@ Title.Text = "المطور | عمك عبيس"
 Title.TextColor3 = Color3.fromRGB(120,200,255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
-Title.ZIndex = 6
 
--- Animation Functions
+-- FUNCTIONS (من سكربتك)
 local function OpenMenu()
 	Frame.Visible = true
-	Frame.Size = UDim2.new(0,0,0,0)
-	Frame.BackgroundTransparency = 1
-	TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{Size=OpenSize,BackgroundTransparency=0}):Play()
+	TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{Size=UDim2.new(0,300,0,240),BackgroundTransparency=0}):Play()
 end
 
 local function CloseMenu()
@@ -82,7 +127,6 @@ local function CloseMenu()
 	t.Completed:Connect(function() Frame.Visible=false end)
 end
 
--- ===== Toggle Switch =====
 local function CreateSwitch(y,text)
 	local Label = Instance.new("TextLabel", Frame)
 	Label.Position = UDim2.new(0,10,0,y)
@@ -91,43 +135,33 @@ local function CreateSwitch(y,text)
 	Label.Text = text
 	Label.TextColor3 = Color3.new(1,1,1)
 	Label.Font = Enum.Font.Gotham
-	Label.ZIndex = 6
 
 	local Switch = Instance.new("Frame", Frame)
 	Switch.Position = UDim2.new(0,200,0,y)
 	Switch.Size = UDim2.new(0,40,0,18)
 	Switch.BackgroundColor3 = Color3.fromRGB(50,50,50)
-	Switch.BorderSizePixel = 0
-	Switch.ZIndex = 6
 	Instance.new("UICorner",Switch)
 
 	local Circle = Instance.new("Frame", Switch)
 	Circle.Size = UDim2.new(0,16,0,16)
 	Circle.Position = UDim2.new(0,1,0,1)
 	Circle.BackgroundColor3 = Color3.fromRGB(230,230,230)
-	Circle.ZIndex = 7
 	Instance.new("UICorner",Circle)
 
 	local Btn = Instance.new("TextButton", Switch)
 	Btn.Size = UDim2.new(1,0,1,0)
 	Btn.BackgroundTransparency = 1
 	Btn.Text = ""
-	Btn.ZIndex = 8
 
 	local state = false
 	Btn.MouseButton1Click:Connect(function()
 		state = not state
-		Circle:TweenPosition(
-			state and UDim2.new(1,-17,0,1) or UDim2.new(0,1,0,1),
-			"Out","Quad",0.15,true
-		)
+		Circle:TweenPosition(state and UDim2.new(1,-17,0,1) or UDim2.new(0,1,0,1),"Out","Quad",0.15,true)
 		Switch.BackgroundColor3 = state and Color3.fromRGB(120,200,255) or Color3.fromRGB(50,50,50)
 	end)
-
 	return function() return state end
 end
 
--- ===== Slider =====
 local function CreateSlider(y,text,max)
 	local value = 0
 	local Label = Instance.new("TextLabel", Frame)
@@ -137,21 +171,17 @@ local function CreateSlider(y,text,max)
 	Label.Text = text.." : 0"
 	Label.TextColor3 = Color3.new(1,1,1)
 	Label.Font = Enum.Font.Gotham
-	Label.ZIndex = 6
 
 	local Bar = Instance.new("Frame", Frame)
 	Bar.Position = UDim2.new(0,10,0,y+22)
 	Bar.Size = UDim2.new(0,220,0,6)
 	Bar.BackgroundColor3 = Color3.fromRGB(60,60,60)
-	Bar.ZIndex = 6
 
 	local Fill = Instance.new("Frame", Bar)
 	Fill.Size = UDim2.new(0,0,1,0)
 	Fill.BackgroundColor3 = Color3.fromRGB(120,200,255)
-	Fill.ZIndex = 7
 
 	local dragging = false
-
 	local function update(x)
 		local pos = math.clamp((x-Bar.AbsolutePosition.X)/Bar.AbsoluteSize.X,0,1)
 		Fill.Size = UDim2.new(pos,0,1,0)
@@ -167,44 +197,56 @@ local function CreateSlider(y,text,max)
 		end
 	end)
 
-	UIS.InputChanged:Connect(function(i)
-		if dragging then update(i.Position.X) end
-	end)
-
-	UIS.InputEnded:Connect(function()
-		if dragging then
-			dragging = false
-			Frame.Draggable = true
-		end
-	end)
+	UIS.InputChanged:Connect(function(i) if dragging then update(i.Position.X) end end)
+	UIS.InputEnded:Connect(function() dragging = false Frame.Draggable = true end)
 
 	return function() return value end
 end
 
--- ===== Create GUI elements =====
+-- التنفيذ
 local getSpeed = CreateSlider(50,"Speed",300)
 local getJump = CreateSlider(120,"Jump",300)
-
 local speedOn = CreateSwitch(180,"Change Speed")
 local jumpOn = CreateSwitch(205,"Change Jump")
 
--- ===== Apply Speed & Jump correctly =====
 RunService.RenderStepped:Connect(function()
-	if Humanoid then
-		-- Speed
-		Humanoid.WalkSpeed = speedOn() and getSpeed() or defaultSpeed
-		-- Jump
-		Humanoid.JumpPower = jumpOn() and getJump() or defaultJump
+	local char = Player.Character
+	local hum = char and char:FindFirstChild("Humanoid")
+	if hum then
+		hum.WalkSpeed = speedOn() and getSpeed() or 16
+		hum.JumpPower = jumpOn() and getJump() or 50
 	end
 end)
 
--- ===== Toggle Menu =====
+-- منطق الأزرار والتحقق
 MainToggle.MouseButton1Click:Connect(function()
-	if Frame.Visible then
-		MainToggle.Text = "OFF"
-		CloseMenu()
-	else
-		MainToggle.Text = "ON"
-		OpenMenu()
-	end
+    if not KeyVerified then
+        KeyFrame.Visible = not KeyFrame.Visible
+    else
+        if Frame.Visible then CloseMenu() MainToggle.Text = "OFF" else OpenMenu() MainToggle.Text = "ON" end
+    end
+end)
+
+GetKeyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(GET_KEY_URL)
+        GetKeyBtn.Text = "تم النسخ!"
+        task.wait(1)
+        GetKeyBtn.Text = "جلب المفتاح"
+    end
+end)
+
+VerifyBtn.MouseButton1Click:Connect(function()
+    if KeyInput.Text == KEY_VALUE then
+        KeyVerified = true
+        SaveVerification()
+        KeyFrame:Destroy() -- إخفاء قائمة المفاتيح نهائياً
+        OpenMenu()
+        MainToggle.Text = "ON"
+    else
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = "مفتاح خطأ!"
+        task.wait(1)
+        KeyInput.PlaceholderText = "ضع المفتاح هنا..."
+    end
 end)
