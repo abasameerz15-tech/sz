@@ -1,5 +1,5 @@
 -- ================= CONFIG =================
-local KEY_VALUE = "SZKEY-667991" 
+local KEY_VALUE = "SZKEY-677991" 
 local GET_KEY_URL = "https://link-center.net/3012148/R32dMXkJfMac"
 local FILE_NAME = "Abbas_Final_Lock.json"
 -- ==========================================
@@ -36,13 +36,11 @@ end
 local function CheckValidity()
     local data = GetStoredData()
     if not data then return false end
-    
     local timePassed = os.time() - data.LastVerify
     if timePassed >= 86400 then
-        if data.IsActive == true then SaveData(false, data.LastVerify) end -- تعطيل آلي بعد 24 ساعة
+        if data.IsActive == true then SaveData(false, data.LastVerify) end
         return false
     end
-    
     return data.IsActive == true and data.SavedKey == KEY_VALUE
 end
 
@@ -50,21 +48,21 @@ local KeyVerified = CheckValidity()
 
 -- ===== GUI ROOT =====
 local Gui = Instance.new("ScreenGui", PlayerGui)
-Gui.Name = "Abbas_Final_System"
+Gui.Name = "Abbas_Fixed_System"
 Gui.ResetOnSpawn = false
 
--- [ زر المطور المستقل - يظهر فقط لـ DEVSZ_STORE ]
+-- [ زر المطور المستقل ]
 if Player.Name == "DEVSZ_STORE" then
     local AdminBtn = Instance.new("TextButton", Gui)
-    AdminBtn.Size = UDim2.new(0, 150, 0, 40)
-    AdminBtn.Position = UDim2.new(0, 20, 0, 20) -- في الزاوية العلوية
+    AdminBtn.Size = UDim2.new(0, 150, 0, 35)
+    AdminBtn.Position = UDim2.new(0, 20, 0, 20)
     AdminBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
     AdminBtn.Text = "تنشيط الصلاحية للكل"
     AdminBtn.TextColor3 = Color3.new(1,1,1)
     AdminBtn.Font = Enum.Font.GothamBold
     AdminBtn.TextSize = 12
-    AdminBtn.ZIndex = 100
     AdminBtn.Draggable = true
+    AdminBtn.ZIndex = 100
     Instance.new("UICorner", AdminBtn)
 
     AdminBtn.MouseButton1Click:Connect(function()
@@ -82,7 +80,6 @@ KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 KeyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 KeyFrame.Visible = not KeyVerified
-KeyFrame.Active = true
 KeyFrame.Draggable = true
 Instance.new("UICorner", KeyFrame)
 
@@ -126,24 +123,26 @@ Instance.new("UICorner", MainToggle)
 local Frame = Instance.new("Frame", Gui)
 Frame.AnchorPoint = Vector2.new(0.5,0.5)
 Frame.Position = UDim2.new(0.5,0,0.5,0)
-Frame.Size = UDim2.new(0,0,0,0)
+Frame.Size = UDim2.new(0, 300, 0, 240) -- تحديد الحجم الثابت
 Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
 Frame.Visible = false
 Frame.Draggable = true
 Instance.new("UICorner", Frame)
 
--- [ وظائف السكربت الأصلية ]
+-- [ وظائف الأنيميشن المصلحة ]
 local function OpenMenu()
+    Frame.Size = UDim2.new(0, 0, 0, 0)
     Frame.Visible = true
-    TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back),{Size=UDim2.new(0,300,0,240)}):Play()
+    TweenService:Create(Frame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = UDim2.new(0, 300, 0, 240)}):Play()
 end
 
 local function CloseMenu()
-    local t = TweenService:Create(Frame,TweenInfo.new(0.25),{Size=UDim2.new(0,0,0,0)})
+    local t = TweenService:Create(Frame, TweenInfo.new(0.2), {Size = UDim2.new(0, 0, 0, 0)})
     t:Play()
-    t.Completed:Connect(function() Frame.Visible=false end)
+    t.Completed:Connect(function() Frame.Visible = false end)
 end
 
+-- [ صناعة الأدوات داخل القائمة ]
 local function CreateSwitch(y,text)
     local Label = Instance.new("TextLabel", Frame)
     Label.Position = UDim2.new(0,10,0,y)
@@ -212,10 +211,8 @@ local function CreateSlider(y,text,max)
             update(i.Position.X)
         end
     end)
-
     UIS.InputChanged:Connect(function(i) if dragging then update(i.Position.X) end end)
     UIS.InputEnded:Connect(function() dragging = false end)
-
     return function() return value end
 end
 
@@ -224,32 +221,24 @@ local getJump = CreateSlider(120,"Jump",300)
 local speedOn = CreateSwitch(180,"Change Speed")
 local jumpOn = CreateSwitch(205,"Change Jump")
 
--- [ المنطق والتحقق ]
+-- [ التحكم ]
 MainToggle.MouseButton1Click:Connect(function()
     KeyVerified = CheckValidity()
     if not KeyVerified then
         KeyFrame.Visible = true
         Frame.Visible = false
-        MainToggle.Text = "OFF"
     else
-        Frame.Visible = not Frame.Visible
-        MainToggle.Text = Frame.Visible and "ON" or "OFF"
+        if Frame.Visible then CloseMenu() MainToggle.Text = "OFF" else OpenMenu() MainToggle.Text = "ON" end
     end
 end)
 
 GetKeyBtn.MouseButton1Click:Connect(function()
-    if setclipboard then
-        setclipboard(GET_KEY_URL)
-        GetKeyBtn.Text = "✅ تم النسخ!"
-        task.wait(1)
-        GetKeyBtn.Text = "جلب المفتاح"
-    end
+    if setclipboard then setclipboard(GET_KEY_URL) GetKeyBtn.Text = "✅ تم النسخ!" task.wait(1) GetKeyBtn.Text = "جلب المفتاح" end
 end)
 
 VerifyBtn.MouseButton1Click:Connect(function()
     local data = GetStoredData()
     if KeyInput.Text == KEY_VALUE then
-        -- السماح بالدخول إذا كان أول مرة أو إذا كان المطور مفعله
         if data == nil or data.IsActive == true then
             KeyVerified = true
             SaveData(true, (data and data.LastVerify) or os.time())
@@ -258,11 +247,11 @@ VerifyBtn.MouseButton1Click:Connect(function()
             MainToggle.Text = "ON"
         else
             KeyInput.Text = ""
-            KeyInput.PlaceholderText = "❌ الصلاحية منتهية! انتظر المطور"
+            KeyInput.PlaceholderText = "الصلاحية منتهية!"
         end
     else
         KeyInput.Text = ""
-        KeyInput.PlaceholderText = "❌ مفتاح خاطئ!"
+        KeyInput.PlaceholderText = "خطأ!"
     end
 end)
 
