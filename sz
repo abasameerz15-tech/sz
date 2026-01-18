@@ -1,7 +1,7 @@
 -- ================= CONFIG =================
-local KEY_VALUE = "SZKEY-667991"
+local KEY_VALUE = "SZKEY-667991" -- لو غيرت هذا الكود، سيطلب السكربت من الجميع المفتاح الجديد فوراً
 local GET_KEY_URL = "https://link-center.net/3012148/R32dMXkJfMac"
-local FILE_NAME = "Abbas_Config_2026.json"
+local FILE_NAME = "Abbas_Final_Save.json"
 -- ==========================================
 
 local Players = game:GetService("Players")
@@ -13,21 +13,26 @@ local HttpService = game:GetService("HttpService")
 local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 
--- دالة حفظ التحقق (24 ساعة)
-local function SaveVerification()
+-- [ وظائف الحفظ والتحقق الذكي ]
+local function SaveData()
     if writefile then
-        local data = {LastVerify = os.time()}
+        local data = {
+            LastVerify = os.time(),
+            SavedKey = KEY_VALUE -- حفظ المفتاح الحالي لمقارنته لاحقاً
+        }
         writefile(FILE_NAME, HttpService:JSONEncode(data))
     end
 end
 
--- دالة فحص هل التحقق ما زال صالحاً؟
 local function IsVerified()
     if isfile and isfile(FILE_NAME) then
         local success, content = pcall(function() return readfile(FILE_NAME) end)
         if success then
             local data = HttpService:JSONDecode(content)
-            if os.time() - data.LastVerify < 86400 then return true end
+            -- شرطين للتحقق: 1- لم يمر 24 ساعة | 2- المفتاح في السكربت لم يتغير
+            if (os.time() - data.LastVerify < 86400) and (data.SavedKey == KEY_VALUE) then 
+                return true 
+            end
         end
     end
     return false
@@ -36,10 +41,9 @@ end
 local KeyVerified = IsVerified()
 
 -- ===== GUI ROOT =====
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "AbbasGui_V3"
+local Gui = Instance.new("ScreenGui", PlayerGui)
+Gui.Name = "Abbas_V2026"
 Gui.ResetOnSpawn = false
-Gui.Parent = PlayerGui
 
 -- [ قائمة المفاتيح ]
 local KeyFrame = Instance.new("Frame", Gui)
@@ -54,7 +58,7 @@ Instance.new("UICorner", KeyFrame)
 
 local KeyTitle = Instance.new("TextLabel", KeyFrame)
 KeyTitle.Size = UDim2.new(1, 0, 0, 40)
-KeyTitle.Text = "نظام المفاتيح | عبيس"
+KeyTitle.Text = "نظام التحقق | عبيس"
 KeyTitle.TextColor3 = Color3.fromRGB(120, 200, 255)
 KeyTitle.Font = Enum.Font.GothamBold
 KeyTitle.TextSize = 18
@@ -65,7 +69,6 @@ KeyInput.Size = UDim2.new(0, 260, 0, 40)
 KeyInput.Position = UDim2.new(0.5, 0, 0.45, 0)
 KeyInput.AnchorPoint = Vector2.new(0.5, 0.5)
 KeyInput.PlaceholderText = "ضع المفتاح هنا..."
-KeyInput.Text = ""
 KeyInput.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 KeyInput.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", KeyInput)
@@ -87,7 +90,7 @@ GetKeyBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 GetKeyBtn.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", GetKeyBtn)
 
--- [ قائمة التفعيلات - سكربتك الأصلي ]
+-- [ قائمة التفعيلات ]
 local MainToggle = Instance.new("TextButton", Gui)
 MainToggle.Size = UDim2.new(0,70,0,35)
 MainToggle.Position = UDim2.new(0,20,0,200)
@@ -95,7 +98,6 @@ MainToggle.BackgroundColor3 = Color3.fromRGB(0,0,0)
 MainToggle.Text = "OFF"
 MainToggle.TextColor3 = Color3.new(1,1,1)
 MainToggle.Font = Enum.Font.GothamBold
-MainToggle.Active = true
 MainToggle.Draggable = true
 
 local Frame = Instance.new("Frame", Gui)
@@ -104,121 +106,118 @@ Frame.Position = UDim2.new(0.5,0,0.5,0)
 Frame.Size = UDim2.new(0,0,0,0)
 Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
 Frame.Visible = false
-Frame.Active = true
 Frame.Draggable = true
 
 local Title = Instance.new("TextLabel", Frame)
 Title.Size = UDim2.new(1,0,0,35)
-Title.BackgroundTransparency = 1
 Title.Text = "المطور | عمك عبيس"
 Title.TextColor3 = Color3.fromRGB(120,200,255)
 Title.Font = Enum.Font.GothamBold
-Title.TextSize = 16
+Title.BackgroundTransparency = 1
 
--- FUNCTIONS (من سكربتك)
+-- [ وظائف السكربت الأصلية ]
 local function OpenMenu()
-	Frame.Visible = true
-	TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out),{Size=UDim2.new(0,300,0,240),BackgroundTransparency=0}):Play()
+    Frame.Visible = true
+    TweenService:Create(Frame,TweenInfo.new(0.35, Enum.EasingStyle.Back),{Size=UDim2.new(0,300,0,240)}):Play()
 end
 
 local function CloseMenu()
-	local t = TweenService:Create(Frame,TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),{Size=UDim2.new(0,0,0,0),BackgroundTransparency=1})
-	t:Play()
-	t.Completed:Connect(function() Frame.Visible=false end)
+    local t = TweenService:Create(Frame,TweenInfo.new(0.25),{Size=UDim2.new(0,0,0,0)})
+    t:Play()
+    t.Completed:Connect(function() Frame.Visible=false end)
 end
 
 local function CreateSwitch(y,text)
-	local Label = Instance.new("TextLabel", Frame)
-	Label.Position = UDim2.new(0,10,0,y)
-	Label.Size = UDim2.new(0,140,0,20)
-	Label.BackgroundTransparency = 1
-	Label.Text = text
-	Label.TextColor3 = Color3.new(1,1,1)
-	Label.Font = Enum.Font.Gotham
+    local Label = Instance.new("TextLabel", Frame)
+    Label.Position = UDim2.new(0,10,0,y)
+    Label.Size = UDim2.new(0,140,0,20)
+    Label.Text = text
+    Label.TextColor3 = Color3.new(1,1,1)
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
 
-	local Switch = Instance.new("Frame", Frame)
-	Switch.Position = UDim2.new(0,200,0,y)
-	Switch.Size = UDim2.new(0,40,0,18)
-	Switch.BackgroundColor3 = Color3.fromRGB(50,50,50)
-	Instance.new("UICorner",Switch)
+    local Switch = Instance.new("Frame", Frame)
+    Switch.Position = UDim2.new(0,200,0,y)
+    Switch.Size = UDim2.new(0,40,0,18)
+    Switch.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    Instance.new("UICorner",Switch)
 
-	local Circle = Instance.new("Frame", Switch)
-	Circle.Size = UDim2.new(0,16,0,16)
-	Circle.Position = UDim2.new(0,1,0,1)
-	Circle.BackgroundColor3 = Color3.fromRGB(230,230,230)
-	Instance.new("UICorner",Circle)
+    local Circle = Instance.new("Frame", Switch)
+    Circle.Size = UDim2.new(0,16,0,16)
+    Circle.Position = UDim2.new(0,1,0,1)
+    Circle.BackgroundColor3 = Color3.fromRGB(230,230,230)
+    Instance.new("UICorner",Circle)
 
-	local Btn = Instance.new("TextButton", Switch)
-	Btn.Size = UDim2.new(1,0,1,0)
-	Btn.BackgroundTransparency = 1
-	Btn.Text = ""
+    local Btn = Instance.new("TextButton", Switch)
+    Btn.Size = UDim2.new(1,0,1,0)
+    Btn.BackgroundTransparency = 1
+    Btn.Text = ""
 
-	local state = false
-	Btn.MouseButton1Click:Connect(function()
-		state = not state
-		Circle:TweenPosition(state and UDim2.new(1,-17,0,1) or UDim2.new(0,1,0,1),"Out","Quad",0.15,true)
-		Switch.BackgroundColor3 = state and Color3.fromRGB(120,200,255) or Color3.fromRGB(50,50,50)
-	end)
-	return function() return state end
+    local state = false
+    Btn.MouseButton1Click:Connect(function()
+        state = not state
+        Circle:TweenPosition(state and UDim2.new(1,-17,0,1) or UDim2.new(0,1,0,1),"Out","Quad",0.15,true)
+        Switch.BackgroundColor3 = state and Color3.fromRGB(120,200,255) or Color3.fromRGB(50,50,50)
+    end)
+    return function() return state end
 end
 
 local function CreateSlider(y,text,max)
-	local value = 0
-	local Label = Instance.new("TextLabel", Frame)
-	Label.Position = UDim2.new(0,10,0,y)
-	Label.Size = UDim2.new(0,200,0,20)
-	Label.BackgroundTransparency = 1
-	Label.Text = text.." : 0"
-	Label.TextColor3 = Color3.new(1,1,1)
-	Label.Font = Enum.Font.Gotham
+    local value = 0
+    local Label = Instance.new("TextLabel", Frame)
+    Label.Position = UDim2.new(0,10,0,y)
+    Label.Size = UDim2.new(0,200,0,20)
+    Label.Text = text.." : 0"
+    Label.TextColor3 = Color3.new(1,1,1)
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
 
-	local Bar = Instance.new("Frame", Frame)
-	Bar.Position = UDim2.new(0,10,0,y+22)
-	Bar.Size = UDim2.new(0,220,0,6)
-	Bar.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    local Bar = Instance.new("Frame", Frame)
+    Bar.Position = UDim2.new(0,10,0,y+22)
+    Bar.Size = UDim2.new(0,220,0,6)
+    Bar.BackgroundColor3 = Color3.fromRGB(60,60,60)
 
-	local Fill = Instance.new("Frame", Bar)
-	Fill.Size = UDim2.new(0,0,1,0)
-	Fill.BackgroundColor3 = Color3.fromRGB(120,200,255)
+    local Fill = Instance.new("Frame", Bar)
+    Fill.Size = UDim2.new(0,0,1,0)
+    Fill.BackgroundColor3 = Color3.fromRGB(120,200,255)
 
-	local dragging = false
-	local function update(x)
-		local pos = math.clamp((x-Bar.AbsolutePosition.X)/Bar.AbsoluteSize.X,0,1)
-		Fill.Size = UDim2.new(pos,0,1,0)
-		value = math.floor(pos*max)
-		Label.Text = text.." : "..value
-	end
+    local dragging = false
+    local function update(x)
+        local pos = math.clamp((x-Bar.AbsolutePosition.X)/Bar.AbsoluteSize.X,0,1)
+        Fill.Size = UDim2.new(pos,0,1,0)
+        value = math.floor(pos*max)
+        Label.Text = text.." : "..value
+    end
 
-	Bar.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			Frame.Draggable = false
-			update(i.Position.X)
-		end
-	end)
+    Bar.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            update(i.Position.X)
+        end
+    end)
 
-	UIS.InputChanged:Connect(function(i) if dragging then update(i.Position.X) end end)
-	UIS.InputEnded:Connect(function() dragging = false Frame.Draggable = true end)
+    UIS.InputChanged:Connect(function(i) if dragging then update(i.Position.X) end end)
+    UIS.InputEnded:Connect(function() dragging = false end)
 
-	return function() return value end
+    return function() return value end
 end
 
--- التنفيذ
 local getSpeed = CreateSlider(50,"Speed",300)
 local getJump = CreateSlider(120,"Jump",300)
 local speedOn = CreateSwitch(180,"Change Speed")
 local jumpOn = CreateSwitch(205,"Change Jump")
 
+-- [ تطبيق الخواص ]
 RunService.RenderStepped:Connect(function()
-	local char = Player.Character
-	local hum = char and char:FindFirstChild("Humanoid")
-	if hum then
-		hum.WalkSpeed = speedOn() and getSpeed() or 16
-		hum.JumpPower = jumpOn() and getJump() or 50
-	end
+    local char = Player.Character
+    local hum = char and char:FindFirstChild("Humanoid")
+    if hum then
+        hum.WalkSpeed = speedOn() and getSpeed() or 16
+        hum.JumpPower = jumpOn() and getJump() or 50
+    end
 end)
 
--- منطق الأزرار والتحقق
+-- [ منطق المفتاح والتحقق ]
 MainToggle.MouseButton1Click:Connect(function()
     if not KeyVerified then
         KeyFrame.Visible = not KeyFrame.Visible
@@ -239,14 +238,12 @@ end)
 VerifyBtn.MouseButton1Click:Connect(function()
     if KeyInput.Text == KEY_VALUE then
         KeyVerified = true
-        SaveVerification()
-        KeyFrame:Destroy() -- إخفاء قائمة المفاتيح نهائياً
+        SaveData()
+        KeyFrame:Destroy()
         OpenMenu()
         MainToggle.Text = "ON"
     else
         KeyInput.Text = ""
         KeyInput.PlaceholderText = "مفتاح خطأ!"
-        task.wait(1)
-        KeyInput.PlaceholderText = "ضع المفتاح هنا..."
     end
 end)
