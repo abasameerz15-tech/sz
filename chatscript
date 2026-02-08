@@ -1,17 +1,27 @@
+-- [[ ABBAS GITHUB GLOBAL CHAT V10 ]] --
+local HttpService = game:GetService("HttpService")
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- 1. الواجهة (الزر والقائمة)
+-- 1. [بياناتك الخاصة - عبّيها هنا]
+local GITHUB_TOKEN = "Bearer " .. "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" 
+local REPO_OWNER = "abasameerz15-tech"
+local REPO_NAME = "ChatData" -- اسم المستودع اللي سويته
+local FILE_PATH = "messages.json" -- اسم الملف اللي داخل المستودع
+
+-- رابط البروكسي (عشان نتخطى حظر روبلوكس لـ جيثب)
+local URL = string.format("https://api.github.com/repos/%s/%s/contents/%s", REPO_OWNER, REPO_NAME, FILE_PATH)
+
+-- 2. واجهة المستخدم (تصميم MOON الأسود)
 local sg = Instance.new("ScreenGui", PlayerGui)
-sg.Name = "AbbasUltraSecret"
+sg.Name = "AbbasGlobalV10"
 sg.ResetOnSpawn = false
 
 local btn = Instance.new("TextButton", sg)
 btn.Size = UDim2.new(0, 60, 0, 40)
 btn.Position = UDim2.new(0, 15, 0.5, 0)
 btn.Text = "MOON"
-btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+btn.BackgroundColor3 = Color3.new(0,0,0)
 btn.TextColor3 = Color3.new(1,1,1)
 btn.Draggable = true
 Instance.new("UICorner", btn)
@@ -31,81 +41,83 @@ log.Position = UDim2.new(0, 10, 0, 10)
 log.BackgroundTransparency = 1
 log.AutomaticCanvasSize = Enum.AutomaticSize.Y
 local layout = Instance.new("UIListLayout", log)
-layout.Padding = UDim.new(0, 5)
 
 local input = Instance.new("TextBox", frame)
 input.Size = UDim2.new(1, -20, 0, 40)
 input.Position = UDim2.new(0, 10, 1, -50)
-input.PlaceholderText = "اكتب هنا (سري)..."
+input.PlaceholderText = "رسالة عالمية عبر جيثب..."
 input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 input.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", input)
 
--- 2. وظيفة إضافة الرسالة
-function AddMsg(senderName, userId, txt)
-    local mFrame = Instance.new("Frame", log)
-    mFrame.Size = UDim2.new(1, 0, 0, 35)
-    mFrame.BackgroundTransparency = 1
-    
-    local img = Instance.new("ImageLabel", mFrame)
-    img.Size = UDim2.new(0, 30, 0, 30)
-    img.Image = game.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
-    Instance.new("UICorner", img).CornerRadius = UDim.new(1,0)
-    
-    local t = Instance.new("TextLabel", mFrame)
-    t.Size = UDim2.new(1, -40, 1, 0)
-    t.Position = UDim2.new(0, 40, 0, 0)
+-- 3. وظيفة إحضار الرسالة وعرضها
+function AddMsg(senderName, txt)
+    local t = Instance.new("TextLabel", log)
+    t.Size = UDim2.new(1, 0, 0, 30)
     t.BackgroundTransparency = 1
     t.Text = "<b>" .. senderName .. "</b>: " .. txt
     t.RichText = true
-    t.TextColor3 = (senderName == Player.Name) and Color3.new(0,1,0.5) or Color3.new(1,1,1)
+    t.TextColor3 = Color3.new(1,1,1)
     t.TextXAlignment = Enum.TextXAlignment.Left
-    t.TextWrapped = true
-
-    log.CanvasPosition = Vector2.new(0, 99999)
+    log.CanvasPosition = Vector2.new(0, 9999)
 end
 
--- 3. [الخدعة] نظام الإرسال المخفي
-local function SendSecret(txt)
-    -- نرسل الرسالة تبدأ بـ /e عشان ما تطلع في شات روبلوكس
-    local secretFormat = "/e ABBAS_CHAT:" .. txt
-    local chatEvents = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-    if chatEvents then
-        chatEvents.SayMessageRequest:FireServer(secretFormat, "All")
-    else
-        -- للنظام الجديد
-        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(secretFormat)
-    end
-end
-
--- 4. [التسمع] لقط الرسائل المخفية فقط
-local function ProcessMessage(senderName, text)
-    if text:sub(1, 14) == "/e ABBAS_CHAT:" then
-        local realMsg = text:sub(15)
-        local sender = game.Players:FindFirstChild(senderName)
-        if sender then
-            AddMsg(sender.Name, sender.UserId, realMsg)
-        end
-    end
-end
-
--- مراقبة الشات
-if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
-    game:GetService("TextChatService").OnIncomingMessage = function(m)
-        if m.TextSource then
-            local p = game.Players:GetPlayerByUserId(m.TextSource.UserId)
-            ProcessMessage(p.Name, m.Text)
-        end
-    end
-else
-    ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents").OnMessageDoneFiltering.OnClientEvent:Connect(function(data)
-        ProcessMessage(data.FromSpeaker, data.Message)
+-- 4. [السر] إرسال الرسالة لجيثب وتحديث الملف
+local function SendToGithub(txt)
+    task.spawn(function()
+        pcall(function()
+            -- إحضار الملف الحالي للحصول على الـ SHA
+            local res = HttpService:RequestAsync({
+                Url = URL,
+                Method = "GET",
+                Headers = {["Authorization"] = GITHUB_TOKEN}
+            })
+            local fileData = HttpService:JSONDecode(res.Body)
+            
+            -- تجهيز البيانات الجديدة (تحويل النص لـ Base64 لأن جيثب يطلبه)
+            local newData = HttpService:JSONEncode({sender = Player.Name, msg = txt, time = os.time()})
+            local encodedContent = game:GetService("Base64Service"):Encode(newData) -- ملاحظة: بعض المحركات تحتاج مكتبة Base64 خارجية
+            
+            -- تحديث الملف في جيثب
+            HttpService:RequestAsync({
+                Url = URL,
+                Method = "PUT",
+                Headers = {
+                    ["Authorization"] = GITHUB_TOKEN,
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    message = "Update Chat",
+                    content = encodedContent,
+                    sha = fileData.sha
+                })
+            })
+        end)
     end)
 end
 
+-- 5. مراقبة التحديثات (تراقب جيثب كل 5 ثواني)
+task.spawn(function()
+    local lastTime = 0
+    while task.wait(5) do
+        pcall(function()
+            local res = HttpService:GetAsync(URL .. "?nocache=" .. os.time())
+            local data = HttpService:JSONDecode(res.Body)
+            -- فك تشفير المحتوى من جيثب
+            local contentRaw = game:GetService("Base64Service"):Decode(data.content)
+            local finalData = HttpService:JSONDecode(contentRaw)
+            
+            if finalData.time > lastTime then
+                lastTime = finalData.time
+                AddMsg(finalData.sender, finalData.msg)
+            end
+        end)
+    end
+end)
+
 input.FocusLost:Connect(function(e)
     if e and input.Text ~= "" then
-        SendSecret(input.Text)
+        SendToGithub(input.Text)
         input.Text = ""
     end
 end)
