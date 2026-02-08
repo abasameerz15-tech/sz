@@ -1,0 +1,113 @@
+local Player = game.Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- 1. الواجهة (الزر والقائمة)
+local sg = Instance.new("ScreenGui", PlayerGui)
+sg.Name = "AbbasUltraSecret"
+sg.ResetOnSpawn = false
+
+local btn = Instance.new("TextButton", sg)
+btn.Size = UDim2.new(0, 60, 0, 40)
+btn.Position = UDim2.new(0, 15, 0.5, 0)
+btn.Text = "MOON"
+btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+btn.TextColor3 = Color3.new(1,1,1)
+btn.Draggable = true
+Instance.new("UICorner", btn)
+
+local frame = Instance.new("Frame", sg)
+frame.Size = UDim2.new(0, 280, 0, 320)
+frame.Position = UDim2.new(0.5, -140, 0.5, -160)
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+frame.Visible = false
+frame.Draggable = true
+Instance.new("UICorner", frame)
+Instance.new("UIStroke", frame).Color = Color3.fromRGB(255, 0, 85)
+
+local log = Instance.new("ScrollingFrame", frame)
+log.Size = UDim2.new(1, -20, 1, -100)
+log.Position = UDim2.new(0, 10, 0, 10)
+log.BackgroundTransparency = 1
+log.AutomaticCanvasSize = Enum.AutomaticSize.Y
+local layout = Instance.new("UIListLayout", log)
+layout.Padding = UDim.new(0, 5)
+
+local input = Instance.new("TextBox", frame)
+input.Size = UDim2.new(1, -20, 0, 40)
+input.Position = UDim2.new(0, 10, 1, -50)
+input.PlaceholderText = "اكتب هنا (سري)..."
+input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+input.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", input)
+
+-- 2. وظيفة إضافة الرسالة
+function AddMsg(senderName, userId, txt)
+    local mFrame = Instance.new("Frame", log)
+    mFrame.Size = UDim2.new(1, 0, 0, 35)
+    mFrame.BackgroundTransparency = 1
+    
+    local img = Instance.new("ImageLabel", mFrame)
+    img.Size = UDim2.new(0, 30, 0, 30)
+    img.Image = game.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+    Instance.new("UICorner", img).CornerRadius = UDim.new(1,0)
+    
+    local t = Instance.new("TextLabel", mFrame)
+    t.Size = UDim2.new(1, -40, 1, 0)
+    t.Position = UDim2.new(0, 40, 0, 0)
+    t.BackgroundTransparency = 1
+    t.Text = "<b>" .. senderName .. "</b>: " .. txt
+    t.RichText = true
+    t.TextColor3 = (senderName == Player.Name) and Color3.new(0,1,0.5) or Color3.new(1,1,1)
+    t.TextXAlignment = Enum.TextXAlignment.Left
+    t.TextWrapped = true
+
+    log.CanvasPosition = Vector2.new(0, 99999)
+end
+
+-- 3. [الخدعة] نظام الإرسال المخفي
+local function SendSecret(txt)
+    -- نرسل الرسالة تبدأ بـ /e عشان ما تطلع في شات روبلوكس
+    local secretFormat = "/e ABBAS_CHAT:" .. txt
+    local chatEvents = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if chatEvents then
+        chatEvents.SayMessageRequest:FireServer(secretFormat, "All")
+    else
+        -- للنظام الجديد
+        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(secretFormat)
+    end
+end
+
+-- 4. [التسمع] لقط الرسائل المخفية فقط
+local function ProcessMessage(senderName, text)
+    if text:sub(1, 14) == "/e ABBAS_CHAT:" then
+        local realMsg = text:sub(15)
+        local sender = game.Players:FindFirstChild(senderName)
+        if sender then
+            AddMsg(sender.Name, sender.UserId, realMsg)
+        end
+    end
+end
+
+-- مراقبة الشات
+if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+    game:GetService("TextChatService").OnIncomingMessage = function(m)
+        if m.TextSource then
+            local p = game.Players:GetPlayerByUserId(m.TextSource.UserId)
+            ProcessMessage(p.Name, m.Text)
+        end
+    end
+else
+    ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents").OnMessageDoneFiltering.OnClientEvent:Connect(function(data)
+        ProcessMessage(data.FromSpeaker, data.Message)
+    end)
+end
+
+input.FocusLost:Connect(function(e)
+    if e and input.Text ~= "" then
+        SendSecret(input.Text)
+        input.Text = ""
+    end
+end)
+
+btn.MouseButton1Click:Connect(function() frame.Visible = not frame.Visible end)
