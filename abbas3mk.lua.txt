@@ -1,40 +1,37 @@
+--[[ ABBAS ELITE V5 - THE FINAL HOPE ]]--
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 local UIS = game:GetService("UserInputService")
-local TextChatService = game:GetService("TextChatService")
 
--- إنشاء الواجهة
+-- 1. إنشاء الواجهة
 local sg = Instance.new("ScreenGui", PlayerGui)
-sg.Name = "AbbasUltraV4"
+sg.Name = "AbbasV5"
 sg.ResetOnSpawn = false
 
--- [1] زر الفتح (CHAT) - قابل للتحريك
+-- زر CHAT (قابل للتحريك)
 local btn = Instance.new("TextButton", sg)
-btn.Size = UDim2.new(0, 60, 0, 60)
-btn.Position = UDim2.new(0, 20, 0.5, 0)
+btn.Size = UDim2.new(0, 50, 0, 50)
+btn.Position = UDim2.new(0, 15, 0.5, 0)
 btn.Text = "CHAT"
 btn.BackgroundColor3 = Color3.fromRGB(255, 0, 85)
 btn.TextColor3 = Color3.new(1,1,1)
-btn.Font = Enum.Font.GothamBold
-btn.Draggable = true -- تفعيل التحريك البسيط
+btn.Draggable = true
 Instance.new("UICorner", btn).CornerRadius = UDim.new(1,0)
 
--- [2] قائمة المحادثة
+-- القائمة
 local frame = Instance.new("Frame", sg)
-frame.Size = UDim2.new(0, 300, 0, 320)
-frame.Position = UDim2.new(0.5, -150, 0.5, -160)
-frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-frame.Visible = false -- تبدأ مخفية
+frame.Size = UDim2.new(0, 260, 0, 280)
+frame.Position = UDim2.new(0.5, -130, 0.5, -140)
+frame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+frame.Visible = false
 frame.Active = true
-frame.Draggable = true -- القائمة أيضاً قابلة للتحريك
+frame.Draggable = true
 Instance.new("UICorner", frame)
-local stroke = Instance.new("UIStroke", frame)
-stroke.Color = Color3.fromRGB(255, 0, 85)
-stroke.Thickness = 2
+Instance.new("UIStroke", frame).Color = Color3.fromRGB(255, 0, 85)
 
--- منطقة الرسائل
+-- الشات
 local log = Instance.new("ScrollingFrame", frame)
-log.Size = UDim2.new(1, -20, 1, -100)
+log.Size = UDim2.new(1, -20, 1, -90)
 log.Position = UDim2.new(0, 10, 0, 10)
 log.BackgroundTransparency = 1
 log.CanvasSize = UDim2.new(0,0,0,0)
@@ -44,81 +41,85 @@ layout.Padding = UDim.new(0, 5)
 
 -- مكان الكتابة
 local input = Instance.new("TextBox", frame)
-input.Size = UDim2.new(1, -20, 0, 45)
-input.Position = UDim2.new(0, 10, 1, -55)
-input.PlaceholderText = "اكتب هنا وارسل..."
-input.Text = ""
+input.Size = UDim2.new(1, -20, 0, 40)
+input.Position = UDim2.new(0, 10, 1, -50)
+input.PlaceholderText = "اكتب هنا..."
 input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 input.TextColor3 = Color3.new(1,1,1)
-input.Font = Enum.Font.SourceSans
-input.TextSize = 18
 Instance.new("UICorner", input)
 
--- [3] وظيفة إضافة الرسالة مع سكن اللاعب
-function AddMsg(sender, txt)
-    if not sender then return end
+-- [ السر الحقيقي ] نظام نقل الرسائل عبر القيم المخفية
+local function GetSignal(p)
+    local folder = p:FindFirstChild("Backpack") -- الحقيبة دايم موجودة والكل يشوفها
+    if folder then
+        local sig = folder:FindFirstChild("AbbasMsg")
+        if not sig then
+            sig = Instance.new("StringValue")
+            sig.Name = "AbbasMsg"
+            sig.Parent = folder
+        end
+        return sig
+    end
+end
+
+local MySignal = GetSignal(Player)
+
+function AddMsg(senderName, txt, senderUserId)
+    -- منع التكرار (نتأكد إن الرسالة ما انضافت قبل ثانية)
+    local lastMsg = log:GetChildren()[#log:GetChildren()]
+    if lastMsg and lastMsg:IsA("Frame") and lastMsg:FindFirstChild("T").Text:find(txt) then return end
+
     local mFrame = Instance.new("Frame", log)
-    mFrame.Size = UDim2.new(1, 0, 0, 35)
+    mFrame.Size = UDim2.new(1, 0, 0, 30)
     mFrame.BackgroundTransparency = 1
     
     local img = Instance.new("ImageLabel", mFrame)
-    img.Size = UDim2.new(0, 30, 0, 30)
-    img.Image = game.Players:GetUserThumbnailAsync(sender.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+    img.Size = UDim2.new(0, 25, 0, 25)
+    img.Image = game.Players:GetUserThumbnailAsync(senderUserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
     Instance.new("UICorner", img).CornerRadius = UDim.new(1,0)
     
     local t = Instance.new("TextLabel", mFrame)
-    t.Size = UDim2.new(1, -40, 1, 0)
-    t.Position = UDim2.new(0, 40, 0, 0)
+    t.Name = "T"
+    t.Size = UDim2.new(1, -35, 1, 0)
+    t.Position = UDim2.new(0, 35, 0, 0)
     t.BackgroundTransparency = 1
-    t.Text = "<b>" .. sender.Name .. "</b>: " .. txt
+    t.Text = "<b>" .. senderName .. "</b>: " .. txt
     t.RichText = true
-    t.TextColor3 = Color3.new(1,1,1)
+    t.TextColor3 = (senderName == Player.Name) and Color3.new(0,1,0.5) or Color3.new(1,1,1)
     t.TextXAlignment = Enum.TextXAlignment.Left
-    t.TextWrapped = true
+    t.TextSize = 14
 
     log.CanvasPosition = Vector2.new(0, 99999)
 end
 
--- [4] نظام فتح وإغلاق القائمة (تصحيح)
-btn.MouseButton1Click:Connect(function()
-    frame.Visible = not frame.Visible
-    print("Chat Toggle: " .. tostring(frame.Visible)) -- للتأكد في الكونسول
-end)
+-- مراقبة كل اللاعبين
+local function Listen(p)
+    task.spawn(function()
+        local backpack = p:WaitForChild("Backpack", 20)
+        if backpack then
+            local sig = GetSignal(p)
+            sig.Changed:Connect(function(val)
+                if val ~= "" then
+                    AddMsg(p.Name, val, p.UserId)
+                end
+            end)
+        end
+    end)
+end
 
--- [5] نظام الإرسال (متوافق مع النظام الجديد والقديم)
+for _, p in pairs(game.Players:GetPlayers()) do Listen(p) end
+game.Players.PlayerAdded:Connect(Listen)
+
+-- الإرسال
 input.FocusLost:Connect(function(enter)
     if enter and input.Text ~= "" then
-        local msg = input.Text
-        -- محاولة الإرسال عبر النظام الجديد
-        local chatChannel = TextChatService:FindFirstChild("TextChannels") and TextChatService.TextChannels:FindFirstChild("RBXGeneral")
-        if chatChannel then
-            chatChannel:SendAsync(msg)
-        else
-            -- محاولة الإرسال عبر النظام القديم
-            local event = game.ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
-            if event then
-                event:FireServer(msg, "All")
-            end
+        if MySignal then
+            MySignal.Value = input.Text
+            task.wait(0.2)
+            MySignal.Value = "" -- تصفير القيمة
         end
         input.Text = ""
     end
 end)
 
--- [6] استقبال الرسائل (النظام الجديد)
-if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-    TextChatService.OnIncomingMessage = function(message)
-        if message.TextSource then
-            local sender = game.Players:GetPlayerByUserId(message.TextSource.UserId)
-            if sender then AddMsg(sender, message.Text) end
-        end
-    end
-else
-    -- استقبال الرسائل (النظام القديم)
-    local chatEvents = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-    if chatEvents then
-        chatEvents:WaitForChild("OnMessageDoneFiltering").OnClientEvent:Connect(function(data)
-            local sender = game.Players:FindFirstChild(data.FromSpeaker)
-            if sender then AddMsg(sender, data.Message) end
-        end)
-    end
-end
+btn.MouseButton1Click:Connect(function() frame.Visible = not frame.Visible end)
