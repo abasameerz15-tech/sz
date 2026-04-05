@@ -3,175 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ŞZS DELTA</title>
+    <title>ŞZS DELTA | المركز الرسمي</title>
     <style>
-        /* التنسيق العام */
+        /* إعدادات الجسم لمنع السحب وتحديد الخلفية السوداء */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #000; color: #fff; }
-        
-        /* التوهج العلوي الأزرق */
-        body::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25vh;
-            background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
-            pointer-events: none; z-index: 1;
-        }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #000; color: #fff; position: relative; }
 
-        /* تأثير النجوم المتساقطة */
+        /* تدرج سمائي خفيف فوق فقط */
+        body::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25vh; background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%); pointer-events: none; z-index: 1; }
+
+        /* نظام النجوم الصاعدة في الخلفية */
         .stars { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.3; animation: rise 8s linear infinite; }
+        .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.3; animation: rise 7s linear infinite; }
         @keyframes rise { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        /* النص اللامع المتحرك */
-        .shiny-text {
-            font-size: 2.2rem; font-weight: bold; text-align: center; margin: 30px 0;
-            background: linear-gradient(120deg, #fff 30%, #00d4ff 50%, #fff 70%);
-            background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: shine 3s infinite linear; position: relative; z-index: 10;
-        }
+        /* النصوص اللامعة والعناوين */
+        .shiny-text { font-size: 2.2rem; font-weight: bold; text-align: center; margin: 25px 0; background: linear-gradient(120deg, #fff 30%, #00d4ff 50%, #fff 70%); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s infinite linear; position: relative; z-index: 10; }
         @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* حاويات الصفحات */
-        .container {
-            position: relative; z-index: 10; padding: 20px; display: none;
-            flex-direction: column; align-items: center; height: calc(100% - 150px);
-            overflow-y: auto;
-        }
+        .header-top { color: #fff; font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; display: block; }
+        .sub-title { color: #00d4ff; font-weight: bold; font-size: 1.3rem; margin-bottom: 15px; display: block; background: linear-gradient(120deg, #00d4ff 30%, #fff 50%, #00d4ff 70%); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 4s infinite linear; }
+
+        /* الحاويات (Cards) بستايل زجاجي */
+        .container { position: relative; z-index: 10; padding: 20px; display: none; flex-direction: column; align-items: center; height: 100%; overflow-y: auto; padding-bottom: 100px; }
         .active-page { display: flex; }
+        .card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px; width: 90%; max-width: 400px; margin-bottom: 20px; color: #e0e0e0; text-align: center; line-height: 1.7; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
 
-        /* تصميم الكروت */
-        .card {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; padding: 20px; width: 95%; max-width: 400px;
-            margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px);
-        }
-        .header-top { color: #aaa; font-size: 0.9rem; margin-bottom: 8px; display: block; }
-        .sub-title { color: #00d4ff; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; display: block; }
+        /* زر التحميل أندرويد */
+        .download-btn { background: rgba(61, 220, 132, 0.1); border: 2px solid #3ddc84; border-radius: 15px; padding: 15px; width: 160px; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #fff; transition: 0.3s; margin: 0 auto; margin-top: 20px; }
+        .download-btn:active { transform: scale(0.95); }
+        .download-btn svg { fill: #3ddc84; width: 35px; height: 35px; margin-bottom: 8px; }
 
-        /* زر التحميل */
-        .download-btn {
-            background: rgba(61, 220, 132, 0.15); border: 2px solid #3ddc84;
-            border-radius: 15px; padding: 15px; width: 160px; display: inline-block;
-            margin-top: 10px; text-decoration: none; color: #fff; transition: 0.2s;
-        }
-        .download-btn:active { transform: scale(0.9); }
-
-        /* الشريط السفلي الاحترافي */
-        .bottom-nav {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 380px; height: 70px;
-            background: rgba(15, 15, 15, 0.95); border-radius: 35px;
-            display: flex; justify-content: space-around; align-items: center;
-            border: 1px solid rgba(255,255,255,0.1); z-index: 100;
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: #00d4ff; }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 4px; transition: 0.3s; }
-        .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); transform: translateY(-2px); }
-        .nav-item span { font-size: 11px; font-weight: bold; }
+        /* شريط التنقل السفلي - التصميم المطابق للصورة تماماً */
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 75px; background: rgba(15, 15, 15, 0.95); border-radius: 40px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #888; /* اللون الرمادي للأيقونات غير النشطة */ cursor: pointer; transition: 0.3s ease; position: relative; }
+        .nav-item.active { color: #00d4ff; /* اللون الأزرق للأيقونة النشطة */ }
+        .nav-item.active svg, .nav-item.active span { text-shadow: 0 0 15px #00d4ff, 0 0 10px #00d4ff; }
+        .nav-item.active::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 50px; height: 50px; background: rgba(0, 212, 255, 0.15); border-radius: 50%; filter: blur(10px); z-index: -1; }
+        .nav-item svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; transition: 0.3s ease; }
+        .nav-item.active svg { transform: translateY(-3px); }
+        .nav-item span { font-size: 11px; font-weight: bold; transition: 0.3s ease; }
     </style>
 </head>
-<body onclick="initAudio()" ontouchstart="initAudio()">
-
-    <div class="stars" id="starContainer"></div>
+<body onclick="initAudio()"> <div class="stars" id="starContainer"></div>
     <h1 class="shiny-text">ŞZS DELTA</h1>
 
     <div id="home" class="container active-page">
         <div class="card">
             <span class="header-top">أهلاً بك في المركز الرسمي</span>
             <span class="sub-title">معلومات هاك دلتا</span>
-            <p>دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك تجربة فريدة في عالم الهاك.</p>
+            دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.
         </div>
         <div class="card">
-            <span class="sub-title">مميزاتنا</span>
-            <p style="font-size: 0.9rem; color: #ccc;">تحديثات دورية، حماية من الباند، ودعم فني متواصل لمشتركين DEVSZ.</p>
+            <span class="sub-title">لماذا تختار دلتا؟</span>
+            دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.
         </div>
     </div>
 
     <div id="hacks" class="container">
         <div class="card">
-            <span class="sub-title">تحميل الهاك</span>
-            <span class="header-top">إصدار الأندرويد الأخير</span>
-            <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" id="btnDownload">
-                <svg viewBox="0 0 24 24" style="fill:#3ddc84; width:30px;"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
-                <br><b>Android</b><br><small>Download Now</small>
+            <span class="sub-title">إصدارات الأجهزة</span>
+            اضغط لتحميل النسخة مباشرة
+            <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="playClick()">
+                <svg viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
+                <span style="font-weight: bold; font-size: 1.1rem; margin-top: 5px;">Android</span>
+                <span style="font-size: 11px; opacity: 0.7;">تحميل APK مباشرة</span>
             </a>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <div class="nav-item active" id="navHome">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            <span>الرئيسية</span>
+    <div id="channels" class="container">
+        <div class="card">
+            <span class="sub-title">قنواتنا</span>
+            سيتم إضافة القنوات قريباً...
         </div>
-        <div class="nav-item" id="navHacks">
+    </div>
+
+    <div id="key" class="container">
+        <div class="card">
+            <span class="sub-title">المفتاح</span>
+            احصل على المفتاح من هنا...
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item" onclick="showPage('key', this)">
+            <svg viewBox="0 0 24 24"><path d="M12.65,10C11.7,7.64 9.38,6 6.75,6C3.06,6 0,9.06 0,12.75C0,16.44 3.06,19.5 6.75,19.5C9.38,19.5 11.7,17.86 12.65,15.5H16.5V18.5H19.5V15.5H22.5V12.5H12.65M6.75,16.5C4.68,16.5 3,14.82 3,12.75C3,10.68 4.68,9 6.75,9C8.82,9 10.5,10.68 10.5,12.75C10.5,14.82 8.82,16.5 6.75,16.5Z"/></svg>
+            <span>المفتاح</span>
+        </div>
+        <div class="nav-item" onclick="showPage('channels', this)">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span>قنواتنا</span>
+        </div>
+        <div class="nav-item" onclick="showPage('hacks', this)">
             <svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V22L4.5,20.5L6,22L7.5,20.5L9,22L10.5,20.5L12,22L13.5,20.5L15,22L16.5,20.5L18,22L19.5,20.5L21,22V11A9,9 0 0,0 12,2M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12A2,2 0 0,1 7,10A2,2 0 0,1 9,8M15,8A2,2 0 0,1 17,10A2,2 0 0,1 15,12A2,2 0 0,1 13,10A2,2 0 0,1 15,8Z"/></svg>
             <span>هاكاتنا</span>
         </div>
+        <div class="nav-item active" onclick="showPage('home', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>الرئيسية</span>
+        </div>
     </nav>
 
-    <audio id="clickSound" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/Screen_Recording_20260405_162247.mp4" preload="auto"></audio>
+    <audio id="clickSound" src="data:audio/wav;base64,UklGRl9vT19XQVZFRm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTdvT18AZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZm" preload="auto"></audio>
 
     <script>
-        const audio = document.getElementById('clickSound');
-        let isAudioReady = false;
+        // نجوم الخلفية
+        const starContainer = document.getElementById('starContainer');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 2 + 'px'; star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.animationDuration = (Math.random() * 5 + 3) + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starContainer.appendChild(star);
+        }
 
-        // تفعيل الصوت عند أول لمسة للشاشة (ضروري للمتصفحات)
+        const snd = document.getElementById('clickSound');
+        let audioUnlocked = false;
+
+        // تفعيل الصوت عند أول لمسة
         function initAudio() {
-            if (!isAudioReady) {
-                audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    isAudioReady = true;
-                }).catch(e => console.log("الصوت قيد التحميل..."));
+            if (!audioUnlocked) {
+                snd.play().then(() => { snd.pause(); snd.currentTime = 0; audioUnlocked = true; }).catch(() => {});
+                document.body.removeAttribute('onclick');
             }
         }
 
-        function playClick() {
-            if (isAudioReady) {
-                audio.currentTime = 0;
-                audio.play();
-            }
-        }
+        function playClick() { if (audioUnlocked) { snd.currentTime = 0; snd.play().catch(() => {}); } }
 
-        // الأوامر البرمجية للأزرار
-        document.getElementById('navHome').onclick = function() {
-            playClick();
-            showPage('home', this);
-        };
-
-        document.getElementById('navHacks').onclick = function() {
-            playClick();
-            showPage('hacks', this);
-        };
-
-        document.getElementById('btnDownload').onclick = function() {
-            playClick();
-        };
-
-        function showPage(pId, el) {
+        // نظام التنقل
+        function showPage(pageId, element) {
+            playClick(); // تشغيل الصوت عند الضغط
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
-            document.getElementById(pId).classList.add('active-page');
+            document.getElementById(pageId).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        // إنشاء النجوم بشكل عشوائي
-        const sc = document.getElementById('starContainer');
-        for (let i = 0; i < 40; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            s.style.width = '2px';
-            s.style.height = '2px';
-            s.style.left = Math.random() * 100 + 'vw';
-            s.style.top = Math.random() * 100 + 'vh';
-            s.style.animationDuration = (Math.random() * 5 + 3) + 's';
-            sc.appendChild(s);
+            element.classList.add('active');
         }
 
         // منع سحب الصفحة للأعلى والأسفل (للمظهر الاحترافي)
-        document.addEventListener('touchmove', (e) => {
-            if (!e.target.closest('.container')) e.preventDefault();
-        }, { passive: false });
+        document.addEventListener('touchmove', (e) => { if (!e.target.closest('.container')) e.preventDefault(); }, { passive: false });
     </script>
 </body>
 </html>
