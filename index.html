@@ -13,14 +13,13 @@
             background-color: #000; position: relative;
         }
 
-        /* التوهج السمائي العلوي */
+        /* التوهج العلوي */
         body::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25vh;
             background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
             z-index: 1; pointer-events: none;
         }
 
-        /* النجوم */
         .stars { position: absolute; width: 100%; height: 100%; z-index: 0; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: rise 7s linear infinite; }
         @keyframes rise { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
@@ -31,8 +30,6 @@
             background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shine 3s infinite linear; position: relative; z-index: 10;
         }
-
-        @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .container {
             position: relative; z-index: 10; padding: 20px; height: 100%;
@@ -53,14 +50,15 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 100%; animation: shine 4s infinite linear;
         }
 
+        @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
         .download-btn {
             background: rgba(61, 220, 132, 0.1); border: 2px solid #3ddc84;
             border-radius: 15px; padding: 12px; width: 150px; display: block;
-            margin: 15px auto 0; text-decoration: none; color: white; transition: 0.2s; text-align: center;
+            margin: 15px auto 0; text-decoration: none; color: white; transition: 0.2s;
         }
-        .download-btn:active { transform: scale(0.9); }
 
-        /* الشريط السفلي الاحترافي */
+        /* الشريط السفلي */
         .bottom-nav {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 380px; height: 75px;
@@ -71,40 +69,27 @@
 
         .nav-item {
             display: flex; flex-direction: column; align-items: center;
-            color: #666; cursor: pointer; transition: 0.3s; position: relative;
+            color: #666; cursor: pointer; transition: 0.3s;
         }
-
         .nav-item.active { color: #00d4ff; }
-        
-        /* تنسيق الأيقونات SVG */
-        .nav-item svg {
-            width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px;
-            transition: 0.3s; filter: drop-shadow(0 0 0px transparent);
-        }
-
-        .nav-item.active svg {
-            filter: drop-shadow(0 0 8px #00d4ff);
-            transform: translateY(-2px);
-        }
-
+        .nav-item svg { width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px; transition: 0.3s; }
+        .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); transform: translateY(-2px); }
         .nav-item span { font-size: 11px; font-weight: bold; }
 
     </style>
 </head>
-<body>
-
-    <div class="stars" id="starContainer"></div>
+<body onclick="initAudio()"> <div class="stars" id="starContainer"></div>
     <h1 class="shiny-text">ŞZS DELTA</h1>
 
     <div id="home" class="container active-page">
         <div class="card">
             <span class="header-top">أهلاً بك في المركز الرسمي</span>
             <span class="sub-title">معلومات هاك دلتا</span>
-            دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند.
+            دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.
         </div>
         <div class="card">
             <span class="sub-title">لماذا تختار دلتا؟</span>
-            <span class="header-top" style="font-size: 1rem;">دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</span>
+            <span class="header-top">دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</span>
         </div>
     </div>
 
@@ -130,9 +115,34 @@
         </div>
     </nav>
 
-    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
     <script>
+        const snd = document.getElementById('clickSound');
+
+        // وظيفة لتفعيل الصوت عند أول لمسة للشاشة (مهم جداً للمتصفحات)
+        function initAudio() {
+            snd.play().then(() => {
+                snd.pause();
+                snd.currentTime = 0;
+            }).catch(() => {});
+            // نزيل الحدث بعد أول تفعيل لتوفير الأداء
+            document.body.removeAttribute('onclick');
+        }
+
+        function playClick() {
+            snd.currentTime = 0;
+            snd.play().catch(e => console.log("الصوت محجوب: ", e));
+        }
+
+        function showPage(pId, el) {
+            playClick();
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
+            document.getElementById(pId).classList.add('active-page');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
         // نجوم الخلفية
         const sc = document.getElementById('starContainer');
         for (let i = 0; i < 50; i++) {
@@ -142,33 +152,12 @@
             s.style.height = s.style.width;
             s.style.left = Math.random() * 100 + 'vw';
             s.style.animationDuration = (Math.random() * 5 + 3) + 's';
-            s.style.animationDelay = Math.random() * 5 + 's';
             sc.appendChild(s);
         }
 
-        function showPage(pId, el) {
-            playClick(); // تشغيل الصوت عند الضغط
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
-            document.getElementById(pId).classList.add('active-page');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function playClick() {
-            const snd = document.getElementById('clickSound');
-            snd.currentTime = 0;
-            snd.play().catch(() => {
-                console.log("الصوت يحتاج تفاعل أولاً");
-            });
-        }
-
-        // منع سحب الشاشة
         document.addEventListener('touchmove', (e) => {
             if (!e.target.closest('.active-page')) e.preventDefault();
         }, { passive: false });
-
-        // تفعيل الصوت لزر التحميل أيضاً
-        document.querySelector('.download-btn').addEventListener('click', playClick);
     </script>
 </body>
 </html>
