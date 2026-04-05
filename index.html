@@ -78,7 +78,9 @@
 
     </style>
 </head>
-<body onclick="initAudio()"> <div class="stars" id="starContainer"></div>
+<body onpointerdown="unlockAudio()">
+
+    <div class="stars" id="starContainer"></div>
     <h1 class="shiny-text">ŞZS DELTA</h1>
 
     <div id="home" class="container active-page">
@@ -115,24 +117,22 @@
         </div>
     </nav>
 
-    <audio id="clickSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
-
     <script>
-        const snd = document.getElementById('clickSound');
+        // هذا هو كود الصوت مدمج (Base64) - صوت نقر "تيك" نظيف جداً
+        const clickData = "data:audio/wav;base64,UklGRl9vT19XQVZFRm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTdvT18AZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZm";
+        const audio = new Audio(clickData);
 
-        // وظيفة لتفعيل الصوت عند أول لمسة للشاشة (مهم جداً للمتصفحات)
-        function initAudio() {
-            snd.play().then(() => {
-                snd.pause();
-                snd.currentTime = 0;
+        function unlockAudio() {
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
             }).catch(() => {});
-            // نزيل الحدث بعد أول تفعيل لتوفير الأداء
-            document.body.removeAttribute('onclick');
+            document.body.removeAttribute('onpointerdown');
         }
 
         function playClick() {
-            snd.currentTime = 0;
-            snd.play().catch(e => console.log("الصوت محجوب: ", e));
+            const clone = audio.cloneNode();
+            clone.play();
         }
 
         function showPage(pId, el) {
@@ -143,9 +143,8 @@
             el.classList.add('active');
         }
 
-        // نجوم الخلفية
         const sc = document.getElementById('starContainer');
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 40; i++) {
             const s = document.createElement('div');
             s.className = 'star';
             s.style.width = Math.random() * 2 + 'px';
