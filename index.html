@@ -53,7 +53,7 @@
         .download-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
         .android-icon { width: 35px; height: 35px; fill: #3ddc84; margin-bottom: 8px; }
 
-        /* الشريط السفلي */
+        /* الشريط السفلي - الأزرار مرتبة (الرئيسية يمين، هاكاتنا يسار) */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             width: 80%; max-width: 340px; height: 75px;
@@ -69,7 +69,7 @@
         .nav-item span { font-size: 11px; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onclick="enableAudio()">
 
     <div class="stars-container" id="starField"></div>
     <div class="shiny-title">ŞZS DELTA</div>
@@ -77,21 +77,27 @@
     <div id="homePage" class="container active-page">
         <div class="card">
             <span class="sub-shiny">معلومات هاك دلتا</span>
-            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.</p>
+            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.</p>
             <div class="status-box">
                 <div class="dot"></div>
                 <span style="color: #00ff78; font-size: 0.85rem; font-weight: bold;">الحالة: يعمل بنجاح</span>
             </div>
+        </div>
+        <div class="card">
+            <span class="sub-shiny">لماذا تختار دلتا؟</span>
+            <p>دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</p>
         </div>
     </div>
 
     <div id="hacksPage" class="container">
         <div class="card">
             <span class="sub-shiny">إصدارات الأجهزة</span>
+            <p style="margin-bottom: 15px;">اضغط لتحميل النسخة مباشرة</p>
             <center>
-                <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="playClick()">
+                <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="btnSound()">
                     <svg class="android-icon" viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
                     <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                    <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
                 </a>
             </center>
         </div>
@@ -108,43 +114,41 @@
         </div>
     </nav>
 
+    <audio id="clickSfx" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAD///8BAP//AgD//wMA//8EAP//BQD//wYA//8HAP//CAD//wkA//8KAP//CwD//wwA//8NAP//DgD//w8A//8QAP//EQD//xIA//8TAP//FAD//xUA//8WAP//FwD//xgA//8ZAP//GgD//xsA//8cAP//HQD//x4A//8fAP//IAD//yEA//8iAP//IwD//yQA//8lAP//JgD//ycA//8oAP//KQD//yoA//8rAP//LAD//y0A//8uAP//LwD//zAA//8xAP//MgD//zMA//80AP//NQD//zYA//83AP//OAD//zkA//86AP//OwD//zwA//89AP//PgD//z8A//9AAP//QQD//0IA//9DAP//RAD//0UA//9GAP//RwD//0gA//9JAP//SgD//0sA//9MAP//TQD//04A//9PAP//UAD//1EA//9SAP//UwD//1QA//9VAP//VgD//1cA//9YAP//WQD//1oA//9bAP//XAD//10A//9eAP//XwD//2AA//9BAP//QgD//0MA//9EAP//RQD//0YA//9HAP//SAD//0kA//9KAP//SwD//0wA//9NAP//TgD//08A//9QAP//UQD//1IA//9TAP//VAD//1UA//9WAP//VwD//1gA//9ZAP//WgD//1sA//9cAP//XQD//14A//9fAP//YAD//2EA//9iAP//YwD//2QA//9lAP//ZgD//2cA//9oAP//aQD//2oA//9rAP//bAD//20A//9uAP//bwD//3AA//9xAP//cgD//3MA//90AP//dQD//3YA//93AP//eAD//3kA//96AP//ewD//3wA//99AP//fgD//38A//8=" preload="auto"></audio>
+
     <script>
-        // دالة توليد صوت الضغطة برمجياً (Web Audio API)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const sfx = document.getElementById('clickSfx');
+        sfx.volume = 1.0; // جعل الصوت بأقصى درجة
+        let isReady = false;
 
-        function playClick() {
-            // استئناف السياق الصوتي (مهم لمتصفحات الجوال)
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
+        function enableAudio() {
+            if (!isReady) {
+                // تفعيل الصوت من أول لمسة للشاشة (مطلوب في المتصفحات)
+                sfx.play().then(() => { 
+                    sfx.pause(); 
+                    sfx.currentTime = 0; 
+                    isReady = true; 
+                }).catch(() => {});
+                document.body.removeAttribute('onclick');
             }
-
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            oscillator.type = 'sine'; // نوع الموجة (نقية)
-            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // التردد الابتدائي
-            oscillator.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); // هبوط التردد لخلق صوت "تكة"
-
-            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); // رفع الصوت
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); // تلاشي سريع جداً
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.1);
         }
 
-        // تبديل التبويبات
+        function btnSound() { 
+            if (isReady) { 
+                sfx.currentTime = 0; 
+                sfx.play(); 
+            } 
+        }
+
         function tab(pageId, el) {
-            playClick(); // تشغيل الصوت فوراً
+            btnSound();
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         }
 
-        // تأثير النجوم
+        // إنشاء نجوم تصعد للأعلى
         const field = document.getElementById('starField');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
@@ -157,7 +161,7 @@
             field.appendChild(star);
         }
 
-        // منع السحب العشوائي للشاشة
+        // منع السحب
         document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
     </script>
 </body>
