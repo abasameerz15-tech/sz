@@ -13,12 +13,12 @@
             background: linear-gradient(180deg, #0a2b3d 0%, #000000 100%); 
         }
 
-        /* النجوم الصاعدة */
+        /* النجوم الصاعدة من تحت لفوق */
         .stars-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
         @keyframes moveStars { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        /* النص اللامع */
+        /* النص اللامع (ŞZS DELTA والعناوين) */
         .shiny-title {
             font-size: 2.2rem; font-weight: bold; text-align: center; margin: 40px 0 20px;
             background: linear-gradient(120deg, #00d4ff 30%, #ffffff 50%, #00d4ff 70%);
@@ -77,11 +77,15 @@
     <div id="homePage" class="container active-page">
         <div class="card">
             <span class="sub-shiny">معلومات هاك دلتا</span>
-            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند.</p>
+            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.</p>
             <div class="status-box">
                 <div class="dot"></div>
                 <span style="color: #00ff78; font-size: 0.85rem; font-weight: bold;">الحالة: يعمل بنجاح</span>
             </div>
+        </div>
+        <div class="card">
+            <span class="sub-shiny">لماذا تختار دلتا؟</span>
+            <p>دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</p>
         </div>
     </div>
 
@@ -114,40 +118,25 @@
 
     <script>
         const sfx = document.getElementById('clickSfx');
-        sfx.volume = 1.0; 
         let isReady = false;
 
-        // وظيفة تفعيل الصوت عند أول لمسة للشاشة (ضرورية للمتصفحات)
         function enableAudio() {
             if (!isReady) {
-                sfx.play().then(() => { 
-                    sfx.pause(); 
-                    sfx.currentTime = 0; 
-                    isReady = true; 
-                    console.log("Audio Enabled");
-                }).catch(e => console.log("Audio pending user interaction"));
+                sfx.play().then(() => { sfx.pause(); sfx.currentTime = 0; isReady = true; });
                 document.body.removeAttribute('onclick');
             }
         }
 
-        // تشغيل الصوت
-        function btnSound() { 
-            if (isReady) { 
-                sfx.currentTime = 0; 
-                sfx.play(); 
-            } 
-        }
+        function btnSound() { if (isReady) { sfx.currentTime = 0; sfx.play(); } }
 
-        // التبديل بين الصفحات
         function tab(pageId, el) {
-            btnSound(); // تشغيل الصوت عند الضغط على القائمة السفلية
+            btnSound();
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         }
 
-        // تأثير النجوم
         const field = document.getElementById('starField');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
@@ -160,11 +149,7 @@
             field.appendChild(star);
         }
 
-        // منع سحب الصفحة في الجوال
-        document.addEventListener('touchmove', e => {
-            if (e.target.closest('.container')) return; 
-            e.preventDefault();
-        }, { passive: false });
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
     </script>
 </body>
 </html>
