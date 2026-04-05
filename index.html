@@ -16,13 +16,13 @@
         /* التوهج السمائي العلوي */
         body::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25vh;
-            background: linear-gradient(180deg, rgba(0, 212, 255, 0.2) 0%, transparent 100%);
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
             z-index: 1; pointer-events: none;
         }
 
         /* النجوم */
         .stars { position: absolute; width: 100%; height: 100%; z-index: 0; }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.4; animation: rise 7s linear infinite; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: rise 7s linear infinite; }
         @keyframes rise { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
         .shiny-text {
@@ -41,42 +41,52 @@
         .active-page { display: flex; }
 
         .card {
-            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px; padding: 20px; width: 92%; max-width: 400px;
-            margin-bottom: 15px; color: #ccc; text-align: center;
+            margin-bottom: 15px; color: #ccc; text-align: center; backdrop-filter: blur(10px);
         }
 
-        /* تنسيق العناوين تحت بعض */
-        .header-top { color: #fff; font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px; display: block; }
+        .header-top { color: #fff; font-size: 0.9rem; opacity: 0.7; margin-bottom: 5px; display: block; }
         .sub-title { 
             color: #00d4ff; font-weight: bold; font-size: 1.3rem; margin-bottom: 10px; display: block;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            background: linear-gradient(120deg, #00d4ff, #fff, #00d4ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 100%; animation: shine 4s infinite linear;
         }
 
         .download-btn {
             background: rgba(61, 220, 132, 0.1); border: 2px solid #3ddc84;
-            border-radius: 15px; padding: 12px; width: 140px; display: block;
-            margin: 15px auto 0; text-decoration: none; color: white; transition: 0.2s;
+            border-radius: 15px; padding: 12px; width: 150px; display: block;
+            margin: 15px auto 0; text-decoration: none; color: white; transition: 0.2s; text-align: center;
         }
         .download-btn:active { transform: scale(0.9); }
 
-        /* الشريط السفلي */
+        /* الشريط السفلي الاحترافي */
         .bottom-nav {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 380px; height: 75px;
-            background: #0f0f0f; border-radius: 40px;
+            background: rgba(15, 15, 15, 0.95); border-radius: 40px;
             display: flex; justify-content: space-around; align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
         }
 
         .nav-item {
             display: flex; flex-direction: column; align-items: center;
-            color: #555; cursor: pointer; transition: 0.3s; position: relative;
+            color: #666; cursor: pointer; transition: 0.3s; position: relative;
         }
 
         .nav-item.active { color: #00d4ff; }
-        .nav-item.active .icon { text-shadow: 0 0 15px #00d4ff; transform: translateY(-3px); }
-        .nav-item .icon { font-size: 24px; margin-bottom: 4px; transition: 0.3s; }
+        
+        /* تنسيق الأيقونات SVG */
+        .nav-item svg {
+            width: 26px; height: 26px; fill: currentColor; margin-bottom: 4px;
+            transition: 0.3s; filter: drop-shadow(0 0 0px transparent);
+        }
+
+        .nav-item.active svg {
+            filter: drop-shadow(0 0 8px #00d4ff);
+            transform: translateY(-2px);
+        }
+
         .nav-item span { font-size: 11px; font-weight: bold; }
 
     </style>
@@ -103,24 +113,24 @@
             <span class="sub-title">إصدارات الأجهزة</span>
             <span class="header-top">اضغط لتحميل النسخة مباشرة</span>
             <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="playClick()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" width="30"><br>
-                <b>Android</b><br><span style="font-size: 10px;">تحميل APK</span>
+                <svg viewBox="0 0 24 24" style="width:30px; fill:#3ddc84;"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
+                <br><b>Android</b><br><span style="font-size: 10px;">تحميل APK</span>
             </a>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="showPage('home', this)">
-            <div class="icon">🏠</div>
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>الرئيسية</span>
         </div>
         <div class="nav-item" onclick="showPage('hacks', this)">
-            <div class="icon">👾</div>
+            <svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V22L4.5,20.5L6,22L7.5,20.5L9,22L10.5,20.5L12,22L13.5,20.5L15,22L16.5,20.5L18,22L19.5,20.5L21,22V11A9,9 0 0,0 12,2M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12A2,2 0 0,1 7,10A2,2 0 0,1 9,8M15,8A2,2 0 0,1 17,10A2,2 0 0,1 15,12A2,2 0 0,1 13,10A2,2 0 0,1 15,8Z"/></svg>
             <span>هاكاتنا</span>
         </div>
     </nav>
 
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
 
     <script>
         // نجوم الخلفية
@@ -137,7 +147,7 @@
         }
 
         function showPage(pId, el) {
-            playClick();
+            playClick(); // تشغيل الصوت عند الضغط
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
             document.getElementById(pId).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -147,13 +157,18 @@
         function playClick() {
             const snd = document.getElementById('clickSound');
             snd.currentTime = 0;
-            snd.play().catch(()=>{});
+            snd.play().catch(() => {
+                console.log("الصوت يحتاج تفاعل أولاً");
+            });
         }
 
         // منع سحب الشاشة
         document.addEventListener('touchmove', (e) => {
             if (!e.target.closest('.active-page')) e.preventDefault();
         }, { passive: false });
+
+        // تفعيل الصوت لزر التحميل أيضاً
+        document.querySelector('.download-btn').addEventListener('click', playClick);
     </script>
 </body>
 </html>
