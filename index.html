@@ -8,10 +8,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background-color: #000; color: #fff; }
         
-        /* التوهج العلوي */
         body::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 20vh; background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%); pointer-events: none; z-index: 1; }
 
-        /* النجوم */
         .stars { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.3; animation: rise 8s linear infinite; }
         @keyframes rise { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
@@ -29,7 +27,7 @@
         .download-btn { background: rgba(61, 220, 132, 0.15); border: 2px solid #3ddc84; border-radius: 15px; padding: 15px; width: 160px; display: inline-block; margin-top: 10px; text-decoration: none; color: #fff; transition: 0.2s; }
         .download-btn:active { transform: scale(0.9); }
 
-        /* الشريط السفلي */
+        /* الشريط السفلي بأيقونات SVG */
         .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 380px; height: 70px; background: #111; border-radius: 35px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 100; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; transition: 0.3s; }
         .nav-item.active { color: #00d4ff; }
@@ -38,7 +36,7 @@
         .nav-item span { font-size: 11px; font-weight: bold; }
     </style>
 </head>
-<body ontouchstart="unlockAudio()" onclick="unlockAudio()">
+<body onclick="initAudio()">
 
     <div class="stars" id="starContainer"></div>
     <h1 class="shiny-text">ŞZS DELTA</h1>
@@ -48,10 +46,6 @@
             <span class="header-top">أهلاً بك في المركز الرسمي</span>
             <span class="sub-title">معلومات هاك دلتا</span>
             دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.
-        </div>
-        <div class="card">
-            <span class="sub-title">لماذا تختار دلتا؟</span>
-            <span class="header-top">دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</span>
         </div>
     </div>
 
@@ -77,29 +71,26 @@
         </div>
     </nav>
 
-    <script>
-        // صوت النقرة مدمج كـ Base64 (شغال 100% بدون انترنت)
-        const clickSnd = new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFRm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YTdvT18AZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZm");
+    <audio id="customSound" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/Screen_Recording_20260405_162247.mp4" preload="auto"></audio>
 
-        let audioUnlocked = false;
-        function unlockAudio() {
-            if (audioUnlocked) return;
-            clickSnd.play().then(() => {
-                clickSnd.pause();
-                clickSnd.currentTime = 0;
-                audioUnlocked = true;
+    <script>
+        const mySound = document.getElementById('customSound');
+
+        function initAudio() {
+            // محاولة أولية لتشغيل الصوت لفك حظر المتصفح
+            mySound.play().then(() => {
+                mySound.pause();
+                mySound.currentTime = 0;
             }).catch(() => {});
+            document.body.removeAttribute('onclick');
         }
 
         function playClick() {
-            if (audioUnlocked) {
-                const s = clickSnd.cloneNode();
-                s.volume = 0.5;
-                s.play();
-            }
+            mySound.currentTime = 0; // البدء من بداية الصوت
+            mySound.play();
         }
 
-        // أزرار التحكم
+        // ربط الصوت بالأزرار المحددة
         document.getElementById('navHome').onclick = function() {
             playClick();
             showPage('home', this);
@@ -121,7 +112,7 @@
             el.classList.add('active');
         }
 
-        // نجوم
+        // تأثير النجوم
         const sc = document.getElementById('starContainer');
         for (let i = 0; i < 40; i++) {
             const s = document.createElement('div');
@@ -132,8 +123,6 @@
             s.style.animationDuration = (Math.random() * 5 + 3) + 's';
             sc.appendChild(s);
         }
-
-        document.addEventListener('touchmove', (e) => { if (!e.target.closest('.container')) e.preventDefault(); }, { passive: false });
     </script>
 </body>
 </html>
