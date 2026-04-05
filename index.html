@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ŞZS DELTA | المركز الرسمي</title>
     <style>
-        /* إعدادات الجسم لمنع السحب */
+        /* إعدادات الجسم لمنع السحب وتحديد الخلفية السوداء */
         * {
             margin: 0;
             padding: 0;
@@ -18,18 +18,24 @@
             height: 100%;
             overflow: hidden; /* منع السحب والتحريك */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(180deg, #87ceeb 0%, #000000 100%);
-            background-size: 400% 400%;
-            animation: waterFlow 15s ease infinite;
+            background-color: #000000; /* خلفية سوداء بالكامل */
+            position: relative;
         }
 
-        @keyframes waterFlow {
-            0% { background-position: 50% 0%; }
-            50% { background-position: 50% 100%; }
-            100% { background-position: 50% 0%; }
+        /* تدرج سمائي خفيف فوق فقط (زي الموقع المطلوب) */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30vh; /* يغطي الـ 30% العلوية فقط */
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* نظام النجوم الصاعدة */
+        /* نظام النجوم الصاعدة في الخلفية */
         .stars {
             position: absolute;
             width: 100%;
@@ -37,45 +43,49 @@
             top: 0;
             left: 0;
             pointer-events: none;
+            z-index: 0;
         }
 
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
-            opacity: 0.5;
-            animation: rise 5s linear infinite;
+            opacity: 0.3;
+            animation: rise 8s linear infinite;
         }
 
         @keyframes rise {
             from { transform: translateY(100vh); opacity: 0; }
-            to { transform: translateY(-10vh); opacity: 0.8; }
+            to { transform: translateY(-10vh); opacity: 0.6; }
         }
 
         /* النصوص اللامعة */
         .shiny-text {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #00d4ff;
+            color: #fff; /* النص الأساسي أبيض */
             text-align: center;
             margin: 20px 0;
-            background: linear-gradient(120deg, transparent 30%, #fff 50%, transparent 70%);
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(120deg, #fff 30%, #00d4ff 50%, #fff 70%);
             background-size: 200% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s infinite;
+            animation: shine 3s infinite linear;
         }
 
         .sub-title {
-            color: #00d4ff;
+            color: #00d4ff; /* لون سمائي زاهي */
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(120deg, transparent 30%, #fff 50%, transparent 70%);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            background: linear-gradient(120deg, #00d4ff 30%, #fff 50%, #00d4ff 70%);
             background-size: 200% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 4s infinite;
+            animation: shine 4s infinite linear;
         }
 
         @keyframes shine {
@@ -83,41 +93,43 @@
             100% { background-position: -200% 0; }
         }
 
-        /* الحاويات */
+        /* الحاويات (Cards) بستايل زجاجي داكن */
         .container {
             position: relative;
             z-index: 10;
             padding: 20px;
+            padding-bottom: 100px; /* مسافة للشريط السفلي */
             display: none; /* مخفي افتراضياً */
             flex-direction: column;
             align-items: center;
-            height: 80vh;
-            overflow-y: auto;
+            height: 100%;
+            overflow-y: auto; /* السماح بالتمرير الداخلي لو طال النص */
         }
 
         .active-page { display: flex; }
 
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.03); /* شفافية خفيفة جداً */
+            backdrop-filter: blur(15px); /* تأثير ضبابي قوي */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* حواف نحيفة جداً */
+            border-radius: 24px; /* حواف أنعم */
+            padding: 25px;
             width: 90%;
             max-width: 400px;
             margin-bottom: 20px;
-            color: white;
+            color: #e0e0e0; /* لون نص مريح للعين */
             text-align: center;
-            line-height: 1.6;
+            line-height: 1.7;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* ظل لإبراز الكارد */
         }
 
         /* زر التحميل أندرويد */
         .download-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(61, 220, 132, 0.1); /* خلفية خضراء خفيفة */
             border: 2px solid #3ddc84;
-            border-radius: 15px;
+            border-radius: 18px;
             padding: 15px;
-            width: 150px;
+            width: 160px;
             cursor: pointer;
             text-decoration: none;
             color: white;
@@ -125,21 +137,12 @@
             flex-direction: column;
             align-items: center;
             transition: 0.3s;
+            margin: 0 auto;
         }
 
-        .download-btn:active { transform: scale(0.9); }
+        .download-btn:active { transform: scale(0.95); }
 
-        .android-icon {
-            width: 40px;
-            height: 40px;
-            background: #3ddc84;
-            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); /* شكل تجريبي */
-            margin-bottom: 5px;
-            mask: url('https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg') no-repeat center;
-            -webkit-mask: url('https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg') no-repeat center;
-        }
-
-        /* الشريط السفلي */
+        /* الشريط السفلي (نفس الستايل المطلوب) */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -147,33 +150,52 @@
             transform: translateX(-50%);
             width: 90%;
             max-width: 400px;
-            height: 70px;
-            background: rgba(20, 20, 20, 0.9);
-            border-radius: 35px;
+            height: 75px;
+            background: rgba(15, 15, 15, 0.95); /* أسود غامق جداً */
+            border-radius: 40px;
             display: flex;
             justify-content: space-around;
             align-items: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 100;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #777;
+            color: #888; /* لون غير نشط */
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s ease;
+            position: relative;
         }
 
+        /* توهج الزر النشط */
         .nav-item.active {
             color: #00d4ff;
-            text-shadow: 0 0 15px #00d4ff;
         }
 
-        .nav-item i { font-size: 24px; margin-bottom: 5px; }
+        .nav-item.active i, .nav-item.active span {
+            text-shadow: 0 0 20px #00d4ff, 0 0 10px #00d4ff;
+        }
 
-        /* أيقونات بسيطة */
+        /* إضافة الإضاءة الخلفية للزر النشط (Glow Effect) */
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(15px);
+            z-index: -1;
+        }
+
+        .nav-item i { font-size: 26px; margin-bottom: 5px; }
+        .nav-item span { font-size: 12px; font-weight: bold; }
+
+        /* أيقونات تجريبية */
         .icon-home::before { content: "🏠"; }
         .icon-hack::before { content: "👻"; }
 
@@ -201,11 +223,11 @@
         <div class="card">
             <div class="sub-title">إصدارات الأجهزة</div>
             اضغط لتحميل النسخة مباشرة
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <div style="margin-top: 25px;">
                 <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="playClickSound()">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" width="30">
-                    <span style="font-weight: bold; margin-top: 5px;">Android</span>
-                    <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" width="35" style="margin-bottom: 8px;">
+                    <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                    <span style="font-size: 11px; opacity: 0.8; margin-top: 2px;">تحميل APK مباشرة</span>
                 </a>
             </div>
         </div>
@@ -213,33 +235,34 @@
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="showPage('home', this)">
-            <span class="icon-home"></span>
+            <i class="icon-home"></i>
             <span>الرئيسية</span>
         </div>
         <div class="nav-item" onclick="showPage('hacks', this)">
-            <span class="icon-hack"></span>
+            <i class="icon-hack"></i>
             <span>هاكاتنا</span>
         </div>
     </nav>
 
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3" preload="auto"></audio>
 
     <script>
-        // إنشاء النجوم
+        // إنشاء النجوم بشكل عشوائي
         const starContainer = document.getElementById('starContainer');
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = Math.random() * 3 + 'px';
+            star.style.width = Math.random() * 2.5 + 'px';
             star.style.height = star.style.width;
             star.style.left = Math.random() * 100 + 'vw';
-            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            star.style.animationDuration = (Math.random() * 4 + 4) + 's'; // حرك أبطأ
             star.style.animationDelay = Math.random() * 5 + 's';
             starContainer.appendChild(star);
         }
 
-        // نظام التنقل
+        // نظام التنقل بين الصفحات
         function showPage(pageId, element) {
+            // تشغيل الصوت فوراً
             playClickSound();
             
             // إخفاء كل الصفحات
@@ -254,13 +277,14 @@
 
         function playClickSound() {
             const sound = document.getElementById('clickSound');
-            sound.currentTime = 0;
-            sound.play();
+            sound.currentTime = 0; // إعادة الصوت للبداية
+            sound.play().catch(() => {}); // تجنب أخطاء المتصفح لو منع الصوت تلقائياً
         }
 
-        // منع السحب للأندرويد والآيفون
+        // منع السحب للأندرويد والآيفون بشكل احترافي
         document.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.container')) return; // السماح بالتمرير فقط داخل المربع إذا كبر النص
+            // السماح بالتمرير فقط داخل حاوية المحتوى النشطة
+            if (e.target.closest('.active-page')) return;
             e.preventDefault();
         }, { passive: false });
     </script>
