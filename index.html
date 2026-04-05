@@ -5,38 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ŞZS DELTA</title>
     <style>
+        /* التنسيق العام */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; background-color: #000; color: #fff; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #000; color: #fff; }
         
-        body::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 20vh; background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%); pointer-events: none; z-index: 1; }
+        /* التوهج العلوي الأزرق */
+        body::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25vh;
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
+            pointer-events: none; z-index: 1;
+        }
 
+        /* تأثير النجوم المتساقطة */
         .stars { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.3; animation: rise 8s linear infinite; }
         @keyframes rise { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        .shiny-text { font-size: 2.2rem; font-weight: bold; text-align: center; margin: 30px 0; background: linear-gradient(120deg, #fff 30%, #00d4ff 50%, #fff 70%); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s infinite linear; position: relative; z-index: 10; }
+        /* النص اللامع المتحرك */
+        .shiny-text {
+            font-size: 2.2rem; font-weight: bold; text-align: center; margin: 30px 0;
+            background: linear-gradient(120deg, #fff 30%, #00d4ff 50%, #fff 70%);
+            background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear; position: relative; z-index: 10;
+        }
         @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .container { position: relative; z-index: 10; padding: 20px; display: none; flex-direction: column; align-items: center; height: calc(100% - 150px); overflow-y: auto; }
+        /* حاويات الصفحات */
+        .container {
+            position: relative; z-index: 10; padding: 20px; display: none;
+            flex-direction: column; align-items: center; height: calc(100% - 150px);
+            overflow-y: auto;
+        }
         .active-page { display: flex; }
 
-        .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px; width: 95%; max-width: 400px; margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px); }
+        /* تصميم الكروت */
+        .card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 20px; width: 95%; max-width: 400px;
+            margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px);
+        }
         .header-top { color: #aaa; font-size: 0.9rem; margin-bottom: 8px; display: block; }
         .sub-title { color: #00d4ff; font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; display: block; }
 
-        .download-btn { background: rgba(61, 220, 132, 0.15); border: 2px solid #3ddc84; border-radius: 15px; padding: 15px; width: 160px; display: inline-block; margin-top: 10px; text-decoration: none; color: #fff; transition: 0.2s; }
+        /* زر التحميل */
+        .download-btn {
+            background: rgba(61, 220, 132, 0.15); border: 2px solid #3ddc84;
+            border-radius: 15px; padding: 15px; width: 160px; display: inline-block;
+            margin-top: 10px; text-decoration: none; color: #fff; transition: 0.2s;
+        }
         .download-btn:active { transform: scale(0.9); }
 
-        /* الشريط السفلي بأيقونات SVG */
-        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 380px; height: 70px; background: #111; border-radius: 35px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 100; }
+        /* الشريط السفلي الاحترافي */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 380px; height: 70px;
+            background: rgba(15, 15, 15, 0.95); border-radius: 35px;
+            display: flex; justify-content: space-around; align-items: center;
+            border: 1px solid rgba(255,255,255,0.1); z-index: 100;
+        }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; transition: 0.3s; }
         .nav-item.active { color: #00d4ff; }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 4px; }
-        .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 4px; transition: 0.3s; }
+        .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); transform: translateY(-2px); }
         .nav-item span { font-size: 11px; font-weight: bold; }
     </style>
 </head>
-<body onclick="initAudio()">
+<body onclick="initAudio()" ontouchstart="initAudio()">
 
     <div class="stars" id="starContainer"></div>
     <h1 class="shiny-text">ŞZS DELTA</h1>
@@ -45,17 +79,21 @@
         <div class="card">
             <span class="header-top">أهلاً بك في المركز الرسمي</span>
             <span class="sub-title">معلومات هاك دلتا</span>
-            دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.
+            <p>دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك تجربة فريدة في عالم الهاك.</p>
+        </div>
+        <div class="card">
+            <span class="sub-title">مميزاتنا</span>
+            <p style="font-size: 0.9rem; color: #ccc;">تحديثات دورية، حماية من الباند، ودعم فني متواصل لمشتركين DEVSZ.</p>
         </div>
     </div>
 
     <div id="hacks" class="container">
         <div class="card">
-            <span class="sub-title">إصدارات الأجهزة</span>
-            <span class="header-top">اضغط لتحميل النسخة مباشرة</span>
+            <span class="sub-title">تحميل الهاك</span>
+            <span class="header-top">إصدار الأندرويد الأخير</span>
             <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" id="btnDownload">
                 <svg viewBox="0 0 24 24" style="fill:#3ddc84; width:30px;"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
-                <br><b>Android</b><br><small>تحميل APK</small>
+                <br><b>Android</b><br><small>Download Now</small>
             </a>
         </div>
     </div>
@@ -71,26 +109,31 @@
         </div>
     </nav>
 
-    <audio id="customSound" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/Screen_Recording_20260405_162247.mp4" preload="auto"></audio>
+    <audio id="clickSound" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/Screen_Recording_20260405_162247.mp4" preload="auto"></audio>
 
     <script>
-        const mySound = document.getElementById('customSound');
+        const audio = document.getElementById('clickSound');
+        let isAudioReady = false;
 
+        // تفعيل الصوت عند أول لمسة للشاشة (ضروري للمتصفحات)
         function initAudio() {
-            // محاولة أولية لتشغيل الصوت لفك حظر المتصفح
-            mySound.play().then(() => {
-                mySound.pause();
-                mySound.currentTime = 0;
-            }).catch(() => {});
-            document.body.removeAttribute('onclick');
+            if (!isAudioReady) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    isAudioReady = true;
+                }).catch(e => console.log("الصوت قيد التحميل..."));
+            }
         }
 
         function playClick() {
-            mySound.currentTime = 0; // البدء من بداية الصوت
-            mySound.play();
+            if (isAudioReady) {
+                audio.currentTime = 0;
+                audio.play();
+            }
         }
 
-        // ربط الصوت بالأزرار المحددة
+        // الأوامر البرمجية للأزرار
         document.getElementById('navHome').onclick = function() {
             playClick();
             showPage('home', this);
@@ -112,17 +155,23 @@
             el.classList.add('active');
         }
 
-        // تأثير النجوم
+        // إنشاء النجوم بشكل عشوائي
         const sc = document.getElementById('starContainer');
         for (let i = 0; i < 40; i++) {
             const s = document.createElement('div');
             s.className = 'star';
-            s.style.width = '2px'; s.style.height = '2px';
+            s.style.width = '2px';
+            s.style.height = '2px';
             s.style.left = Math.random() * 100 + 'vw';
             s.style.top = Math.random() * 100 + 'vh';
             s.style.animationDuration = (Math.random() * 5 + 3) + 's';
             sc.appendChild(s);
         }
+
+        // منع سحب الصفحة للأعلى والأسفل (للمظهر الاحترافي)
+        document.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('.container')) e.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
