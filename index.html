@@ -13,43 +13,12 @@
             background: linear-gradient(180deg, #0a2b3d 0%, #000000 100%); 
         }
 
-        /* واجهة التسجيل والترحيب */
-        #authOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); z-index: 200;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            backdrop-filter: blur(15px); transition: 0.5s;
-        }
-        .auth-card {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.3);
-            padding: 30px; border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
-        }
-        .auth-card h2 { color: #00d4ff; margin-bottom: 10px; }
-        .auth-card p { color: #ccc; font-size: 0.9rem; margin-bottom: 20px; }
-        .auth-input {
-            width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px; border-radius: 12px; color: #fff; text-align: center; font-size: 1.2rem;
-            outline: none; margin-bottom: 15px; letter-spacing: 5px;
-        }
-        .auth-btn {
-            background: #00d4ff; color: #000; border: none; padding: 12px 30px;
-            border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
-        }
-
-        /* تنسيق عداد إجمالي المستخدمين */
-        .user-counter {
-            position: absolute; top: 15px; right: 15px; z-index: 100;
-            color: #fff; font-size: 0.8rem; background: rgba(255, 255, 255, 0.1);
-            padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; gap: 5px;
-        }
-
-        /* النجوم الصاعدة */
+        /* النجوم الصاعدة من تحت لفوق */
         .stars-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
         @keyframes moveStars { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        /* النص اللامع */
+        /* النص اللامع (ŞZS DELTA والعناوين) */
         .shiny-title {
             font-size: 2.2rem; font-weight: bold; text-align: center; margin: 40px 0 20px;
             background: linear-gradient(120deg, #00d4ff 30%, #ffffff 50%, #00d4ff 70%);
@@ -94,6 +63,7 @@
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; min-width: 80px; }
         .nav-item.active { color: #00d4ff; }
+        .nav-item:active { color: #00d4ff; background: rgba(0, 212, 255, 0.1); border-radius: 20px; }
         .nav-item svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; }
         .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); }
         .nav-item span { font-size: 11px; font-weight: bold; }
@@ -101,25 +71,10 @@
 </head>
 <body onclick="enableAudio()">
 
-    <div id="authOverlay">
-        <div class="auth-card">
-            <h2>مرحباً بك! 👋</h2>
-            <p>الرجاء كتابة كود 6 من صنعك (أرقام فقط)</p>
-            <input type="text" id="userCodeInput" class="auth-input" maxlength="6" placeholder="000000" inputmode="numeric">
-            <button class="auth-btn" id="loginBtn" onclick="validateAndLogin()">دخول للموقع</button>
-            <p id="errorMsg" style="color: #ff4d4d; margin-top: 10px; font-size: 0.8rem; display: none;"></p>
-        </div>
-    </div>
-
-    <div class="user-counter">
-        <span>عدد مستخدمين موقعنا: 🌐</span>
-        <span id="visitorCount">0</span>
-    </div>
-
     <div class="stars-container" id="starField"></div>
     <div class="shiny-title">ŞZS DELTA</div>
 
-    <div id="homePage" class="container">
+    <div id="homePage" class="container active-page">
         <div class="card">
             <span class="sub-shiny">معلومات هاك دلتا</span>
             <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.</p>
@@ -163,81 +118,7 @@
 
     <script>
         const sfx = document.getElementById('clickSfx');
-        const visitorElement = document.getElementById('visitorCount');
-        const loginBtn = document.getElementById('loginBtn');
-        const siteID = "szs_delta_v2026_final_fixed"; 
         let isReady = false;
-
-        // وظيفة التحقق من الكود والدخول مع Bypass لتجنب التعليق
-        async function validateAndLogin() {
-            const input = document.getElementById('userCodeInput').value;
-            const error = document.getElementById('errorMsg');
-            
-            if (!/^\d{6}$/.test(input)) {
-                showError("يجب إدخال 6 أرقام فقط!");
-                return;
-            }
-
-            loginBtn.disabled = true;
-            loginBtn.innerText = "جاري التحقق...";
-            error.style.display = "none";
-
-            // إذا السيرفر تأخر، ادخل تلقائياً (Bypass)
-            const forceEntry = setTimeout(() => {
-                localStorage.setItem('user_token_final', input);
-                showMainContent();
-            }, 3500);
-
-            try {
-                // نستخدم CounterAPI للتحقق
-                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total`);
-                const data = await res.json();
-
-                if (data.count && data.count > 0) {
-                    clearTimeout(forceEntry);
-                    showError("هذا الكود مستخدم مسبقاً! جرب رقماً آخر.");
-                    loginBtn.disabled = false;
-                    loginBtn.innerText = "دخول للموقع";
-                } else {
-                    // حجز الكود وزيادة العداد العام
-                    await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total/increment`);
-                    await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total/increment`);
-                    clearTimeout(forceEntry);
-                    localStorage.setItem('user_token_final', input);
-                    showMainContent();
-                }
-            } catch (e) {
-                console.log("Server issue - bypassing...");
-            }
-        }
-
-        function showError(msg) {
-            const error = document.getElementById('errorMsg');
-            error.innerText = msg;
-            error.style.display = "block";
-        }
-
-        function showMainContent() {
-            document.getElementById('authOverlay').style.display = "none";
-            document.getElementById('homePage').classList.add('active-page');
-            updateLiveCount();
-        }
-
-        window.onload = () => {
-            if (localStorage.getItem('user_token_final')) {
-                showMainContent();
-            }
-        };
-
-        async function updateLiveCount() {
-            try {
-                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total`);
-                const data = await res.json();
-                visitorElement.innerText = data.count || 0;
-            } catch (e) {}
-        }
-
-        setInterval(updateLiveCount, 8000);
 
         function enableAudio() {
             if (!isReady) {
@@ -256,7 +137,6 @@
             el.classList.add('active');
         }
 
-        // نجوم الخلفية
         const field = document.getElementById('starField');
         for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
