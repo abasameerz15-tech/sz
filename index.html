@@ -13,6 +13,24 @@
             background: linear-gradient(180deg, #0a2b3d 0%, #000000 100%); 
         }
 
+        /* تنسيق عداد المستخدمين في الزاوية */
+        .user-counter {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 100;
+            color: #fff;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         /* النجوم الصاعدة من تحت لفوق */
         .stars-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
@@ -71,6 +89,11 @@
 </head>
 <body onclick="enableAudio()">
 
+    <div class="user-counter">
+        <span>عدد مستخدمين موقعنا: 🌐</span>
+        <span id="visitorCount">0</span>
+    </div>
+
     <div class="stars-container" id="starField"></div>
     <div class="shiny-title">ŞZS DELTA</div>
 
@@ -119,6 +142,18 @@
     <script>
         const sfx = document.getElementById('clickSfx');
         let isReady = false;
+
+        // برمجة عداد الزيارات الدائم
+        function updateCounter() {
+            let count = localStorage.getItem('visitor_count');
+            if (!count) {
+                count = 100; // يبدأ من 100 كأول رقم إذا أردت، أو غيره لـ 1
+            }
+            count = parseInt(count) + 1;
+            localStorage.setItem('visitor_count', count);
+            document.getElementById('visitorCount').innerText = count;
+        }
+        updateCounter();
 
         function enableAudio() {
             if (!isReady) {
