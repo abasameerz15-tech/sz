@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ŞZS DELTA</title>
     <style>
-        /* إعدادات الشاشة */
+        /* إعدادات الشاشة ومنع السحب */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
         body, html { 
             width: 100%; height: 100%; overflow: hidden; 
@@ -13,7 +13,7 @@
             background: linear-gradient(180deg, #0a2b3d 0%, #000000 100%); 
         }
 
-        /* واجهة التسجيل */
+        /* واجهة التسجيل والترحيب */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); z-index: 200;
@@ -24,8 +24,8 @@
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.3);
             padding: 30px; border-radius: 25px; width: 85%; max-width: 350px; text-align: center;
         }
-        .auth-card h2 { color: #00d4ff; margin-bottom: 10px; font-size: 1.5rem; }
-        .auth-card p { color: #ccc; font-size: 0.85rem; margin-bottom: 20px; }
+        .auth-card h2 { color: #00d4ff; margin-bottom: 10px; }
+        .auth-card p { color: #ccc; font-size: 0.9rem; margin-bottom: 20px; }
         .auth-input {
             width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px; border-radius: 12px; color: #fff; text-align: center; font-size: 1.2rem;
@@ -36,44 +36,70 @@
             border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
         }
 
-        /* العداد العلوي */
+        /* تنسيق عداد إجمالي المستخدمين */
         .user-counter {
-            position: absolute; top: 15px; right: 15px; z-index: 100; color: #fff;
-            font-size: 0.8rem; background: rgba(255, 255, 255, 0.1);
+            position: absolute; top: 15px; right: 15px; z-index: 100;
+            color: #fff; font-size: 0.8rem; background: rgba(255, 255, 255, 0.1);
             padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; gap: 5px;
         }
 
-        /* النجوم والجماليات */
+        /* النجوم الصاعدة */
         .stars-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
         @keyframes moveStars { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
+        /* النص اللامع */
         .shiny-title {
             font-size: 2.2rem; font-weight: bold; text-align: center; margin: 40px 0 20px;
             background: linear-gradient(120deg, #00d4ff 30%, #ffffff 50%, #00d4ff 70%);
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: shineEffect 3s linear infinite; position: relative; z-index: 10;
         }
+        .sub-shiny {
+            font-weight: bold; font-size: 1.2rem; margin-bottom: 12px; display: block;
+            background: linear-gradient(120deg, #00d4ff 40%, #fff 50%, #00d4ff 60%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shineEffect 4s linear infinite;
+        }
         @keyframes shineEffect { to { background-position: 200% center; } }
 
-        /* الصفحات */
+        /* البطاقات */
         .container { position: relative; z-index: 10; padding: 0 20px; display: none; flex-direction: column; align-items: center; height: 100%; }
         .active-page { display: flex; }
-        .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 22px; width: 100%; max-width: 380px; margin-bottom: 15px; text-align: center; color: #ddd; }
+        .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 22px; width: 100%; max-width: 380px; margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px); }
+        .card p { color: #ddd; font-size: 0.95rem; line-height: 1.6; }
 
+        /* مؤشر الحالة */
+        .status-box { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 120, 0.1); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 255, 120, 0.3); margin-top: 15px; }
+        .dot { width: 8px; height: 8px; background: #00ff78; border-radius: 50%; box-shadow: 0 0 10px #00ff78; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
+
+        /* زر التحميل */
+        .download-btn {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px; padding: 18px; width: 190px; display: flex; flex-direction: column; 
+            align-items: center; text-decoration: none; color: #fff; margin-top: 10px; transition: 0.2s;
+        }
+        .download-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
+        .android-icon { width: 35px; height: 35px; fill: #3ddc84; margin-bottom: 8px; }
+
+        /* الشريط السفلي */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 340px; height: 75px; background: #0d0d0d; border-radius: 40px; 
-            display: flex; justify-content: center; align-items: center; gap: 50px; 
+            width: 80%; max-width: 340px; height: 75px;
+            background: #0d0d0d; border-radius: 40px; display: flex;
+            justify-content: center; align-items: center; gap: 50px; 
             border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; min-width: 80px; }
         .nav-item.active { color: #00d4ff; }
-        .nav-item svg { width: 28px; height: 28px; fill: currentColor; }
+        .nav-item svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; }
+        .nav-item.active svg { filter: drop-shadow(0 0 8px #00d4ff); }
+        .nav-item span { font-size: 11px; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onclick="enableAudio()">
 
     <div id="authOverlay">
         <div class="auth-card">
@@ -81,7 +107,7 @@
             <p>الرجاء كتابة كود 6 من صنعك (أرقام فقط)</p>
             <input type="text" id="userCodeInput" class="auth-input" maxlength="6" placeholder="000000" inputmode="numeric">
             <button class="auth-btn" id="loginBtn" onclick="validateAndLogin()">دخول للموقع</button>
-            <p id="errorMsg" style="color: #ff4d4d; margin-top: 12px; font-size: 0.8rem; display: none;"></p>
+            <p id="errorMsg" style="color: #ff4d4d; margin-top: 10px; font-size: 0.8rem; display: none;"></p>
         </div>
     </div>
 
@@ -95,29 +121,54 @@
 
     <div id="homePage" class="container">
         <div class="card">
-            <h3 style="color:#00d4ff; margin-bottom:10px;">أهلاً بك يا بطل</h3>
-            <p>تم تسجيل دخولك بنجاح. استمتع بكل الميزات.</p>
+            <span class="sub-shiny">معلومات هاك دلتا</span>
+            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.</p>
+            <div class="status-box">
+                <div class="dot"></div>
+                <span style="color: #00ff78; font-size: 0.85rem; font-weight: bold;">الحالة: يعمل بنجاح</span>
+            </div>
+        </div>
+        <div class="card">
+            <span class="sub-shiny">لماذا تختار دلتا؟</span>
+            <p>دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</p>
         </div>
     </div>
 
     <div id="hacksPage" class="container">
-        <div class="card"><p>قسم الهاكات قريباً..</p></div>
+        <div class="card">
+            <span class="sub-shiny">إصدارات الأجهزة</span>
+            <p style="margin-bottom: 15px;">اضغط لتحميل النسخة مباشرة</p>
+            <center>
+                <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="download-btn" onclick="btnSound()">
+                    <svg class="android-icon" viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
+                    <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                    <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
+                </a>
+            </center>
+        </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="tab('homePage', this)">
+        <div class="nav-item active" id="mBtn" onclick="tab('homePage', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>الرئيسية</span>
         </div>
-        <div class="nav-item" onclick="tab('hacksPage', this)">
+        <div class="nav-item" id="hBtn" onclick="tab('hacksPage', this)">
             <svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V22L4.5,20.5L6,22L7.5,20.5L9,22L10.5,20.5L12,22L13.5,20.5L15,22L16.5,20.5L18,22L19.5,20.5L21,22V11A9,9 0 0,0 12,2M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12A2,2 0 0,1 7,10A2,2 0 0,1 9,8M15,8A2,2 0 0,1 17,10A2,2 0 0,1 15,12A2,2 0 0,1 13,10A2,2 0 0,1 15,8Z"/></svg>
+            <span>هاكاتنا</span>
         </div>
     </nav>
 
+    <audio id="clickSfx" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/mixkit-modern-technology-select-3124%20(1).wav" preload="auto"></audio>
+
     <script>
+        const sfx = document.getElementById('clickSfx');
         const visitorElement = document.getElementById('visitorCount');
         const loginBtn = document.getElementById('loginBtn');
-        const siteID = "szs_delta_v2026_fixed"; 
+        const siteID = "szs_delta_v2026_final_fixed"; 
+        let isReady = false;
 
+        // وظيفة التحقق من الكود والدخول مع Bypass لتجنب التعليق
         async function validateAndLogin() {
             const input = document.getElementById('userCodeInput').value;
             const error = document.getElementById('errorMsg');
@@ -128,34 +179,35 @@
             }
 
             loginBtn.disabled = true;
-            loginBtn.innerText = "جاري الدخول...";
+            loginBtn.innerText = "جاري التحقق...";
             error.style.display = "none";
 
-            // ميزة التخطي الذكي: إذا السيرفر لم يرد خلال 4 ثواني، ادخل للموقع فوراً
-            const timeout = setTimeout(() => {
-                localStorage.setItem('user_auth_key', input);
+            // إذا السيرفر تأخر، ادخل تلقائياً (Bypass)
+            const forceEntry = setTimeout(() => {
+                localStorage.setItem('user_token_final', input);
                 showMainContent();
-            }, 4000);
+            }, 3500);
 
             try {
-                // محاولة التحقق الحقيقي من السيرفر
-                const res = await fetch(`https://api.countapi.xyz/hit/${siteID}/user_${input}`);
+                // نستخدم CounterAPI للتحقق
+                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total`);
                 const data = await res.json();
 
-                // إذا الـ Hit رجع قيمة أكبر من 1 يعني الكود مستخدم سابقاً من شخص آخر
-                if (data.value > 1) {
-                    clearTimeout(timeout);
-                    showError("هذا الكود محجوز لشخص آخر! اختر كوداً جديداً.");
+                if (data.count && data.count > 0) {
+                    clearTimeout(forceEntry);
+                    showError("هذا الكود مستخدم مسبقاً! جرب رقماً آخر.");
                     loginBtn.disabled = false;
                     loginBtn.innerText = "دخول للموقع";
                 } else {
-                    clearTimeout(timeout);
-                    localStorage.setItem('user_auth_key', input);
+                    // حجز الكود وزيادة العداد العام
+                    await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total/increment`);
+                    await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total/increment`);
+                    clearTimeout(forceEntry);
+                    localStorage.setItem('user_token_final', input);
                     showMainContent();
                 }
             } catch (e) {
-                // في حال فشل السيرفر تماماً، لا نعلق المستخدم، بل ندخله
-                console.log("Server bypass active");
+                console.log("Server issue - bypassing...");
             }
         }
 
@@ -172,24 +224,32 @@
         }
 
         window.onload = () => {
-            if (localStorage.getItem('user_auth_key')) {
+            if (localStorage.getItem('user_token_final')) {
                 showMainContent();
             }
         };
 
         async function updateLiveCount() {
             try {
-                const res = await fetch(`https://api.countapi.xyz/get/${siteID}/total_users`);
+                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total`);
                 const data = await res.json();
-                visitorElement.innerText = data.value || 0;
-            } catch (e) {
-                visitorElement.innerText = "1"; // قيمة افتراضية في حال تعطل السيرفر
+                visitorElement.innerText = data.count || 0;
+            } catch (e) {}
+        }
+
+        setInterval(updateLiveCount, 8000);
+
+        function enableAudio() {
+            if (!isReady) {
+                sfx.play().then(() => { sfx.pause(); sfx.currentTime = 0; isReady = true; });
+                document.body.removeAttribute('onclick');
             }
         }
 
-        setInterval(updateLiveCount, 10000);
+        function btnSound() { if (isReady) { sfx.currentTime = 0; sfx.play(); } }
 
         function tab(pageId, el) {
+            btnSound();
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -198,15 +258,18 @@
 
         // نجوم الخلفية
         const field = document.getElementById('starField');
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 40; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.width = '1.5px'; star.style.height = '1.5px';
-            star.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            star.style.width = (Math.random() * 2 + 1) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
             field.appendChild(star);
         }
+
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
     </script>
 </body>
 </html>
