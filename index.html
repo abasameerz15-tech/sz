@@ -13,7 +13,7 @@
             background: linear-gradient(180deg, #0a2b3d 0%, #000000 100%); 
         }
 
-        /* تنسيق عداد المستخدمين في الزاوية */
+        /* تنسيق عداد المستخدمين الموحد */
         .user-counter {
             position: absolute;
             top: 15px;
@@ -31,12 +31,12 @@
             gap: 5px;
         }
 
-        /* النجوم الصاعدة من تحت لفوق */
+        /* النجوم الصاعدة */
         .stars-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
         @keyframes moveStars { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        /* النص اللامع (ŞZS DELTA والعناوين) */
+        /* النص اللامع */
         .shiny-title {
             font-size: 2.2rem; font-weight: bold; text-align: center; margin: 40px 0 20px;
             background: linear-gradient(120deg, #00d4ff 30%, #ffffff 50%, #00d4ff 70%);
@@ -143,17 +143,37 @@
         const sfx = document.getElementById('clickSfx');
         let isReady = false;
 
-        // برمجة عداد الزيارات الدائم
-        function updateCounter() {
-            let count = localStorage.getItem('visitor_count');
-            if (!count) {
-                count = 100; // يبدأ من 100 كأول رقم إذا أردت، أو غيره لـ 1
+        // برمجة عداد الزيارات العالمي الموحد (بواسطة API مجاني)
+        // ملاحظة: الـ Namespace والـ Key اخترتهم باسم موقعك ليكون خاصاً بك
+        const counterKey = "szs_delta_main_counter_abas"; 
+        const visitorElement = document.getElementById('visitorCount');
+
+        async function initCounter() {
+            try {
+                // استدعاء السيرفر لزيادة الرقم وإرجاع القيمة الجديدة
+                const response = await fetch(`https://api.countapi.xyz/hit/devsz.site/${counterKey}`);
+                const data = await response.json();
+                visitorElement.innerText = data.value || 0;
+            } catch (err) {
+                // في حال تعطل السيرفر يستخدم الذاكرة المحلية كبديل مؤقت
+                let localCount = localStorage.getItem('backup_count') || 0;
+                localCount = parseInt(localCount) + 1;
+                localStorage.setItem('backup_count', localCount);
+                visitorElement.innerText = localCount;
             }
-            count = parseInt(count) + 1;
-            localStorage.setItem('visitor_count', count);
-            document.getElementById('visitorCount').innerText = count;
         }
-        updateCounter();
+
+        // تحديث الرقم تلقائياً كل 10 ثوانٍ لمراقبة الزوار الجدد وأنت داخل الصفحة
+        async function refreshCounter() {
+            try {
+                const response = await fetch(`https://api.countapi.xyz/get/devsz.site/${counterKey}`);
+                const data = await response.json();
+                if(data.value) visitorElement.innerText = data.value;
+            } catch (err) {}
+        }
+
+        initCounter();
+        setInterval(refreshCounter, 10000); 
 
         function enableAudio() {
             if (!isReady) {
