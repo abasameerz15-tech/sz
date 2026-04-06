@@ -35,7 +35,6 @@
             background: #00d4ff; color: #000; border: none; padding: 12px 30px;
             border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
         }
-        .auth-btn:disabled { background: #444; color: #888; }
 
         /* العداد العلوي */
         .user-counter {
@@ -97,12 +96,12 @@
     <div id="homePage" class="container">
         <div class="card">
             <h3 style="color:#00d4ff; margin-bottom:10px;">أهلاً بك يا بطل</h3>
-            <p>تم تسجيل دخولك بالكود الخاص بك. استمتع بمميزات دلتا.</p>
+            <p>تم تسجيل دخولك بنجاح. استمتع بكل الميزات.</p>
         </div>
     </div>
 
     <div id="hacksPage" class="container">
-        <div class="card"><p>قريباً.. قسم التحميل المباشر.</p></div>
+        <div class="card"><p>قسم الهاكات قريباً..</p></div>
     </div>
 
     <nav class="bottom-nav">
@@ -117,7 +116,7 @@
     <script>
         const visitorElement = document.getElementById('visitorCount');
         const loginBtn = document.getElementById('loginBtn');
-        const siteID = "szs_delta_v100_final"; // معرف فريد للمشروع
+        const siteID = "szs_delta_v2026_fixed"; 
 
         async function validateAndLogin() {
             const input = document.getElementById('userCodeInput').value;
@@ -129,31 +128,34 @@
             }
 
             loginBtn.disabled = true;
-            loginBtn.innerText = "جاري التحقق من السيرفر...";
+            loginBtn.innerText = "جاري الدخول...";
             error.style.display = "none";
 
+            // ميزة التخطي الذكي: إذا السيرفر لم يرد خلال 4 ثواني، ادخل للموقع فوراً
+            const timeout = setTimeout(() => {
+                localStorage.setItem('user_auth_key', input);
+                showMainContent();
+            }, 4000);
+
             try {
-                // نستخدم API بديل سريع (api.countapi.xyz)
-                // نفحص إذا الكود موجود
-                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total`);
+                // محاولة التحقق الحقيقي من السيرفر
+                const res = await fetch(`https://api.countapi.xyz/hit/${siteID}/user_${input}`);
                 const data = await res.json();
 
-                if (data.count && data.count > 0) {
-                    showError("هذا الكود مستخدم من قبل! اختر كوداً آخر.");
+                // إذا الـ Hit رجع قيمة أكبر من 1 يعني الكود مستخدم سابقاً من شخص آخر
+                if (data.value > 1) {
+                    clearTimeout(timeout);
+                    showError("هذا الكود محجوز لشخص آخر! اختر كوداً جديداً.");
                     loginBtn.disabled = false;
                     loginBtn.innerText = "دخول للموقع";
                 } else {
-                    // تسجيل الكود وزيادة العداد الرئيسي
-                    await fetch(`https://api.counterapi.dev/v1/${siteID}_user_${input}/total/increment`);
-                    await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total/increment`);
-                    
+                    clearTimeout(timeout);
                     localStorage.setItem('user_auth_key', input);
                     showMainContent();
                 }
             } catch (e) {
-                showError("تنبيه: السيرفر مشغول، جرب تضغط 'دخول' مرة ثانية.");
-                loginBtn.disabled = false;
-                loginBtn.innerText = "دخول للموقع";
+                // في حال فشل السيرفر تماماً، لا نعلق المستخدم، بل ندخله
+                console.log("Server bypass active");
             }
         }
 
@@ -177,13 +179,15 @@
 
         async function updateLiveCount() {
             try {
-                const res = await fetch(`https://api.counterapi.dev/v1/${siteID}_main/total`);
+                const res = await fetch(`https://api.countapi.xyz/get/${siteID}/total_users`);
                 const data = await res.json();
-                visitorElement.innerText = data.count || 0;
-            } catch (e) {}
+                visitorElement.innerText = data.value || 0;
+            } catch (e) {
+                visitorElement.innerText = "1"; // قيمة افتراضية في حال تعطل السيرفر
+            }
         }
 
-        setInterval(updateLiveCount, 7000);
+        setInterval(updateLiveCount, 10000);
 
         function tab(pageId, el) {
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
@@ -194,12 +198,12 @@
 
         // نجوم الخلفية
         const field = document.getElementById('starField');
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 25; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
-            star.style.width = '2px'; star.style.height = '2px';
+            star.style.width = '1.5px'; star.style.height = '1.5px';
             star.style.animationDuration = (Math.random() * 3 + 4) + 's';
             field.appendChild(star);
         }
