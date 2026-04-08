@@ -44,60 +44,65 @@
         .dot { width: 8px; height: 8px; background: #00ff78; border-radius: 50%; box-shadow: 0 0 10px #00ff78; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
 
-        /* الأزرار العامة */
+        /* أزرار التحميل والسكربتات */
         .action-btn {
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 15px; padding: 15px; width: 100%; max-width: 250px; display: flex; flex-direction: column; 
+            border-radius: 15px; padding: 18px; width: 100%; max-width: 250px; display: flex; flex-direction: column; 
             align-items: center; text-decoration: none; color: #fff; margin: 10px auto; transition: 0.2s; cursor: pointer;
         }
         .action-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
-        .icon-svg { width: 30px; height: 30px; margin-bottom: 8px; }
+        .icon-svg { width: 35px; height: 35px; margin-bottom: 8px; }
 
-        /* الشريط السفلي المعدل */
+        /* الشريط السفلي */
         .bottom-nav {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; height: 70px;
-            background: #0d0d0d; border-radius: 35px; display: flex;
-            justify-content: space-around; align-items: center;
+            width: 90%; max-width: 400px; height: 75px;
+            background: #0d0d0d; border-radius: 40px; display: flex;
+            justify-content: center; align-items: center; gap: 30px; 
             border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; flex: 1; }
         .nav-item.active { color: #00d4ff; }
-        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 4px; }
-        .nav-item span { font-size: 10px; font-weight: bold; }
+        .nav-item svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; }
+        .nav-item span { font-size: 11px; font-weight: bold; }
 
         /* تنبيه النسخ */
         #toast {
-            position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%);
-            background: #00d4ff; color: #000; padding: 10px 20px; border-radius: 20px;
-            font-weight: bold; font-size: 0.8rem; display: none; z-index: 1000;
+            position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
+            background: #00d4ff; color: #000; padding: 10px 25px; border-radius: 20px;
+            font-weight: bold; font-size: 0.9rem; display: none; z-index: 1000; box-shadow: 0 0 15px rgba(0,212,255,0.5);
         }
     </style>
 </head>
 <body onclick="enableAudio()">
 
-    <div id="toast">تم النسخ بنجاح! ✅</div>
+    <div id="toast">تم نسخ السكربت! ✅</div>
     <div class="stars-container" id="starField"></div>
     <div class="shiny-title">ŞZS DELTA</div>
 
     <div id="homePage" class="container active-page">
         <div class="card">
             <span class="sub-shiny">معلومات هاك دلتا</span>
-            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.</p>
+            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند.</p>
             <div class="status-box">
                 <div class="dot"></div>
                 <span style="color: #00ff78; font-size: 0.85rem; font-weight: bold;">الحالة: يعمل بنجاح</span>
             </div>
+        </div>
+        <div class="card">
+            <span class="sub-shiny">لماذا تختار دلتا؟</span>
+            <p>دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</p>
         </div>
     </div>
 
     <div id="hacksPage" class="container">
         <div class="card">
             <span class="sub-shiny">إصدارات الأجهزة</span>
-            <p>تحميل النسخة مباشرة</p>
+            <p style="margin-bottom: 15px;">اضغط لتحميل النسخة مباشرة</p>
             <a href="https://deltaexecutor.filesadda.com/Delta-2.715.apk" class="action-btn" onclick="btnSound()">
                 <svg class="icon-svg" style="fill: #3ddc84;" viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
-                <span style="font-weight: bold;">Android APK</span>
+                <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
             </a>
         </div>
     </div>
@@ -105,10 +110,9 @@
     <div id="scriptsMainPage" class="container">
         <div class="card">
             <span class="sub-shiny">قائمة الألعاب</span>
-            <p>اختر اللعبة لعرض السكربتات</p>
             <div class="action-btn" onclick="tab('bloxFruitsPage', this)">
                 <span style="font-weight: bold; font-size: 1.2rem; color: #ffca28;">Blox Fruits 🍎</span>
-                <span style="font-size: 10px; opacity: 0.7;">بلوكس فروت</span>
+                <span style="font-size: 10px; opacity: 0.7;">اضغط لعرض السكربتات</span>
             </div>
         </div>
     </div>
@@ -116,13 +120,16 @@
     <div id="bloxFruitsPage" class="container">
         <div class="card">
             <span class="sub-shiny">سكربتات بلوكس فروت</span>
+            
             <div class="action-btn" onclick="copyScript('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua\'))()')">
-                <span style="font-weight: bold;">جرافيتي - Gravity Hub</span>
+                <span style="font-weight: bold;">جرافيتي (Gravity)</span>
             </div>
+
             <div class="action-btn" onclick="copyScript('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua\'))()')">
-                <span style="font-weight: bold;">دورايمون - Doraymon</span>
+                <span style="font-weight: bold;">دورايمون (Doraymon)</span>
             </div>
-            <p style="margin-top: 15px; font-size: 0.7rem; color: #888;" onclick="tab('scriptsMainPage', this)">← العودة للقائمة</p>
+
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #00d4ff; cursor: pointer;" onclick="tab('scriptsMainPage', this)">← العودة للقائمة</p>
         </div>
     </div>
 
@@ -161,7 +168,7 @@
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             
-            // تحديث حالة القائمة السفلية إذا كان الضغط من هناك
+            // تحديث الألوان في الشريط السفلي فقط إذا كان الضغط من هناك
             if(el.classList.contains('nav-item')) {
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 el.classList.add('active');
@@ -170,11 +177,16 @@
 
         function copyScript(text) {
             btnSound();
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('toast');
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 2000);
-            });
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
         }
 
         // نجوم الخلفية
