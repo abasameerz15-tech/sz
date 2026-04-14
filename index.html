@@ -40,9 +40,9 @@
         .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 22px; width: 100%; max-width: 380px; margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px); }
         .card p { color: #ddd; font-size: 0.95rem; line-height: 1.6; }
 
-        /* مشغل الفيديو */
+        /* مشغل الفيديو المطور */
         .video-wrapper { width: 100%; border-radius: 15px; overflow: hidden; border: 1px solid #00d4ff; background: #000; margin-top: 10px; }
-        video { width: 100%; display: block; outline: none; }
+        video { width: 100%; display: block; outline: none; background: #000; }
 
         /* مؤشر الحالة */
         .status-box { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 120, 0.1); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 255, 120, 0.3); margin-top: 15px; }
@@ -163,8 +163,8 @@
             <span class="sub-shiny">شرح مفتاح هاك دلتا! 👇</span>
             <p style="font-size: 0.8rem; margin-bottom: 10px; color: #00d4ff;">شاهد الفيديو بالأسفل لمعرفة الطريقة الصحيحة</p>
             <div class="video-wrapper">
-                <video controls preload="none" playsinline>
-                    <source src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/Screen_Recording_20260414_162257.mp4" type="video/mp4">
+                <video controls preload="metadata" playsinline>
+                    <source src="https://e.top4top.io/m_3756dr48z0.mp4" type="video/mp4">
                     متصفحك لا يدعم تشغيل الفيديو.
                 </video>
             </div>
@@ -220,7 +220,6 @@
             document.querySelectorAll('.container').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             
-            // إيقاف الفيديو عند الخروج من الصفحة
             if(pageId !== 'howToPage') {
                 const video = document.querySelector('video');
                 if(video) video.pause();
@@ -260,15 +259,13 @@
             field.appendChild(star);
         }
 
-        // تمكين اللمس المتعدد للسكرول في صفحات معينة
         document.addEventListener('touchmove', function(e) {
             const activeContainer = document.querySelector('.container.active-page');
-            if (activeContainer && activeContainer.scrollHeight > activeContainer.clientHeight) {
-                // السماح بالسكرول إذا كانت الصفحة طويلة
-            } else {
+            if (!activeContainer || activeContainer.scrollHeight <= activeContainer.clientHeight) {
                 e.preventDefault();
             }
         }, { passive: false });
     </script>
 </body>
 </html>
+
