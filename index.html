@@ -40,9 +40,20 @@
         .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 22px; width: 100%; max-width: 380px; margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px); }
         .card p { color: #ddd; font-size: 0.95rem; line-height: 1.6; }
 
-        /* مشغل الفيديو */
-        .video-wrapper { width: 100%; border-radius: 15px; overflow: hidden; border: 1px solid #00d4ff; background: #000; margin-top: 10px; }
-        video { width: 100%; display: block; outline: none; }
+        /* مشغل الفيديو المستطيل (المعدل) */
+        .video-wrapper { 
+            width: 100%; 
+            aspect-ratio: 16 / 9; /* يخليه مستطيل دائماً */
+            border-radius: 15px; 
+            overflow: hidden; 
+            border: 1px solid #00d4ff; 
+            background: #000; 
+            margin: 15px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        video { width: 100%; height: 100%; display: block; outline: none; object-fit: contain; }
 
         /* مؤشر الحالة */
         .status-box { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 120, 0.1); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 255, 120, 0.3); margin-top: 15px; }
