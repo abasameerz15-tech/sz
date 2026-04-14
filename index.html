@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ŞZS DELTA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* إعدادات الشاشة ومنع السحب */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -44,27 +45,29 @@
         .dot { width: 8px; height: 8px; background: #00ff78; border-radius: 50%; box-shadow: 0 0 10px #00ff78; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
 
-        /* الأزرار (تحميل وسكربتات) */
-        .download-btn, .script-btn {
+        /* الأزرار (تحميل وسكربتات وقنوات) */
+        .download-btn, .script-btn, .social-btn {
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 15px; padding: 18px; width: 100%; max-width: 250px; display: flex; flex-direction: column; 
-            align-items: center; text-decoration: none; color: #fff; margin: 10px auto; transition: 0.2s; cursor: pointer;
+            border-radius: 15px; padding: 18px; width: 100%; max-width: 280px; display: flex; 
+            align-items: center; justify-content: center; text-decoration: none; color: #fff; margin: 10px auto; transition: 0.2s; cursor: pointer;
+            gap: 12px;
         }
-        .download-btn:active, .script-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
-        .android-icon { width: 35px; height: 35px; fill: #3ddc84; margin-bottom: 8px; }
+        .download-btn:active, .script-btn:active, .social-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
+        .android-icon { width: 35px; height: 35px; fill: #3ddc84; }
+        .social-btn i { font-size: 24px; }
 
         /* الشريط السفلي */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 380px; height: 75px;
+            width: 95%; max-width: 420px; height: 75px;
             background: #0d0d0d; border-radius: 40px; display: flex;
-            justify-content: center; align-items: center; gap: 30px; 
+            justify-content: center; align-items: center; gap: 15px; 
             border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; flex: 1; }
         .nav-item.active { color: #00d4ff; }
-        .nav-item svg { width: 28px; height: 28px; fill: currentColor; margin-bottom: 4px; }
-        .nav-item span { font-size: 11px; font-weight: bold; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; margin-bottom: 4px; }
+        .nav-item span { font-size: 10px; font-weight: bold; }
 
         /* تنبيه النسخ */
         #copyToast {
@@ -102,8 +105,10 @@
             <center>
                 <a href="https://deltaexecutor.filesadda.com/Delta-2.716.apk" class="download-btn" onclick="btnSound()">
                     <svg class="android-icon" viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
-                    <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
-                    <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                        <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
+                    </div>
                 </a>
             </center>
         </div>
@@ -127,7 +132,27 @@
             <div class="script-btn" onclick="copyText('doraemon')">
                 <span style="font-weight: bold;">دورايمون</span>
             </div>
+            <div class="script-btn" onclick="copyText('turbo')">
+                <span style="font-weight: bold;">توربو (Turbo)</span>
+            </div>
             <p style="margin-top: 15px; color: #00d4ff; cursor: pointer;" onclick="tab('scriptsMainPage', this)">← عودة للقائمة</p>
+        </div>
+    </div>
+
+    <div id="channelsPage" class="container">
+        <div class="card">
+            <span class="sub-shiny">قنواتنا الرسمية</span>
+            <p style="margin-bottom: 15px;">تابعنا للحصول على آخر التحديثات</p>
+            
+            <a href="https://www.tiktok.com/@sz2st?_r=1&_t=ZS-95WqHlwYYyH" target="_blank" class="social-btn" onclick="btnSound()">
+                 <i class="fa-brands fa-tiktok"></i>
+                 <span style="font-weight: bold;">قناة التيك توك</span>
+            </a>
+
+            <a href="https://discord.gg/WMvuyvkGP" target="_blank" class="social-btn" onclick="btnSound()">
+                 <i class="fa-brands fa-discord"></i>
+                 <span style="font-weight: bold;">سيرفر الديسكورد</span>
+            </a>
         </div>
     </div>
 
@@ -144,6 +169,10 @@
             <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
             <span>سكربتاتنا</span>
         </div>
+        <div class="nav-item" onclick="tab('channelsPage', this)">
+            <svg viewBox="0 0 24 24"><path d="M18,15H6L2,19V3C2,1.89 2.89,1 4,1H20C21.11,1 22,1.89 22,3V11C22,12.11 21.11,13 20,13H18V15M7,9H17V7H7V9M7,13H13V11H7V13Z"/></svg>
+            <span>قنواتنا</span>
+        </div>
     </nav>
 
     <audio id="clickSfx" src="https://github.com/abasameerz15-tech/sz/raw/refs/heads/main/mixkit-modern-technology-select-3124%20(1).wav" preload="auto"></audio>
@@ -152,10 +181,11 @@
         const sfx = document.getElementById('clickSfx');
         let isReady = false;
 
-        // السكربتات المحددة
+        // السكربتات المحدثة
         const scriptCodes = {
             gravity: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua"))()`,
-            doraemon: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua"))()`
+            doraemon: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua"))()`,
+            turbo: `loadstring(game:HttpGet("https://raw.githubusercontent.com/TurboLite/Script/refs/heads/main/MainV2.lua"))()`
         };
 
         function enableAudio() {
