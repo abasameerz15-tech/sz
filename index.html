@@ -19,7 +19,7 @@
         .star { position: absolute; background: #fff; border-radius: 50%; opacity: 0.6; animation: moveStars 8s linear infinite; }
         @keyframes moveStars { from { transform: translateY(110vh); } to { transform: translateY(-10vh); } }
 
-        /* النص اللامع */
+        /* النص اللامع (ŞZS DELTA والعناوين) */
         .shiny-title {
             font-size: 2.2rem; font-weight: bold; text-align: center; margin: 40px 0 20px;
             background: linear-gradient(120deg, #00d4ff 30%, #ffffff 50%, #00d4ff 70%);
@@ -40,9 +40,18 @@
         .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 22px; width: 100%; max-width: 380px; margin-bottom: 15px; text-align: center; backdrop-filter: blur(10px); }
         .card p { color: #ddd; font-size: 0.95rem; line-height: 1.6; }
 
-        /* مشغل الفيديو */
-        .video-wrapper { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; overflow: hidden; border: 1px solid #00d4ff; background: #000; margin-top: 15px; display: flex; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: contain; }
+        /* مشغل الفيديو المستطيل */
+        .video-wrapper { 
+            width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; overflow: hidden; 
+            border: 1px solid #00d4ff; background: #000; margin: 15px auto 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        video { width: 100%; height: 100%; display: block; outline: none; object-fit: contain; }
+
+        /* مؤشر الحالة */
+        .status-box { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 255, 120, 0.1); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0, 255, 120, 0.3); margin-top: 15px; }
+        .dot { width: 8px; height: 8px; background: #00ff78; border-radius: 50%; box-shadow: 0 0 10px #00ff78; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
 
         /* الأزرار */
         .download-btn, .script-btn, .social-btn, .send-btn {
@@ -50,34 +59,70 @@
             border-radius: 15px; padding: 18px; width: 100%; max-width: 280px; display: flex; 
             align-items: center; justify-content: center; text-decoration: none; color: #fff; margin: 10px auto; transition: 0.2s; cursor: pointer; gap: 12px;
         }
-        .send-btn { background: #00d4ff; color: #000; font-weight: bold; width: 100%; border: none; }
+        .download-btn:active, .script-btn:active, .social-btn:active { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
+        .android-icon { width: 35px; height: 35px; fill: #3ddc84; }
+        .send-btn { background: #00d4ff; color: #000; font-weight: bold; border: none; width: 100%; margin-top: 10px; }
         .send-btn:disabled { background: #555; color: #aaa; cursor: not-allowed; }
 
-        /* منطقة التعليقات */
+        /* منطقة التقييم */
         .feedback-area { width: 100%; background: rgba(0,0,0,0.3); border: 1px dashed #00d4ff; border-radius: 15px; padding: 15px; color: white; outline: none; resize: none; text-align: right; margin-top: 10px; font-family: inherit; }
         .feedback-label { color: #00d4ff; font-size: 0.9rem; margin-top: 20px; display: block; animation: bounce 2s infinite; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         /* الشريط السفلي */
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 450px; height: 70px; background: #0d0d0d; border-radius: 35px; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100; }
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 450px; height: 70px;
+            background: #0d0d0d; border-radius: 35px; display: flex;
+            justify-content: center; align-items: center; gap: 5px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); z-index: 100;
+        }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; cursor: pointer; transition: 0.3s; flex: 1; }
         .nav-item.active { color: #00d4ff; }
         .nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 4px; }
-        .nav-item span { font-size: 9px; font-weight: bold; }
+        .nav-item span { font-size: 9px; font-weight: bold; text-align: center; }
 
-        #copyToast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #00d4ff; color: #000; padding: 10px 20px; border-radius: 20px; font-weight: bold; display: none; z-index: 1000; }
+        #copyToast {
+            position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
+            background: #00d4ff; color: #000; padding: 10px 20px; border-radius: 20px;
+            font-weight: bold; display: none; z-index: 1000;
+        }
     </style>
 </head>
 <body onclick="enableAudio()">
 
-    <div id="copyToast">تم تنفيذ العملية! ✅</div>
+    <div id="copyToast">تم نسخ السكربت! ✅</div>
     <div class="stars-container" id="starField"></div>
     <div class="shiny-title">ŞZS DELTA</div>
 
     <div id="homePage" class="container active-page">
         <div class="card">
             <span class="sub-shiny">معلومات هاك دلتا</span>
-            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام.</p>
+            <p>أهلاً بك في المركز الرسمي. دلتا إكسبلويت هو المحقن رقم #1 الذي يجمع بين القوة وسهولة الاستخدام. نقدم لك حماية متكاملة ضد أنظمة الباند مع سرعة حقن تتجاوز كل المنافسين.</p>
+            <div class="status-box">
+                <div class="dot"></div>
+                <span style="color: #00ff78; font-size: 0.85rem; font-weight: bold;">الحالة: يعمل بنجاح</span>
+            </div>
+        </div>
+        <div class="card">
+            <span class="sub-shiny">لماذا تختار دلتا؟</span>
+            <p>دعم كامل لجميع السكربتات الضخمة، تحديثات تلقائية، وواجهة مستخدم بستايل أيفون عصري.</p>
+        </div>
+    </div>
+
+    <div id="hacksPage" class="container">
+        <div class="card">
+            <span class="sub-shiny">إصدارات الأجهزة</span>
+            <p style="margin-bottom: 15px;">اضغط لتحميل النسخة مباشرة</p>
+            <center>
+                <a href="https://deltaexecutor.filesadda.com/Delta-2.716.apk" class="download-btn" onclick="btnSound()">
+                    <svg class="android-icon" viewBox="0 0 24 24"><path d="M17.523 15.3414C17.025 15.3414 16.6215 14.9379 16.6215 14.4399C16.6215 13.9419 17.025 13.5384 17.523 13.5384C18.021 13.5384 18.4245 13.9419 18.4245 14.4399C18.4245 14.9379 18.021 15.3414 17.523 15.3414ZM6.477 15.3414C5.979 15.3414 5.5755 14.9379 5.5755 14.4399C5.5755 13.9419 5.979 13.5384 6.477 13.5384C6.975 13.5384 7.3785 13.9419 7.3785 14.4399C7.3785 14.9379 6.975 15.3414 6.477 15.3414ZM17.9175 11.2334L19.5585 8.3904C19.6845 8.1729 19.611 7.8939 19.3935 7.7679C19.176 7.6419 18.897 7.7154 18.771 7.9329L17.1045 10.8204C15.63 10.1514 13.902 9.7719 12 9.7719C10.098 9.7719 8.37 10.1514 6.8955 10.8204L5.229 7.9329C5.103 7.7154 4.824 7.6419 4.6065 7.7679C4.389 7.8939 4.3155 8.1729 4.4415 8.3904L6.0825 11.2334C3.5415 12.6374 1.83 15.1974 1.515 18.2314H22.485C22.17 15.1974 20.4585 12.6374 17.9175 11.2334Z"/></svg>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <span style="font-weight: bold; font-size: 1.1rem;">Android</span>
+                        <span style="font-size: 10px; opacity: 0.7;">تحميل APK</span>
+                    </div>
+                </a>
+            </center>
         </div>
     </div>
 
@@ -99,9 +144,9 @@
             <div class="script-btn" onclick="copyText('morning')">
                 <span style="font-weight: bold; color: #ffeb3b;">تحويل الليل إلى صباح</span>
             </div>
-            <div class="script-btn" onclick="copyText('gravity')"><span>جرافيتي</span></div>
-            <div class="script-btn" onclick="copyText('doraemon')"><span>دورايمون</span></div>
-            <div class="script-btn" onclick="copyText('turbo')"><span>توربو (Turbo)</span></div>
+            <div class="script-btn" onclick="copyText('gravity')"><span style="font-weight: bold;">جرافيتي</span></div>
+            <div class="script-btn" onclick="copyText('doraemon')"><span style="font-weight: bold;">دورايمون</span></div>
+            <div class="script-btn" onclick="copyText('turbo')"><span style="font-weight: bold;">توربو (Turbo)</span></div>
             <p style="margin-top: 15px; color: #00d4ff; cursor: pointer;" onclick="tab('scriptsMainPage', this)">← عودة للقائمة</p>
         </div>
     </div>
@@ -109,11 +154,14 @@
     <div id="channelsPage" class="container">
         <div class="card">
             <span class="sub-shiny">قنواتنا الرسمية</span>
-            <a href="https://www.tiktok.com/@sz2st" target="_blank" class="social-btn"><i class="fa-brands fa-tiktok"></i><span>تيك توك</span></a>
-            <a href="https://discord.gg/WMvuyvkGP" target="_blank" class="social-btn"><i class="fa-brands fa-discord"></i><span>ديسكورد</span></a>
-            
+            <p style="margin-bottom: 15px;">تابعنا للحصول على آخر التحديثات</p>
+            <a href="https://www.tiktok.com/@sz2st" target="_blank" class="social-btn" onclick="btnSound()">
+                 <i class="fa-brands fa-tiktok"></i><span style="font-weight: bold;">تيك توك</span>
+            </a>
+            <a href="https://discord.gg/WMvuyvkGP" target="_blank" class="social-btn" onclick="btnSound()">
+                 <i class="fa-brands fa-discord"></i><span style="font-weight: bold;">ديسكورد</span>
+            </a>
             <hr style="margin: 20px 0; opacity: 0.1;">
-            
             <span class="feedback-label">اكتب تقيمك للموقع او اقتراحاتك رأيك يهمنا🤍 👇</span>
             <textarea id="userFeedback" class="feedback-area" rows="4" placeholder="اكتب هنا..."></textarea>
             <button id="sendFeedbackBtn" class="send-btn" onclick="sendToTelegram()">إرسال التقيم</button>
@@ -133,6 +181,7 @@
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="tab('homePage', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>الرئيسية</span></div>
+        <div class="nav-item" onclick="tab('hacksPage', this)"><svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V22L4.5,20.5L6,22L7.5,20.5L9,22L10.5,20.5L12,22L13.5,20.5L15,22L16.5,20.5L18,22L19.5,20.5L21,22V11A9,9 0 0,0 12,2M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12A2,2 0 0,1 7,10A2,2 0 0,1 9,8M15,8A2,2 0 0,1 17,10A2,2 0 0,1 15,12A2,2 0 0,1 13,10A2,2 0 0,1 15,8Z"/></svg><span>هاكاتنا</span></div>
         <div class="nav-item" onclick="tab('scriptsMainPage', this)"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg><span>سكربتاتنا</span></div>
         <div class="nav-item" onclick="tab('channelsPage', this)"><svg viewBox="0 0 24 24"><path d="M18,15H6L2,19V3C2,1.89 2.89,1 4,1H20C21.11,1 22,1.89 22,3V11C22,12.11 21.11,13 20,13H18V15M7,9H17V7H7V9M7,13H13V11H7V13Z"/></svg><span>قنواتنا</span></div>
         <div class="nav-item" onclick="tab('howToPage', this)"><svg viewBox="0 0 24 24"><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/></svg><span>شرح المفاتيح</span></div>
@@ -169,8 +218,7 @@
             const text = scriptCodes[type];
             navigator.clipboard.writeText(text);
             const t = document.getElementById('copyToast');
-            t.innerText = "تم نسخ السكربت! ✅";
-            t.style.display = 'block';
+            t.innerText = "تم نسخ السكربت! ✅"; t.style.display = 'block';
             setTimeout(() => { t.style.display = 'none'; }, 2000);
         }
 
@@ -182,34 +230,19 @@
             const now = new Date().getTime();
 
             if (!text.trim()) return alert("الرجاء كتابة شيء قبل الإرسال!");
-
-            // فحص الـ 48 ساعة (172800000 مللي ثانية)
             if (lastSent && (now - lastSent < 172800000)) {
-                const remaining = 172800000 - (now - lastSent);
-                const hours = Math.ceil(remaining / (1000 * 60 * 60));
-                return alert(`لا يمكنك الإرسال الآن! يجب عليك الانتظار ${hours} ساعة إضافية.`);
+                const hours = Math.ceil((172800000 - (now - lastSent)) / 3600000);
+                return alert(`يجب عليك الانتظار ${hours} ساعة إضافية.`);
             }
 
-            btn.disabled = true;
-            btn.innerText = "جاري الإرسال...";
-
-            const token = "8785353299:AAGHbwY9sVIO7hwnKvDsvEpFeo1EF00WMeg";
-            const chatId = "2092901099";
-            const msg = `🌟 تقييم جديد من الموقع:\n\n${text}`;
-
+            btn.disabled = true; btn.innerText = "جاري الإرسال...";
             try {
-                await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`);
+                await fetch(`https://api.telegram.org/bot8785353299:AAGHbwY9sVIO7hwnKvDsvEpFeo1EF00WMeg/sendMessage?chat_id=2092901099&text=${encodeURIComponent('🌟 تقييم جديد:\n' + text)}`);
                 localStorage.setItem('last_feedback_time', now);
-                const t = document.getElementById('copyToast');
-                t.innerText = "تم إرسال تقييمك بنجاح! شكراً لك 🤍";
-                t.style.display = 'block';
+                alert("تم إرسال تقييمك بنجاح! شكراً لك 🤍");
                 document.getElementById('userFeedback').value = "";
-                setTimeout(() => { t.style.display = 'none'; }, 3000);
-            } catch (e) {
-                alert("فشل الإرسال، حاول لاحقاً.");
-                btn.disabled = false;
-            }
-            btn.innerText = "إرسال التقيم";
+            } catch (e) { alert("فشل الإرسال."); }
+            btn.disabled = false; btn.innerText = "إرسال التقيم";
         }
 
         const field = document.getElementById('starField');
