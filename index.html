@@ -138,6 +138,9 @@
     <div id="bloxFruitsPage" class="container">
         <div class="card">
             <span class="sub-shiny">سكربتات بلوكس فروت</span>
+            <div class="script-btn" onclick="copyText('tushita')">
+                <span style="font-weight: bold; color: #ff4081;">مهمة تيوشيتا تلقائي</span>
+            </div>
             <div class="script-btn" onclick="copyText('quantum')">
                 <span style="font-weight: bold; color: #00ff88;">كوانتوم (Quantum)</span>
             </div>
@@ -194,6 +197,7 @@
         let isReady = false;
 
         const scriptCodes = {
+            tushita: `loadstring(game:HttpGet("https://raw.githubusercontent.com/abasameerz15-tech/sz/refs/heads/main/torch.lua.txt"))();`,
             quantum: `loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()`,
             morning: `loadstring(game:HttpGet("https://raw.githubusercontent.com/abasameerz15-tech/sz/refs/heads/main/full.lua.txt"))();`,
             gravity: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua"))()`,
