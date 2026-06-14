@@ -1,0 +1,425 @@
+-- [[ مطور السكربت: عباس ]] --
+
+local CURRENT_KEY = "AURA-FREE1"
+local KEY_FILE = "Abbas_Hub_Key.txt"
+
+-- نظام التحقق المسبق وحذف الملفات القديمة تلقائياً عند تغيير المفتاح
+local function readSavedKey()
+    if isfile and isfile(KEY_FILE) then return readfile(KEY_FILE) end
+    return nil
+end
+
+local savedKey = readSavedKey()
+if savedKey and savedKey ~= CURRENT_KEY then
+    if tf and delfile then delfile(KEY_FILE) end 
+    savedKey = nil
+end
+
+local keyValid = (savedKey == CURRENT_KEY)
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "1+ Speed Keyboard 🍫",
+    LoadingTitle = "1+ Speed Keyboard",
+    LoadingSubtitle = "by عباس",
+    Theme = "Amethyst",
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
+    ConfigurationSaving = { Enabled = false },
+    
+    KeySystem = not keyValid, 
+    Title = "AURA",
+    Subtitle = "Key System",
+    Note = "قم بالدخول إلى بوت التيليجرام للحصول على المفتاح: https://t.me/hackscbot",
+    KeySettings = {
+        Title = "AURA",
+        Subtitle = "Key System",
+        Note = "قم بالدخول إلى بوت التيليجرام للحصول على المفتاح: https://t.me/hackscbot",
+        SaveKey = true,                     
+        FileName = "Abbas_Hub_Key",         
+        Key = { CURRENT_KEY }               
+    }
+})
+
+if not keyValid then
+    task.spawn(function()
+        repeat task.wait(0.5) until not Window.KeySystem
+        if writefile then writefile(KEY_FILE, CURRENT_KEY) end
+    end)
+end
+
+---------------------------------------------------------------------------
+-- السكربت الأساسي
+---------------------------------------------------------------------------
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- 1. تبويب العالم الأول
+local World1Tab = Window:CreateTab("🌍 العالم الأول 1", 4483362458)
+World1Tab:CreateSection("⚙️ إعدادات التفريم")
+
+local selectedOption = ""
+local world1FarmActive = false
+local world1FreezeGrav = false
+local farmSpeed = 25
+
+local world1Points_1Cup = {
+    Vector3.new(3.93, 9.44, 83.03),
+    Vector3.new(5.95, 9.44, 284.57),
+    Vector3.new(-19.53, 18.08, 283.18)
+}
+
+local world1Points_3Cups = {
+    Vector3.new(3.26, 9.44, 83.78),
+    Vector3.new(4.02, 9.44, 170.47),
+    Vector3.new(6.43, 9.44, 290.92),
+    Vector3.new(-59.35, 9.44, 380.96),
+    Vector3.new(-7.74, 9.44, 490.36),
+    Vector3.new(-17.50, 25.47, 507.26)
+}
+
+local world1Points_10Cups = {
+    Vector3.new(5.99, 9.44, 88.36),
+    Vector3.new(7.94, 9.44, 159.87),
+    Vector3.new(6.86, 9.44, 196.17),
+    Vector3.new(7.82, 9.44, 278.04),
+    Vector3.new(5.87, 9.44, 313.56),
+    Vector3.new(-60.58, 9.44, 373.89),
+    Vector3.new(-1.93, 9.44, 491.84),
+    Vector3.new(19.86, 9.44, 526.53),
+    Vector3.new(18.98, 10.30, 564.96),
+    Vector3.new(18.93, 77.73, 755.03),
+    Vector3.new(-16.13, 98.71, 774.65)
+}
+
+World1Tab:CreateDropdown({
+    Name = "تحديد",
+    Options = {"1 كاس", "3 كؤوس", "10 كؤوس"},
+    CurrentOption = {""},
+    MultipleOptions = false,
+    Flag = "DropdownWorld1",
+    Callback = function(option)
+        selectedOption = option[1]
+    end,
+})
+
+World1Tab:CreateToggle({
+    Name = "بدء التفريم",
+    CurrentValue = false,
+    Flag = "StartFarmWorld1",
+    Callback = function(state)
+        world1FarmActive = state
+        if state then
+            if selectedOption == "1 كاس" or selectedOption == "3 كؤوس" or selectedOption == "10 كؤوس" then
+                Rayfield:Notify({ Title = "🏆 تفريم العالم الأول", Content = "تم بدء التفريم لـ " .. selectedOption .. "!", Duration = 2 })
+                
+                task.spawn(function()
+                    local antiGravConn = RunService.Heartbeat:Connect(function()
+                        if not world1FarmActive or not world1FreezeGrav then return end
+                        local char = player.Character
+                        if char then
+                            local hrp = char:FindFirstChild("HumanoidRootPart")
+                            if hrp then hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z) end
+                        end
+                    end)
+
+                    while world1FarmActive do
+                        local currentPoints = world1Points_1Cup
+                        if selectedOption == "3 كؤوس" then
+                            currentPoints = world1Points_3Cups
+                        elseif selectedOption == "10 كؤوس" then
+                            currentPoints = world1Points_10Cups
+                        end
+                        
+                        local char = player.Character or player.CharacterAdded:Wait()
+                        local hrp = char:WaitForChild("HumanoidRootPart", 5)
+                        local hum = char:FindFirstChildOfClass("Humanoid")
+                        if not hrp or not hum then task.wait(0.5) continue end
+
+                        local died = false
+                        local diedConn = hum.Died:Connect(function() died = true end)
+                        world1FreezeGrav = true
+
+                        for i, point in ipairs(currentPoints) do
+                            if not world1FarmActive or died then break end
+                            local dist = (hrp.Position - point).Magnitude
+                            local duration = math.max(dist / (farmSpeed * 8), 0.05)
+                            local tw = TweenService:Create(hrp, TweenInfo.new(duration, Enum.EasingStyle.Linear), {CFrame = CFrame.new(point)})
+                            tw:Play()
+                            
+                            local done = false
+                            tw.Completed:Connect(function() done = true end)
+                            while not done and not died and world1FarmActive do task.wait(0.05) end
+                            if died then break end
+                            task.wait(0.05)
+                        end
+
+                        diedConn:Disconnect()
+                        world1FreezeGrav = false
+
+                        if not died and world1FarmActive then
+                            Rayfield:Notify({ Title = "🏆 تم الوصول إلى الوجهه", Content = "سيتم اعادة البدء بعد 4 ثواني 🏆", Duration = 4 })
+                            task.wait(4)
+                        elseif died then
+                            Rayfield:Notify({ Title = "💀 مت!", Content = "انتظر إعادة الرسترة...", Duration = 3 })
+                            player.CharacterAdded:Wait()
+                            task.wait(2)
+                        end
+                    end
+                    world1FreezeGrav = false
+                    antiGravConn:Disconnect()
+                end)
+            else
+                Rayfield:Notify({ Title = "⚠️ تنبيه", Content = "الرجاء تحديد خيار من القائمة أولاً!", Duration = 3 })
+            end
+        else
+            world1FarmActive = false
+            world1FreezeGrav = false
+            Rayfield:Notify({ Title = "🏆 تفريم العالم الأول", Content = "تم إيقاف التفريم", Duration = 2 })
+        end
+    end,
+})
+
+-- 2. تبويب العالم الثاني
+local World2Tab = Window:CreateTab("🌎 العالم الثاني 2", 4483362458)
+World2Tab:CreateSection("🏆 فارم الكؤوس")
+
+local selectedWorld2Option = ""
+local farmActive = false
+local freezeGrav = false
+
+local cupPoints = {
+    Vector3.new(-394.12, 504.68, -1.47), Vector3.new(-397.72, 504.68, 57.41),
+    Vector3.new(-401.19, 504.68, 126.65), Vector3.new(-394.39, 500.75, 435.26),
+    Vector3.new(-390.94, 500.62, 464.45), Vector3.new(-345.22, 500.62, 465.81),
+    Vector3.new(-346.87, 527.68, 578.11), Vector3.new(-454.07, 527.68, 577.75),
+    Vector3.new(-452.68, 554.68, 466.71), Vector3.new(-345.88, 554.68, 464.52),
+    Vector3.new(-346.19, 581.75, 577.82), Vector3.new(-456.75, 581.75, 578.53),
+    Vector3.new(-456.22, 608.75, 468.15), Vector3.new(-395.06, 608.75, 467.45),
+    Vector3.new(-400.31, 608.54, 613.48), Vector3.new(-402.69, 608.54, 676.34),
+    Vector3.new(-425.31, 608.54, 735.92), Vector3.new(-413.49, 608.54, 757.06),
+    Vector3.new(-400.73, 608.54, 800.37), Vector3.new(-401.54, 608.11, 850.91),
+    Vector3.new(-397.75, 608.10, 1257.90), Vector3.new(-392.54, 608.10, 1441.81),
+    Vector3.new(-359.70, 628.89, 1596.88), Vector3.new(-360.09, 605.98, 1700.36),
+    Vector3.new(-361.81, 615.02, 1784.11), Vector3.new(-397.20, 608.10, 1865.97),
+    Vector3.new(-405.54, 618.66, 1955.29), Vector3.new(-399.17, 608.10, 2044.11),
+    Vector3.new(-401.16, 608.10, 2225.70), Vector3.new(-394.97, 624.05, 2368.15),
+    Vector3.new(-399.80, 623.99, 2641.84), Vector3.new(-396.08, 624.02, 3158.59),
+    Vector3.new(-285.03, 624.02, 3339.62), Vector3.new(-156.64, 624.02, 3264.65),
+    Vector3.new(-99.36, 624.02, 3363.19), Vector3.new(-251.30, 624.02, 3481.40),
+    Vector3.new(-331.17, 624.02, 3645.36), Vector3.new(-542.01, 624.02, 3638.68),
+    Vector3.new(-484.55, 624.02, 3819.06), Vector3.new(-138.11, 624.02, 3810.27),
+    Vector3.new(-61.58, 624.08, 3862.19), Vector3.new(397.42, 624.23, 3864.44),
+    Vector3.new(794.50, 624.22, 3865.04), Vector3.new(1197.81, 624.29, 3865.71),
+    Vector3.new(1320.41, 621.61, 3863.41), Vector3.new(1746.68, 626.75, 3947.01),
+    Vector3.new(1971.54, 616.50, 3785.50), Vector3.new(2091.69, 625.75, 3944.46),
+    Vector3.new(2293.39, 617.65, 3873.06), Vector3.new(2398.64, 628.29, 3867.06),
+    Vector3.new(2542.96, 640.21, 3866.47), Vector3.new(2910.14, 603.24, 3868.06),
+    Vector3.new(3050.09, 592.91, 3875.90), Vector3.new(3220.52, 593.19, 3863.05),
+    Vector3.new(3270.04, 614.16, 3889.15), -- النقطة الأخيرة (55)
+}
+
+World2Tab:CreateDropdown({
+    Name = "تحديد المسافة",
+    Options = {"40m كأس", "60m كأس"},
+    CurrentOption = {""},
+    MultipleOptions = false,
+    Flag = "DropdownWorld2",
+    Callback = function(option)
+        selectedWorld2Option = option[1]
+    end,
+})
+
+World2Tab:CreateToggle({
+    Name = "فارم كؤوس تلقائي 🏆",
+    CurrentValue = false,
+    Flag = "CupFarm",
+    Callback = function(state)
+        farmActive = state
+        if state then
+            if selectedWorld2Option == "40m كأس" or selectedWorld2Option == "60m كأس" then
+                Rayfield:Notify({ Title = "🏆 فارم الكؤوس", Content = "تم تفعيل الفارم لـ " .. selectedWorld2Option, Duration = 2 })
+                
+                task.spawn(function()
+                    local antiGravConn = RunService.Heartbeat:Connect(function()
+                        if not farmActive or not freezeGrav then return end
+                        local char = player.Character
+                        if char then
+                            local hrp = char:FindFirstChild("HumanoidRootPart")
+                            if hrp then hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z) end
+                        end
+                    end)
+                    
+                    while farmActive do
+                        local char = player.Character or player.CharacterAdded:Wait()
+                        local hrp = char:WaitForChild("HumanoidRootPart", 5)
+                        local hum = char:FindFirstChildOfClass("Humanoid")
+                        if not hrp or not hum then task.wait(0.5) continue end
+
+                        local died = false
+                        local diedConn = hum.Died:Connect(function() died = true end)
+                        freezeGrav = true
+
+                        for i, point in ipairs(cupPoints) do
+                            if not farmActive or died then break end
+                            
+                            -- حلقة الـ 60m تقف تلقائياً عند النقطة 54 (المنصة الصفراء) ولا تذهب للـ 55 الأساسية
+                            if selectedWorld2Option == "60m كأس" and i == #cupPoints then
+                                break
+                            end
+
+                            local dist = (hrp.Position - point).Magnitude
+                            local duration = math.max(dist / (farmSpeed * 8), 0.05)
+                            local tw = TweenService:Create(hrp, TweenInfo.new(duration, Enum.EasingStyle.Linear), {CFrame = CFrame.new(point)})
+                            tw:Play()
+                            local done = false
+                            tw.Completed:Connect(function() done = true end)
+                            while not done and not died and farmActive do task.wait(0.05) end
+                            if died then break end
+                            
+                            if i == #cupPoints and selectedWorld2Option == "40m كأس" then
+                                freezeGrav = false
+                                Rayfield:Notify({ Title = "🏆 اكتملت الجولة!", Content = "هابط.. يبدأ من جديد بعد 4 ثواني", Duration = 4 })
+                                task.wait(4)
+                                freezeGrav = true
+                            else
+                                task.wait(0.05)
+                            end
+                        end
+
+                        -- الفحص الذكي للـ 60m كأس وانتظار عبور Tsunami1 و Tsunami2 وراء اللاعب
+                        if selectedWorld2Option == "60m كأس" and farmActive and not died then
+                            Rayfield:Notify({ Title = "⏳ نظام الأمان", Content = "جاري التأكد من سلامة الطريق من Tsunami 1 & 2...", Duration = 3 })
+                            
+                            repeat
+                                local isSafe = true
+                                
+                                -- فحص الموديل الأول
+                                local tsunami1 = workspace:FindFirstChild("Tsunami1", true)
+                                if tsunami1 and tsunami1:IsA("BasePart") then
+                                    if tsunami1.Position.X <= hrp.Position.X + 15 then
+                                        isSafe = false
+                                    end
+                                end
+                                
+                                -- فحص الموديل الثاني
+                                local tsunami2 = workspace:FindFirstChild("Tsunami2", true)
+                                if tsunami2 and tsunami2:IsA("BasePart") then
+                                    if tsunami2.Position.X <= hrp.Position.X + 15 then
+                                        isSafe = false
+                                    end
+                                end
+                                
+                                if not isSafe then task.wait(0.05) end
+                            until isSafe or not farmActive or died
+                            
+                            -- الانطلاق السريع للنقاط الستة الجديدة بسرعة 45 فقط
+                            if farmActive and not died then
+                                Rayfield:Notify({ Title = "⚡ انطلاق سريع (45)!", Content = "جاري السحب للإحداثيات الجديدة...", Duration = 2 })
+                                
+                                local points60m = {
+                                    Vector3.new(3350.99, 568.30, 3874.17),
+                                    Vector3.new(3345.02, 568.30, 5053.17),
+                                    Vector3.new(3430.00, 568.30, 5124.99),
+                                    Vector3.new(4184.20, 568.30, 5138.25),
+                                    Vector3.new(4643.95, 568.32, 5142.03),
+                                    Vector3.new(4632.42, 594.85, 5158.87)
+                                }
+                                local speed60m = 45
+                                
+                                for _, p60 in ipairs(points60m) do
+                                    if not farmActive or died then break end
+                                    local dist60 = (hrp.Position - p60).Magnitude
+                                    local duration60 = math.max(dist60 / (speed60m * 8), 0.05)
+                                    local tw60 = TweenService:Create(hrp, TweenInfo.new(duration60, Enum.EasingStyle.Linear), {CFrame = CFrame.new(p60)})
+                                    tw60:Play()
+                                    local done60 = false
+                                    tw60.Completed:Connect(function() done60 = true end)
+                                    while not done60 and not died and farmActive do task.wait(0.05) end
+                                    if died then break end
+                                    task.wait(0.05)
+                                end
+                                
+                                -- بعد انتهاء النقاط الستة تظهر الرسالة وتتكرر العملية تلقائياً بعد 4 ثواني والسرعة تعود طبيعية (25)
+                                if farmActive and not died then
+                                    freezeGrav = false
+                                    Rayfield:Notify({ Title = "🏆 تم الوصول إلى الوجهه", Content = "سيتم اعادة البدء بعد 4 ثواني 🏆", Duration = 4 })
+                                    task.wait(4)
+                                    freezeGrav = true
+                                end
+                            end
+                        end
+
+                        diedConn:Disconnect()
+                        freezeGrav = false
+                        
+                        -- عند الموت ينتظر الرسبون + 4 ثواني ويعيد تلقائياً بدون ما يطفي التوجل
+                        if died then
+                            Rayfield:Notify({ Title = "💀 مت!", Content = "انتظر إعادة الرسترة... (4 ثواني)", Duration = 4 })
+                            player.CharacterAdded:Wait()
+                            task.wait(4)
+                        end
+                    end
+                    freezeGrav = false
+                    antiGravConn:Disconnect()
+                end)
+            else
+                Rayfield:Notify({ Title = "⚠️ تنبيه", Content = "الرجاء تحديد مسافة الكؤوس من القائمة أولاً!", Duration = 3 })
+            end
+        else
+            farmActive = false
+            freezeGrav = false
+            Rayfield:Notify({ Title = "🏆 فارم الكؤوس", Content = "تم إيقاف الفارم", Duration = 2 })
+        end
+    end,
+})
+
+World2Tab:CreateSection("🩸 أدوات الحذف")
+World2Tab:CreateButton({
+    Name = "🩸 حذف الأشياء القاتلة",
+    Callback = function()
+        local targets = {"MovingWalls","Lava_Stage3","NPC_Zone5","NPC_Zone9","Twomp","Ventilateur","Arrow","ArrowBeam","Arrows","FanEffects"}
+        for _, obj in pairs(workspace:GetDescendants()) do
+            for _, name in pairs(targets) do
+                if obj.Name == name and obj.Parent then obj:Destroy() break end
+            end
+        end
+        Rayfield:Notify({ Title = "🩸 تم!", Content = "تم حذف كل الأشياء القاتلة", Duration = 2 })
+    end,
+})
+
+-- 3. تبويب الإعدادات والدعم
+local SettingsTab = Window:CreateTab("⚙️ الإعدادات", 4483362458)
+SettingsTab:CreateSection("الميزات")
+SettingsTab:CreateToggle({
+    Name = "⚡ قفز لا نهائي",
+    CurrentValue = false,
+    Flag = "InfiniteJump",
+    Callback = function(state)
+        if state then
+            InfiniteJumpConn = game:GetService("UserInputService").JumpRequest:Connect(function()
+                local char = player.Character
+                if char and char:FindFirstChildOfClass("Humanoid") then
+                    char:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end)
+        else
+            if InfiniteJumpConn then InfiniteJumpConn:Disconnect() InfiniteJumpConn = nil end
+        end
+    end,
+})
+
+local SocialTab = Window:CreateTab("📢 قنواتنا", 4483362458)
+SocialTab:CreateSection("🌟 أهلاً وسهلاً!")
+SocialTab:CreateLabel("مرحباً بك في Abbas Premium Hub")
+SocialTab:CreateSection("🔗 روابط التواصل")
+SocialTab:CreateButton({
+    Name = "📨 قناة التيليجرام",
+    Callback = function()
+        setclipboard("https://t.me/SZSTORE_1")
+        Rayfield:Notify({ Title = "✅ تم النسخ!", Content = "تم نسخ رابط قناة التيليجرام", Duration = 3, Image = 4483362458 })
+    end,
+})
