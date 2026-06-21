@@ -11,6 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -36,9 +37,10 @@
             overflow: hidden;
         }
 
+        /* ===== HEADER ===== */
         .header-sky {
             background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
-            padding: 32px 28px 28px 28px;
+            padding: 28px 24px 24px 24px;
             text-align: center;
             position: relative;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
@@ -56,10 +58,12 @@
         }
 
         .header-sky h1 {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 800;
             color: #fff;
             text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
+            position: relative;
+            z-index: 1;
         }
 
         .header-sky h1 i {
@@ -68,9 +72,11 @@
         }
 
         .header-sky p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #e0f0ff;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         .header-sky .badge {
@@ -83,28 +89,32 @@
             color: #fff;
             margin-top: 8px;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
 
+        /* ===== CONTENT ===== */
         .content-dark {
             background: #191f2e;
-            padding: 24px 20px 32px 20px;
+            padding: 24px 20px 28px 20px;
             color: #eef2f9;
-            min-height: 300px;
+            min-height: 250px;
         }
 
+        /* ===== GREETING ===== */
         .greeting-box {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(4px);
-            padding: 16px 12px;
+            padding: 14px 12px;
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             text-align: center;
         }
 
         .greeting-box h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 600;
             background: linear-gradient(135deg, #b6d9ff, #7fc9ff);
             -webkit-background-clip: text;
@@ -118,11 +128,12 @@
         }
 
         .greeting-box .sub {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #a5b9d4;
             margin-top: 2px;
         }
 
+        /* ===== زر رفع نص ===== */
         .btn-primary {
             display: flex;
             align-items: center;
@@ -131,20 +142,20 @@
             width: 100%;
             background: linear-gradient(135deg, #2b8cff, #0066e6);
             border: none;
-            padding: 20px 12px;
+            padding: 18px 12px;
             border-radius: 60px;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #fff;
             box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4);
             transition: all 0.2s ease;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .btn-primary i {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #ffe484;
         }
 
@@ -152,9 +163,16 @@
             transform: scale(0.96);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== محرر الكتابة ===== */
         .editor-zone {
             display: none;
-            margin-top: 20px;
+            margin-top: 18px;
             animation: fadeSlide 0.3s ease;
         }
 
@@ -168,7 +186,7 @@
         }
 
         .editor-zone .label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #8aa3cc;
             margin-bottom: 8px;
             display: flex;
@@ -178,17 +196,17 @@
 
         .editor-zone .label .count {
             margin-left: auto;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #6b7f9e;
         }
 
         .editor-zone textarea {
             width: 100%;
-            min-height: 180px;
+            min-height: 160px;
             background: #0c101e;
             border: 1px solid #2f3a52;
             border-radius: 28px;
-            padding: 20px 18px;
+            padding: 18px 16px;
             font-size: 1rem;
             color: #eef2f9;
             resize: vertical;
@@ -203,16 +221,21 @@
             box-shadow: 0 0 0 3px rgba(43, 140, 255, 0.3), inset 0 4px 8px #000;
         }
 
+        .editor-zone textarea::placeholder {
+            color: #4a5a7a;
+        }
+
+        /* ===== زر إنشاء رابط ===== */
         .btn-secondary {
             width: 100%;
             background: #253141;
             border: none;
-            padding: 16px 12px;
+            padding: 14px 12px;
             border-radius: 60px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #c8daf5;
-            margin-top: 18px;
+            margin-top: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -228,10 +251,25 @@
             box-shadow: 0 2px 0 #0b0e16;
         }
 
+        .btn-secondary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 6px 0 #0b0e16;
+        }
+
         .btn-secondary i {
             color: #ffb347;
         }
 
+        .editor-info {
+            margin-top: 10px;
+            font-size: 0.7rem;
+            color: #4a5a7a;
+            text-align: center;
+        }
+
+        /* ===== صفحة العرض ===== */
         .display-page {
             display: none;
             animation: fadeSlide 0.25s ease;
@@ -241,39 +279,32 @@
             display: block;
         }
 
+        /* ===== صندوق العرض ===== */
         .display-box {
             background: #0c101e;
-            border-radius: 28px;
-            padding: 20px 18px;
+            border-radius: 24px;
+            padding: 18px 16px;
             border: 1px solid #2f3a52;
-            min-height: 140px;
+            min-height: 120px;
             position: relative;
             word-break: break-word;
             white-space: pre-wrap;
             color: #d4e0f5;
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.7;
             box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
             user-select: none;
             -webkit-user-select: none;
             pointer-events: none;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .display-box .watermark {
             position: absolute;
-            bottom: 8px;
-            left: 16px;
-            font-size: 0.65rem;
+            bottom: 6px;
+            left: 14px;
+            font-size: 0.6rem;
             color: #3c4b66;
-        }
-
-        .display-box .timestamp {
-            position: absolute;
-            bottom: 8px;
-            right: 16px;
-            font-size: 0.55rem;
-            color: #2a3a52;
         }
 
         .display-box .empty-state {
@@ -283,15 +314,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 120px;
-            gap: 8px;
+            min-height: 100px;
+            gap: 6px;
         }
 
         .display-box .empty-state i {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #3c4b66;
         }
 
+        /* ===== أزرار العرض ===== */
         .action-row {
             display: flex;
             gap: 12px;
@@ -302,9 +334,9 @@
             flex: 1;
             background: #1e283b;
             border: none;
-            padding: 16px 8px;
+            padding: 14px 8px;
             border-radius: 40px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #d4e0f5;
             display: flex;
@@ -323,7 +355,7 @@
         }
 
         .action-btn i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .action-btn.copy-btn i {
@@ -334,72 +366,41 @@
             color: #ffb74d;
         }
 
-        .short-link-box {
-            background: #0c101e;
-            border-radius: 20px;
-            padding: 12px 16px;
-            margin-top: 16px;
-            border: 1px solid #2b8cff;
+        .action-btn:hover {
+            background: #253141;
+            border-color: #4a5a7a;
+        }
+
+        /* ===== تحميل ===== */
+        .loading-placeholder {
             display: none;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            gap: 12px;
+            justify-content: center;
+            min-height: 160px;
+            gap: 14px;
+            color: #4a5a7a;
         }
 
-        .short-link-box.active {
-            display: flex;
-        }
-
-        .short-link-box input {
-            background: transparent;
-            border: none;
-            color: #7fc9ff;
-            font-size: 0.85rem;
-            flex: 1;
-            outline: none;
-            font-weight: 500;
-            direction: ltr;
-            font-family: 'Courier New', monospace;
-        }
-
-        .short-link-box button {
-            background: #2b8cff;
-            border: none;
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .short-link-box button:active {
-            transform: scale(0.94);
-        }
-
-        .back-link {
+        .spinner {
             display: inline-block;
-            margin-top: 16px;
-            color: #8aa3cc;
-            font-weight: 500;
-            border-bottom: 1px dashed #3e5070;
-            padding-bottom: 2px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .back-link:hover {
-            color: #b6d9ff;
-            border-bottom-color: #2b8cff;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .back-link i {
-            margin-left: 6px;
+        .loading-placeholder p {
+            font-size: 0.85rem;
         }
 
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -407,13 +408,13 @@
             transform: translateX(-50%);
             background: #1f2a3f;
             backdrop-filter: blur(8px);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 60px;
             color: #d4e0f5;
             font-weight: 500;
             box-shadow: 0 8px 24px rgba(0,0,0,0.8);
             border: 1px solid #3e5070;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             z-index: 999;
             transition: all 0.25s ease;
             opacity: 0;
@@ -427,56 +428,33 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .loading-placeholder {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            gap: 16px;
-            color: #4a5a7a;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        /* ===== FOOTER ===== */
         .footer {
-            margin-top: 20px;
+            margin-top: 18px;
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #3c4b66;
             border-top: 1px solid #1a2233;
-            padding-top: 14px;
+            padding-top: 12px;
         }
 
-        .editor-info {
-            margin-top: 12px;
-            font-size: 0.75rem;
-            color: #4a5a7a;
-            text-align: center;
-        }
-
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .header-sky h1 { font-size: 2rem; }
-            .header-sky { padding: 24px 20px 24px 20px; }
-            .content-dark { padding: 20px 16px 24px 16px; }
-            .btn-primary { font-size: 1.4rem; padding: 16px 12px; }
-            .btn-secondary { font-size: 1.1rem; padding: 14px 12px; }
+            .header-sky h1 { font-size: 1.7rem; }
+            .header-sky { padding: 20px 16px 18px 16px; }
+            .content-dark { padding: 18px 14px 22px 14px; }
+            .btn-primary { font-size: 1.3rem; padding: 16px 12px; }
+            .btn-secondary { font-size: 1.1rem; padding: 12px 12px; }
             .action-row { flex-direction: column; gap: 10px; }
-            .action-btn { padding: 14px 8px; font-size: 1rem; }
-            .display-box { padding: 16px 14px; min-height: 120px; font-size: 0.95rem; }
-            .toast { font-size: 0.8rem; padding: 10px 18px; white-space: normal; max-width: 90%; }
+            .action-btn { padding: 12px 8px; font-size: 0.95rem; }
+            .display-box { padding: 14px 12px; min-height: 100px; font-size: 0.9rem; }
+            .greeting-box h2 { font-size: 1.3rem; }
+            .toast { font-size: 0.75rem; padding: 8px 16px; white-space: normal; max-width: 90%; }
+        }
+
+        @media (max-width: 380px) {
+            .header-sky h1 { font-size: 1.4rem; }
+            .greeting-box h2 { font-size: 1.1rem; }
         }
 
         ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -489,25 +467,32 @@
 
     <div class="main-card">
 
+        <!-- ===== HEADER ===== -->
         <div class="header-sky">
             <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
             <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
             <div class="badge"><i class="fas fa-shield-alt"></i> روابط دائمة</div>
         </div>
 
+        <!-- ===== CONTENT ===== -->
         <div class="content-dark">
 
+            <!-- ===== GREETING ===== -->
             <div class="greeting-box" id="greetingBox">
                 <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
                 <div class="sub">في أداة رفع النصوص الذكية</div>
             </div>
 
-            <!-- ===== زر رفع نص ===== -->
+            <!-- ==========================================================
+                 القسم 1: واجهة الإنشاء (للرابط الأساسي)
+                 ========================================================== -->
+
+            <!-- ===== رفع نص ===== -->
             <button class="btn-primary" id="raiseBtn">
                 <i class="fas fa-arrow-up"></i> رفع نص
             </button>
 
-            <!-- ===== محرر الكتابة ===== -->
+            <!-- ===== EDITOR ZONE ===== -->
             <div class="editor-zone" id="editorZone">
                 <div class="label">
                     <i class="fas fa-pen"></i> اكتب نصك
@@ -524,29 +509,30 @@
                 </div>
             </div>
 
-            <!-- ===== صفحة العرض ===== -->
+            <!-- ==========================================================
+                 القسم 2: صفحة العرض (لما يدخل المستخدم من الرابط)
+                 ========================================================== -->
+
+            <!-- ===== LOADING ===== -->
             <div class="loading-placeholder" id="loadingPlaceholder">
                 <div class="spinner"></div>
                 <p>جاري تحميل النص...</p>
             </div>
 
+            <!-- ===== DISPLAY PAGE ===== -->
             <div class="display-page" id="displayPage">
                 
+                <!-- ===== DISPLAY BOX ===== -->
                 <div class="display-box" id="displayContent">
                     <div class="empty-state">
                         <i class="fas fa-file-alt"></i>
                         <span>لا يوجد نص لعرضه</span>
                     </div>
                     <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                    <div class="timestamp" id="displayTime"></div>
                 </div>
 
-                <div class="short-link-box" id="shortLinkBox">
-                    <input type="text" id="shortLinkInput" readonly />
-                    <button id="copyLinkBtn"><i class="fas fa-copy"></i> نسخ</button>
-                </div>
-
-                <div class="action-row">
+                <!-- ===== ACTION BUTTONS ===== -->
+                <div class="action-row" id="actionRow">
                     <button class="action-btn copy-btn" id="copyBtn">
                         <i class="fas fa-copy"></i> نسخ النص
                     </button>
@@ -554,12 +540,9 @@
                         <i class="fas fa-share-alt"></i> مشاركة
                     </button>
                 </div>
-
-                <span class="back-link" id="backToEditor">
-                    <i class="fas fa-arrow-left"></i> رجوع للتحرير
-                </span>
             </div>
 
+            <!-- ===== FOOTER ===== -->
             <div class="footer">
                 <i class="fas fa-database"></i> محفوظ في Firebase
                 <span style="margin: 0 6px;">·</span>
@@ -569,8 +552,12 @@
         </div>
     </div>
 
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
+    <!-- ================================================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ================================================================ -->
     <script>
         (function() {
             "use strict";
@@ -579,7 +566,7 @@
             // 1. FIREBASE CONFIG - استبدل ببياناتك
             // ============================================================
             const firebaseConfig = {
-                apiKey: "AIzaSyDummyKey",
+                apiKey: "AIzaSyDummyKey", // ❗ استبدل
                 authDomain: "save-link-34c39.firebaseapp.com",
                 databaseURL: "https://save-link-34c39-default-rtdb.firebaseio.com/",
                 projectId: "save-link-34c39",
@@ -594,20 +581,20 @@
             // ============================================================
             // 2. DOM ELEMENTS
             // ============================================================
+            // الإنشاء
             const raiseBtn = document.getElementById('raiseBtn');
             const editorZone = document.getElementById('editorZone');
             const textInput = document.getElementById('textInput');
             const charCount = document.getElementById('charCount');
             const createLinkBtn = document.getElementById('createLinkBtn');
+
+            // العرض
             const displayPage = document.getElementById('displayPage');
             const displayContent = document.getElementById('displayContent');
-            const displayTime = document.getElementById('displayTime');
             const copyBtn = document.getElementById('copyBtn');
             const shareBtn = document.getElementById('shareBtn');
-            const backToEditor = document.getElementById('backToEditor');
-            const shortLinkInput = document.getElementById('shortLinkInput');
-            const copyLinkBtn = document.getElementById('copyLinkBtn');
-            const shortLinkBox = document.getElementById('shortLinkBox');
+
+            // عام
             const toast = document.getElementById('toast');
             const greetingBox = document.getElementById('greetingBox');
             const loadingPlaceholder = document.getElementById('loadingPlaceholder');
@@ -617,6 +604,7 @@
             // ============================================================
             let currentText = '';
             let toastTimer = null;
+            let isViewMode = false;
 
             // ============================================================
             // 4. UTILITY FUNCTIONS
@@ -640,18 +628,6 @@
                 }, duration);
             }
 
-            function formatTimestamp(timestamp) {
-                if (!timestamp) return '';
-                const date = new Date(timestamp);
-                return date.toLocaleString('ar-SA', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            }
-
             function escapeHTML(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
@@ -665,7 +641,7 @@
             }
 
             // ============================================================
-            // 5. UI MODE FUNCTIONS
+            // 5. UI MODE
             // ============================================================
 
             function setMode(mode) {
@@ -674,27 +650,26 @@
                     displayPage.classList.remove('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
-                    shortLinkBox.classList.remove('active');
+                    isViewMode = false;
                 } else if (mode === 'display') {
                     editorZone.classList.remove('active');
                     displayPage.classList.add('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
-                    shortLinkBox.classList.add('active');
+                    isViewMode = true;
                 } else if (mode === 'loading') {
                     editorZone.classList.remove('active');
                     displayPage.classList.remove('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'flex';
-                    shortLinkBox.classList.remove('active');
+                    isViewMode = false;
                 }
             }
 
-            function renderDisplayText(text, timestamp) {
+            function renderDisplayText(text) {
                 loadingPlaceholder.style.display = 'none';
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
-                shortLinkBox.classList.add('active');
 
                 if (!text || text.trim() === '') {
                     displayContent.innerHTML = `
@@ -704,7 +679,6 @@
                         </div>
                         <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
                     `;
-                    displayTime.textContent = '';
                     return;
                 }
 
@@ -714,10 +688,6 @@
                     <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
                 `;
 
-                if (timestamp) {
-                    displayTime.textContent = '📅 ' + formatTimestamp(timestamp);
-                }
-
                 currentText = text;
             }
 
@@ -725,7 +695,6 @@
                 loadingPlaceholder.style.display = 'none';
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
-                shortLinkBox.classList.remove('active');
 
                 displayContent.innerHTML = `
                     <div class="empty-state">
@@ -737,7 +706,7 @@
             }
 
             // ============================================================
-            // 6. FIREBASE OPERATIONS
+            // 6. FIREBASE
             // ============================================================
 
             function saveTextToFirebase(text) {
@@ -763,7 +732,7 @@
                         .then((snapshot) => {
                             const data = snapshot.val();
                             if (data && data.content) {
-                                resolve(data);
+                                resolve(data.content);
                             } else {
                                 reject(new Error('النص غير موجود'));
                             }
@@ -785,7 +754,6 @@
                     const shortURL = baseURL + '?v=' + key;
                     return { key, shortURL };
                 } catch (error) {
-                    console.error('Error:', error);
                     throw error;
                 }
             }
@@ -794,45 +762,41 @@
             // 8. EVENT LISTENERS
             // ============================================================
 
-            // 🔥 8.1 زر رفع نص - يظهر المحرر
+            // 8.1 زر رفع نص
             raiseBtn.addEventListener('click', function() {
                 setMode('editor');
                 textInput.focus();
                 showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
             });
 
-            // 🔥 8.2 زر إنشاء رابط دائم
+            // 8.2 زر إنشاء رابط
             createLinkBtn.addEventListener('click', async function() {
                 const raw = textInput.value;
                 if (!raw || raw.trim() === '') {
                     showToast('⚠️ الرجاء كتابة نص أولاً', 1500);
                     return;
                 }
-                
-                currentText = raw.trim();
-                
+
                 createLinkBtn.disabled = true;
                 createLinkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-                
+
                 try {
-                    const { key, shortURL } = await createShortLink(currentText);
-                    
+                    const { key, shortURL } = await createShortLink(raw.trim());
+                    currentText = raw.trim();
+
                     renderDisplayText(currentText);
                     setMode('display');
-                    
-                    shortLinkInput.value = shortURL;
-                    shortLinkBox.classList.add('active');
-                    
+
                     showToast('✅ تم إنشاء الرابط الدائم بنجاح!', 2000);
-                    
+
                     try {
                         await navigator.clipboard.writeText(shortURL);
-                        showToast('📋 تم نسخ الرابط القصير تلقائياً', 2000);
+                        showToast('📋 تم نسخ الرابط تلقائياً', 2000);
                     } catch (e) {}
-                    
+
                 } catch (error) {
-                    let errorMsg = error.message || 'فشل إنشاء الرابط';
-                    if (errorMsg.includes('PERMISSION_DENIED')) {
+                    let errorMsg = 'فشل إنشاء الرابط';
+                    if (error.message && error.message.includes('PERMISSION_DENIED')) {
                         errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
                     }
                     showToast('❌ ' + errorMsg, 3000);
@@ -842,48 +806,42 @@
                 }
             });
 
-            // 8.3 نسخ الرابط
-            copyLinkBtn.addEventListener('click', function() {
-                const link = shortLinkInput.value;
-                if (!link) {
-                    showToast('لا يوجد رابط لنسخه', 1500);
-                    return;
-                }
-                navigator.clipboard.writeText(link).then(() => {
-                    showToast('📋 تم نسخ الرابط القصير', 1500);
-                }).catch(() => {
-                    shortLinkInput.select();
-                    document.execCommand('copy');
-                    showToast('📋 تم نسخ الرابط', 1500);
-                });
-            });
-
-            // 8.4 نسخ النص
+            // 8.3 نسخ النص
             copyBtn.addEventListener('click', function() {
-                if (!currentText) {
+                if (!currentText || currentText.trim() === '') {
                     showToast('لا يوجد نص لنسخه', 1500);
                     return;
                 }
-                navigator.clipboard.writeText(currentText).then(() => {
-                    showToast('📋 تم نسخ النص بنجاح', 1500);
-                }).catch(() => {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = currentText;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    try {
-                        document.execCommand('copy');
-                        showToast('📋 تم نسخ النص', 1500);
-                    } catch (e) {
-                        showToast('فشل النسخ، حاول يدوياً', 1500);
-                    }
-                    document.body.removeChild(textarea);
-                });
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(currentText)
+                        .then(() => showToast('📋 تم نسخ النص بنجاح', 1500))
+                        .catch(() => copyFallback());
+                } else {
+                    copyFallback();
+                }
             });
 
-            // 8.5 مشاركة
+            function copyFallback() {
+                const textarea = document.createElement('textarea');
+                textarea.value = currentText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 تم نسخ النص', 1500);
+                } catch (e) {
+                    showToast('فشل النسخ، حاول يدوياً', 1500);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            // 8.4 مشاركة
             shareBtn.addEventListener('click', function() {
-                if (!currentText) {
+                if (!currentText || currentText.trim() === '') {
                     showToast('لا يوجد نص للمشاركة', 1500);
                     return;
                 }
@@ -892,73 +850,29 @@
                     navigator.share({
                         title: 'نص مرفوع',
                         text: currentText,
-                    }).then(() => {
-                        showToast('تمت المشاركة بنجاح', 1500);
-                    }).catch((err) => {
+                    })
+                    .then(() => showToast('تمت المشاركة بنجاح', 1500))
+                    .catch((err) => {
                         if (err.name !== 'AbortError') {
                             showToast('تم إلغاء المشاركة', 1500);
                         }
                     });
                 } else {
-                    navigator.clipboard.writeText(currentText).then(() => {
-                        showToast('📋 تم نسخ النص للمشاركة', 1500);
-                    }).catch(() => {
-                        showToast('شارك النص: ' + currentText, 3000);
-                    });
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(currentText)
+                            .then(() => showToast('📋 تم نسخ النص للمشاركة', 1500))
+                            .catch(() => copyFallback());
+                    } else {
+                        copyFallback();
+                    }
                 }
             });
 
-            // 8.6 رجوع للتحرير
-            backToEditor.addEventListener('click', function() {
-                setMode('editor');
-                if (currentText) {
-                    textInput.value = currentText;
-                }
-                showToast('↩️ عدت إلى التحرير', 1500);
-            });
-
-            // 8.7 عداد الأحرف
+            // 8.5 عداد الأحرف
             textInput.addEventListener('input', updateCharCount);
 
             // ============================================================
-            // 9. LOAD FROM URL
-            // ============================================================
-
-            async function loadFromURL() {
-                const params = new URLSearchParams(window.location.search);
-                const key = params.get('v');
-
-                if (key) {
-                    try {
-                        const data = await getTextFromFirebase(key);
-                        currentText = data.content;
-                        renderDisplayText(currentText, data.createdAt);
-                        setMode('display');
-                        
-                        const baseURL = window.location.origin + window.location.pathname;
-                        shortLinkInput.value = baseURL + '?v=' + key;
-                        shortLinkBox.classList.add('active');
-                        
-                        showToast('📄 تم تحميل النص من الرابط', 1500);
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        return true;
-                    } catch (error) {
-                        let errorMsg = 'حدث خطأ أثناء تحميل النص';
-                        if (error.message && error.message.includes('PERMISSION_DENIED')) {
-                            errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
-                        } else if (error.message && error.message.includes('غير موجود')) {
-                            errorMsg = '❌ الرابط غير صالح أو منتهي الصلاحية';
-                        }
-                        showError(errorMsg);
-                        showToast(errorMsg, 3000);
-                        return false;
-                    }
-                }
-                return false;
-            }
-
-            // ============================================================
-            // 10. منع النسخ من العرض
+            // 9. منع النسخ من العرض
             // ============================================================
 
             displayContent.addEventListener('copy', (e) => {
@@ -976,6 +890,40 @@
             });
 
             // ============================================================
+            // 10. LOAD FROM URL
+            // ============================================================
+
+            async function loadFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                const key = params.get('v');
+
+                if (key) {
+                    setMode('loading');
+
+                    try {
+                        const text = await getTextFromFirebase(key);
+                        currentText = text;
+                        renderDisplayText(text);
+                        setMode('display');
+                        showToast('📄 تم تحميل النص', 1500);
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        return true;
+                    } catch (error) {
+                        let errorMsg = 'حدث خطأ';
+                        if (error.message && error.message.includes('PERMISSION_DENIED')) {
+                            errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
+                        } else if (error.message && error.message.includes('غير موجود')) {
+                            errorMsg = '❌ الرابط غير صالح';
+                        }
+                        showError(errorMsg);
+                        showToast(errorMsg, 3000);
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            // ============================================================
             // 11. INIT
             // ============================================================
 
@@ -988,8 +936,7 @@
                 textInput.value = '';
             }
 
-            console.log('✅ أداة رفع النصوص جاهزة 100%');
-            
+            console.log('✅ أداة رفع النصوص - النسخة المتكاملة');
         })();
     </script>
 </body>
