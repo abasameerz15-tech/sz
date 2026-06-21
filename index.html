@@ -11,7 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -26,26 +25,19 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        /* ===== MAIN CARD ===== */
         .main-card {
             max-width: 480px;
             width: 100%;
             background: #0f1322;
             border-radius: 48px 48px 32px 32px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 
-                        0 0 0 1px rgba(100, 180, 255, 0.15);
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(100, 180, 255, 0.15);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ===== HEADER ===== */
         .header-sky {
-            background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
+            background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 100%);
             padding: 40px 28px 32px 28px;
             text-align: center;
             position: relative;
@@ -68,8 +60,6 @@
             font-weight: 800;
             color: #fff;
             text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
-            position: relative;
-            z-index: 1;
         }
 
         .header-sky h1 i {
@@ -82,8 +72,6 @@
             color: #e0f0ff;
             font-weight: 500;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
         }
 
         .header-sky .badge {
@@ -96,18 +84,14 @@
             color: #fff;
             margin-top: 8px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            z-index: 1;
         }
 
-        /* ===== CONTENT ===== */
         .content-dark {
             background: #191f2e;
             padding: 32px 24px 40px 24px;
             color: #eef2f9;
         }
 
-        /* ===== GREETING BOX ===== */
         .greeting-box {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(4px);
@@ -117,7 +101,6 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
             margin-bottom: 28px;
             text-align: center;
-            transition: all 0.3s ease;
         }
 
         .greeting-box h2 {
@@ -155,7 +138,6 @@
             gap: 6px;
         }
 
-        /* ===== PRIMARY BUTTON ===== */
         .btn-primary {
             display: flex;
             align-items: center;
@@ -185,7 +167,6 @@
             transform: scale(0.96);
         }
 
-        /* ===== EDITOR ZONE ===== */
         .editor-zone {
             display: none;
             margin-top: 24px;
@@ -241,7 +222,6 @@
             color: #4a5a7a;
         }
 
-        /* ===== SECONDARY BUTTON ===== */
         .btn-secondary {
             width: 100%;
             background: #253141;
@@ -271,7 +251,6 @@
             color: #ffb347;
         }
 
-        /* ===== DISPLAY PAGE ===== */
         .display-page {
             display: none;
             margin-top: 24px;
@@ -308,7 +287,6 @@
             color: #3c4b66;
         }
 
-        /* ===== SHORT LINK BOX ===== */
         .short-link-box {
             background: #0c101e;
             border-radius: 20px;
@@ -350,7 +328,6 @@
             transform: scale(0.94);
         }
 
-        /* ===== ACTION ROW ===== */
         .action-row {
             display: flex;
             gap: 12px;
@@ -393,7 +370,6 @@
             color: #ffb74d;
         }
 
-        /* ===== BACK LINK ===== */
         .back-link {
             display: inline-block;
             margin-top: 18px;
@@ -414,7 +390,6 @@
             margin-left: 6px;
         }
 
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -442,7 +417,15 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ===== RESPONSIVE ===== */
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #3c4b66;
+            border-top: 1px solid #1a2233;
+            padding-top: 16px;
+        }
+
         @media (max-width: 480px) {
             .header-sky h1 { font-size: 2.2rem; }
             .btn-primary { font-size: 1.4rem; padding: 16px 12px; }
@@ -455,42 +438,25 @@
             .header-sky { padding: 32px 20px 28px 20px; }
         }
 
-        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0c101e; }
         ::-webkit-scrollbar-thumb { background: #2f3a52; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4a5a7a; }
-
-        /* ===== SELECTION ===== */
         ::selection { background: rgba(43, 140, 255, 0.3); color: #fff; }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            margin-top: 24px;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #3c4b66;
-            border-top: 1px solid #1a2233;
-            padding-top: 16px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ===== MAIN CARD ===== -->
     <div class="main-card">
 
-        <!-- ===== HEADER ===== -->
         <div class="header-sky">
             <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
             <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
             <div class="badge"><i class="fas fa-shield-alt"></i> روابط دائمة</div>
         </div>
 
-        <!-- ===== CONTENT ===== -->
         <div class="content-dark" id="mainContent">
 
-            <!-- ===== GREETING ===== -->
             <div class="greeting-box" id="greetingBox">
                 <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
                 <div class="sub">في أداة رفع النصوص الذكية</div>
@@ -501,12 +467,10 @@
                 </div>
             </div>
 
-            <!-- ===== RAISE BUTTON ===== -->
             <button class="btn-primary" id="raiseBtn">
                 <i class="fas fa-arrow-up"></i> رفع نص
             </button>
 
-            <!-- ===== EDITOR ZONE ===== -->
             <div class="editor-zone" id="editorZone">
                 <div class="label">
                     <i class="fas fa-pen"></i> اكتب نصك
@@ -523,7 +487,6 @@
                 </div>
             </div>
 
-            <!-- ===== DISPLAY PAGE ===== -->
             <div class="display-page" id="displayPage">
                 
                 <div class="display-box" id="displayContent">
@@ -550,7 +513,6 @@
                 </span>
             </div>
 
-            <!-- ===== FOOTER ===== -->
             <div class="footer">
                 <i class="fas fa-database"></i> محفوظ في Firebase
                 <span style="margin: 0 8px;">·</span>
@@ -560,18 +522,14 @@
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ============================================================ -->
-    <!-- ===== JAVASCRIPT ===== -->
-    <!-- ============================================================ -->
     <script>
         (function() {
             "use strict";
 
             // ============================================================
-            // 1. FIREBASE CONFIGURATION
+            // 1. FIREBASE CONFIGURATION - استبدل ببياناتك الحقيقية
             // ============================================================
             const firebaseConfig = {
                 apiKey: "AIzaSyDummyKey", // ❗ استبدل بمفتاحك الحقيقي
@@ -583,7 +541,7 @@
                 appId: "1:123456789:web:abcdef"
             };
 
-            // Initialize Firebase
+            // تهيئة Firebase
             firebase.initializeApp(firebaseConfig);
             const database = firebase.database();
 
@@ -671,7 +629,7 @@
             }
 
             // ============================================================
-            // 6. FIREBASE OPERATIONS
+            // 6. FIREBASE OPERATIONS - مع تحسين معالجة الأخطاء
             // ============================================================
 
             function saveTextToFirebase(text) {
@@ -679,30 +637,43 @@
                     const key = generateShortKey();
                     const ref = database.ref('save-link/' + key);
                     
-                    ref.set({
+                    const data = {
                         content: text,
                         createdAt: firebase.database.ServerValue.TIMESTAMP
-                    }).then(() => {
-                        resolve(key);
-                    }).catch((error) => {
-                        reject(error);
-                    });
+                    };
+
+                    ref.set(data)
+                        .then(() => {
+                            resolve(key);
+                        })
+                        .catch((error) => {
+                            console.error('Firebase Error:', error);
+                            // 🔥 عرض رسالة خطأ محددة
+                            if (error.code === 'PERMISSION_DENIED') {
+                                reject(new Error('⚠️ أذونات Firebase مرفوضة! تأكد من قواعد الأمان في Realtime Database.'));
+                            } else {
+                                reject(error);
+                            }
+                        });
                 });
             }
 
             function getTextFromFirebase(key) {
                 return new Promise((resolve, reject) => {
                     const ref = database.ref('save-link/' + key);
-                    ref.once('value').then((snapshot) => {
-                        const data = snapshot.val();
-                        if (data && data.content) {
-                            resolve(data.content);
-                        } else {
-                            reject('النص غير موجود');
-                        }
-                    }).catch((error) => {
-                        reject(error);
-                    });
+                    ref.once('value')
+                        .then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data && data.content) {
+                                resolve(data.content);
+                            } else {
+                                reject(new Error('النص غير موجود'));
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Firebase Read Error:', error);
+                            reject(error);
+                        });
                 });
             }
 
@@ -726,7 +697,7 @@
             // 8. EVENT LISTENERS
             // ============================================================
 
-            // 8.1 Raise Button - 🔥 الحل هنا 🔥
+            // 8.1 Raise Button
             raiseBtn.addEventListener('click', function() {
                 setMode('editor');
                 textInput.focus();
@@ -763,7 +734,12 @@
                     } catch (e) {}
                     
                 } catch (error) {
-                    showToast('❌ فشل إنشاء الرابط: ' + error.message, 3000);
+                    // 🔥 عرض خطأ مفهوم للمستخدم
+                    let errorMsg = error.message || 'فشل إنشاء الرابط';
+                    if (errorMsg.includes('PERMISSION_DENIED')) {
+                        errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase: اضبط .read و .write على true';
+                    }
+                    showToast('❌ ' + errorMsg, 4000);
                 } finally {
                     createLinkBtn.disabled = false;
                     createLinkBtn.innerHTML = '<i class="fas fa-link"></i> إنشاء رابط دائم';
@@ -876,7 +852,11 @@
                         window.history.replaceState({}, document.title, window.location.pathname);
                         return true;
                     } catch (error) {
-                        showToast('❌ الرابط غير صالح أو منتهي الصلاحية', 2500);
+                        let errorMsg = error.message || 'الرابط غير صالح';
+                        if (errorMsg.includes('PERMISSION_DENIED')) {
+                            errorMsg = '⚠️ خطأ في قراءة البيانات! تأكد من قواعد Firebase';
+                        }
+                        showToast('❌ ' + errorMsg, 4000);
                         return false;
                     }
                 }
@@ -903,16 +883,15 @@
 
             const hasLoaded = loadFromURL();
             if (!hasLoaded) {
-                // الوضع الافتراضي: إخفاء المحرر وإظهار الترحيب
                 editorZone.classList.remove('active');
                 displayPage.classList.remove('active');
                 greetingBox.style.display = 'block';
                 textInput.value = '';
             }
 
-            console.log('✅ أداة رفع النصوص جاهزة - مشكلة الظهور تم حلها!');
+            console.log('✅ أداة رفع النصوص جاهزة!');
             
         })();
     </script>
 </body>
-  </html>
+    </html>
