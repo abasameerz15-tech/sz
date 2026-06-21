@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>رفع النصوص - احترافي</title>
+    <title>نص مرفوع</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     
-    <!-- Firebase SDK (تحميل متزامن) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* ================================================================
-           1. RESET & BASE (السطور 1-30)
-           ================================================================ */
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -21,9 +19,7 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        /* ================================================================
-           2. BODY & BACKGROUND (31-50)
-           ================================================================ */
+        /* ===== BODY ===== */
         body {
             background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
             min-height: 100vh;
@@ -31,12 +27,9 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            position: relative;
         }
 
-        /* ================================================================
-           3. MAIN CARD (51-70)
-           ================================================================ */
+        /* ===== MAIN CARD ===== */
         .main-card {
             max-width: 480px;
             width: 100%;
@@ -45,36 +38,15 @@
             box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 
                         0 0 0 1px rgba(100, 180, 255, 0.15);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ================================================================
-           4. HEADER - SKY GRADIENT (71-120)
-           ================================================================ */
+        /* ===== HEADER ===== */
         .header-sky {
             background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
-            padding: 32px 28px 28px 28px;
+            padding: 28px 24px 24px 24px;
             text-align: center;
             position: relative;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-
-        .header-sky::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-            animation: shimmer 8s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(10%, 5%) rotate(3deg); }
         }
 
         .header-sky::after {
@@ -86,178 +58,132 @@
             height: 24px;
             background: #0f1322;
             border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-            z-index: 2;
         }
 
         .header-sky h1 {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 800;
-            letter-spacing: 1px;
             color: #fff;
             text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
-            margin-bottom: 4px;
             position: relative;
             z-index: 1;
         }
 
         .header-sky h1 i {
-            margin-left: 8px;
+            margin-left: 6px;
             color: #ffe484;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
         }
 
         .header-sky p {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: #e0f0ff;
-            font-weight: 500;
             opacity: 0.9;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1;
         }
 
-        /* ================================================================
-           5. CONTENT DARK (121-140)
-           ================================================================ */
+        /* ===== CONTENT ===== */
         .content-dark {
             background: #191f2e;
-            padding: 24px 20px 32px 20px;
-            color: #eef2f9;
-            min-height: 300px;
-            position: relative;
+            padding: 24px 20px 28px 20px;
+            min-height: 250px;
         }
 
-        /* ================================================================
-           6. GREETING BOX (141-170)
-           ================================================================ */
+        /* ===== GREETING ===== */
         .greeting-box {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            padding: 16px 12px;
-            border-radius: 40px;
+            padding: 12px 12px;
+            border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
             text-align: center;
-            transition: all 0.3s ease;
+            margin-bottom: 16px;
         }
 
         .greeting-box h2 {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 600;
             background: linear-gradient(135deg, #b6d9ff, #7fc9ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 1px;
         }
 
         .greeting-box h2 i {
             color: #ffd966;
-            margin-left: 8px;
+            margin-left: 6px;
         }
 
         .greeting-box .sub {
-            font-size: 0.85rem;
-            color: #a5b9d4;
+            font-size: 0.75rem;
+            color: #6b7f9e;
             margin-top: 2px;
-            letter-spacing: 0.5px;
         }
 
-        /* ================================================================
-           7. DISPLAY PAGE - القائمة الرئيسية (171-250)
-           ================================================================ */
-        .display-page {
-            display: none;
-            animation: fadeSlide 0.25s ease;
-        }
-
-        .display-page.active {
-            display: block;
-        }
-
-        @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(8px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ================================================================
-           8. DISPLAY BOX - عرض النص (251-290)
-           ================================================================ */
+        /* ===== DISPLAY BOX ===== */
         .display-box {
             background: #0c101e;
-            border-radius: 28px;
-            padding: 20px 18px;
+            border-radius: 24px;
+            padding: 18px 16px;
             border: 1px solid #2f3a52;
-            min-height: 140px;
+            min-height: 120px;
             position: relative;
             word-break: break-word;
             white-space: pre-wrap;
             color: #d4e0f5;
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.7;
             box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
             user-select: none;
             -webkit-user-select: none;
             pointer-events: none;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .display-box .watermark {
             position: absolute;
-            bottom: 8px;
-            left: 16px;
-            font-size: 0.65rem;
+            bottom: 6px;
+            left: 14px;
+            font-size: 0.6rem;
             color: #3c4b66;
-            letter-spacing: 1px;
         }
 
         .display-box .timestamp {
             position: absolute;
-            bottom: 8px;
-            right: 16px;
-            font-size: 0.55rem;
+            bottom: 6px;
+            right: 14px;
+            font-size: 0.5rem;
             color: #2a3a52;
         }
 
         .display-box .empty-state {
             color: #6b7f9e;
-            font-style: italic;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 120px;
-            gap: 8px;
+            min-height: 100px;
+            gap: 6px;
         }
 
         .display-box .empty-state i {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #3c4b66;
         }
 
-        /* ================================================================
-           9. ACTION ROW - أزرار النسخ والمشاركة (291-330)
-           ================================================================ */
+        /* ===== ACTION BUTTONS ===== */
         .action-row {
             display: flex;
             gap: 12px;
-            margin-top: 4px;
         }
 
         .action-btn {
             flex: 1;
             background: #1e283b;
             border: none;
-            padding: 16px 8px;
+            padding: 14px 8px;
             border-radius: 40px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #d4e0f5;
             display: flex;
@@ -276,7 +202,7 @@
         }
 
         .action-btn i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .action-btn.copy-btn i {
@@ -287,14 +213,7 @@
             color: #ffb74d;
         }
 
-        .action-btn:hover {
-            background: #253141;
-            border-color: #4a5a7a;
-        }
-
-        /* ================================================================
-           10. TOAST NOTIFICATION (331-360)
-           ================================================================ */
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -302,13 +221,13 @@
             transform: translateX(-50%);
             background: #1f2a3f;
             backdrop-filter: blur(8px);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 60px;
             color: #d4e0f5;
             font-weight: 500;
             box-shadow: 0 8px 24px rgba(0,0,0,0.8);
             border: 1px solid #3e5070;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             z-index: 999;
             transition: all 0.25s ease;
             opacity: 0;
@@ -322,14 +241,22 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ================================================================
-           11. LOADING SPINNER (361-380)
-           ================================================================ */
+        /* ===== LOADING ===== */
+        .loading-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            gap: 14px;
+            color: #4a5a7a;
+        }
+
         .spinner {
             display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
             border-top-color: #fff;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -339,230 +266,85 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ================================================================
-           12. LOADING PLACEHOLDER (381-410)
-           ================================================================ */
-        .loading-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            gap: 16px;
-            color: #4a5a7a;
-        }
-
-        .loading-placeholder .spinner {
-            width: 32px;
-            height: 32px;
-            border-width: 3px;
-        }
-
         .loading-placeholder p {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* ================================================================
-           13. FOOTER (411-430)
-           ================================================================ */
+        /* ===== FOOTER ===== */
         .footer {
-            margin-top: 20px;
+            margin-top: 16px;
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #3c4b66;
             border-top: 1px solid #1a2233;
-            padding-top: 14px;
+            padding-top: 12px;
         }
 
-        .footer a {
-            color: #5a7a9a;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #7fc9ff;
-        }
-
-        /* ================================================================
-           14. RESPONSIVE DESIGN (431-480)
-           ================================================================ */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .header-sky h1 { 
-                font-size: 2rem; 
-            }
-            
-            .header-sky {
-                padding: 24px 20px 24px 20px;
-            }
-            
-            .content-dark {
-                padding: 20px 16px 24px 16px;
-            }
-            
-            .action-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .action-btn {
-                padding: 14px 8px;
-                font-size: 1rem;
-            }
-            
-            .greeting-box h2 {
-                font-size: 1.4rem;
-            }
-            
-            .display-box {
-                padding: 16px 14px;
-                min-height: 120px;
-                font-size: 0.95rem;
-            }
-            
-            .toast {
-                font-size: 0.8rem;
-                padding: 10px 18px;
-                white-space: normal;
-                max-width: 90%;
-            }
+            .header-sky h1 { font-size: 1.7rem; }
+            .header-sky { padding: 22px 18px 20px 18px; }
+            .content-dark { padding: 18px 14px 22px 14px; }
+            .action-row { flex-direction: column; gap: 10px; }
+            .action-btn { padding: 12px 8px; font-size: 0.95rem; }
+            .greeting-box h2 { font-size: 1.1rem; }
+            .display-box { padding: 14px 12px; min-height: 100px; font-size: 0.9rem; }
+            .toast { font-size: 0.75rem; padding: 8px 16px; white-space: normal; max-width: 90%; }
         }
 
-        @media (max-width: 380px) {
-            .header-sky h1 { 
-                font-size: 1.6rem; 
-            }
-            
-            .greeting-box h2 {
-                font-size: 1.2rem;
-            }
-        }
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0c101e; }
+        ::-webkit-scrollbar-thumb { background: #2f3a52; border-radius: 10px; }
 
-        /* ================================================================
-           15. SCROLLBAR (481-500)
-           ================================================================ */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0c101e;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #2f3a52;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4a5a7a;
-        }
-
-        /* ================================================================
-           16. SELECTION COLOR (501-510)
-           ================================================================ */
-        ::selection {
-            background: rgba(43, 140, 255, 0.3);
-            color: #fff;
-        }
-
-        /* ================================================================
-           17. STATUS DOT (511-525)
-           ================================================================ */
-        .status-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-
-        .status-dot.online {
-            background: #4caf50;
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-        }
-
-        .status-dot.offline {
-            background: #f44336;
-            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
-        }
-
-        /* ================================================================
-           18. UTILITY CLASSES (526-540)
-           ================================================================ */
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-8 {
-            margin-top: 8px;
-        }
-
-        .mt-16 {
-            margin-top: 16px;
-        }
-
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* ===== SELECTION ===== */
+        ::selection { background: rgba(43, 140, 255, 0.3); color: #fff; }
     </style>
 </head>
 <body>
 
-    <!-- ================================================================
-         MAIN CARD
-         ================================================================ -->
-    <div class="main-card" id="appContainer">
+    <!-- ===== MAIN CARD ===== -->
+    <div class="main-card">
 
         <!-- ===== HEADER ===== -->
         <div class="header-sky">
             <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
-            <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
+            <p>مشاركة النصوص بسهولة</p>
         </div>
 
         <!-- ===== CONTENT ===== -->
-        <div class="content-dark" id="mainContent">
+        <div class="content-dark">
 
             <!-- ===== GREETING ===== -->
             <div class="greeting-box" id="greetingBox">
-                <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
+                <h2><i class="fas fa-hand-peace"></i> مرحباً بك</h2>
                 <div class="sub">تم نشر النص بنجاح</div>
             </div>
 
-            <!-- ===== LOADING PLACEHOLDER ===== -->
+            <!-- ===== LOADING ===== -->
             <div class="loading-placeholder" id="loadingPlaceholder">
                 <div class="spinner"></div>
                 <p>جاري تحميل النص...</p>
             </div>
 
-            <!-- ===== DISPLAY PAGE ===== -->
-            <div class="display-page" id="displayPage">
-                
-                <!-- ===== DISPLAY BOX ===== -->
-                <div class="display-box" id="displayContent">
-                    <div class="empty-state">
-                        <i class="fas fa-file-alt"></i>
-                        <span>لا يوجد نص لعرضه</span>
-                    </div>
-                    <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                    <div class="timestamp" id="displayTime"></div>
+            <!-- ===== DISPLAY ===== -->
+            <div class="display-box" id="displayContent" style="display: none;">
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <span>لا يوجد نص لعرضه</span>
                 </div>
+                <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
+                <div class="timestamp" id="displayTime"></div>
+            </div>
 
-                <!-- ===== ACTION BUTTONS ===== -->
-                <div class="action-row">
-                    <button class="action-btn copy-btn" id="copyBtn">
-                        <i class="fas fa-copy"></i> نسخ النص
-                    </button>
-                    <button class="action-btn share-btn" id="shareBtn">
-                        <i class="fas fa-share-alt"></i> مشاركة
-                    </button>
-                </div>
+            <!-- ===== BUTTONS ===== -->
+            <div class="action-row" id="actionRow" style="display: none;">
+                <button class="action-btn copy-btn" id="copyBtn">
+                    <i class="fas fa-copy"></i> نسخ النص
+                </button>
+                <button class="action-btn share-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> مشاركة
+                </button>
             </div>
 
             <!-- ===== FOOTER ===== -->
@@ -578,18 +360,18 @@
     <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ================================================================
-         JAVASCRIPT
-         ================================================================ -->
+    <!-- ================================================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ================================================================ -->
     <script>
         (function() {
             "use strict";
 
             // ============================================================
-            // 1. FIREBASE CONFIGURATION
+            // 1. FIREBASE CONFIG - استبدل ببياناتك
             // ============================================================
             const firebaseConfig = {
-                apiKey: "AIzaSyDummyKey", // ❗ استبدل بمفتاحك الحقيقي
+                apiKey: "AIzaSyDummyKey",
                 authDomain: "save-link-34c39.firebaseapp.com",
                 databaseURL: "https://save-link-34c39-default-rtdb.firebaseio.com/",
                 projectId: "save-link-34c39",
@@ -598,33 +380,28 @@
                 appId: "1:123456789:web:abcdef"
             };
 
-            // تهيئة Firebase
             firebase.initializeApp(firebaseConfig);
             const database = firebase.database();
 
             // ============================================================
             // 2. DOM ELEMENTS
             // ============================================================
-            const displayPage = document.getElementById('displayPage');
+            const loadingPlaceholder = document.getElementById('loadingPlaceholder');
             const displayContent = document.getElementById('displayContent');
             const displayTime = document.getElementById('displayTime');
+            const actionRow = document.getElementById('actionRow');
             const copyBtn = document.getElementById('copyBtn');
             const shareBtn = document.getElementById('shareBtn');
             const toast = document.getElementById('toast');
             const greetingBox = document.getElementById('greetingBox');
-            const loadingPlaceholder = document.getElementById('loadingPlaceholder');
 
-            // ============================================================
-            // 3. STATE
-            // ============================================================
             let currentText = '';
             let toastTimer = null;
 
             // ============================================================
-            // 4. UTILITY FUNCTIONS
+            // 3. UTILITY FUNCTIONS
             // ============================================================
 
-            // 4.1 Show Toast Notification
             function showToast(msg, duration = 1800) {
                 toast.textContent = msg;
                 toast.classList.add('show');
@@ -634,7 +411,6 @@
                 }, duration);
             }
 
-            // 4.2 Format Timestamp
             function formatTimestamp(timestamp) {
                 if (!timestamp) return '';
                 const date = new Date(timestamp);
@@ -647,7 +423,6 @@
                 });
             }
 
-            // 4.3 Escape HTML
             function escapeHTML(text) {
                 const div = document.createElement('div');
                 div.textContent = text;
@@ -655,14 +430,14 @@
             }
 
             // ============================================================
-            // 5. RENDER FUNCTIONS
+            // 4. RENDER FUNCTIONS
             // ============================================================
 
-            // 5.1 Render Display Text
             function renderDisplayText(text, timestamp) {
                 // إخفاء التحميل وإظهار المحتوى
                 loadingPlaceholder.style.display = 'none';
-                displayPage.classList.add('active');
+                displayContent.style.display = 'block';
+                actionRow.style.display = 'flex';
                 greetingBox.style.display = 'block';
 
                 if (!text || text.trim() === '') {
@@ -677,7 +452,6 @@
                     return;
                 }
 
-                // عرض النص مع الحفاظ على المسافات والأسطر
                 const escapedText = escapeHTML(text);
                 displayContent.innerHTML = `
                     ${escapedText.replace(/\n/g, '<br>')}
@@ -688,14 +462,13 @@
                     displayTime.textContent = '📅 ' + formatTimestamp(timestamp);
                 }
 
-                // تحديث النص الحالي
                 currentText = text;
             }
 
-            // 5.2 Show Error
             function showError(message) {
                 loadingPlaceholder.style.display = 'none';
-                displayPage.classList.add('active');
+                displayContent.style.display = 'block';
+                actionRow.style.display = 'flex';
                 greetingBox.style.display = 'block';
 
                 displayContent.innerHTML = `
@@ -708,15 +481,12 @@
             }
 
             // ============================================================
-            // 6. FIREBASE OPERATIONS
+            // 5. FIREBASE OPERATIONS
             // ============================================================
 
-            // 6.1 Get Text from Firebase
             function getTextFromFirebase(key) {
                 return new Promise((resolve, reject) => {
                     const ref = database.ref('save-link/' + key);
-                    
-                    // استخدام once() للقراءة السريعة
                     ref.once('value')
                         .then((snapshot) => {
                             const data = snapshot.val();
@@ -727,31 +497,29 @@
                             }
                         })
                         .catch((error) => {
-                            console.error('Firebase Read Error:', error);
                             reject(error);
                         });
                 });
             }
 
             // ============================================================
-            // 7. LOAD FROM URL - مع تحسين السرعة
+            // 6. LOAD FROM URL
             // ============================================================
 
             async function loadFromURL() {
-                // قراءة البارامتر فوراً
                 const params = new URLSearchParams(window.location.search);
                 const key = params.get('v');
-                
-                // إذا لم يوجد مفتاح، نعرض رسالة
+
                 if (!key) {
                     loadingPlaceholder.style.display = 'none';
-                    displayPage.classList.add('active');
+                    displayContent.style.display = 'block';
+                    actionRow.style.display = 'flex';
                     greetingBox.style.display = 'block';
                     displayContent.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-link" style="color: #4a5a7a;"></i>
                             <span>الرابط غير صحيح</span>
-                            <span style="font-size: 0.8rem; color: #4a5a7a;">تأكد من الرابط المدخل</span>
+                            <span style="font-size: 0.75rem; color: #4a5a7a;">تأكد من الرابط المدخل</span>
                         </div>
                         <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
                     `;
@@ -759,30 +527,23 @@
                 }
 
                 try {
-                    // 🔥 محاولة جلب البيانات بأسرع وقت
                     const data = await getTextFromFirebase(key);
-                    
-                    // عرض النص فوراً
                     renderDisplayText(data.content, data.createdAt);
-                    
-                    // تنظيف الرابط من البارامتر (للمظهر)
+
                     if (window.history && window.history.replaceState) {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
-                    
+
                     showToast('📄 تم تحميل النص بنجاح', 1500);
                     return true;
-                    
+
                 } catch (error) {
-                    console.error('Load Error:', error);
-                    
                     let errorMsg = 'حدث خطأ أثناء تحميل النص';
                     if (error.message && error.message.includes('PERMISSION_DENIED')) {
                         errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
                     } else if (error.message && error.message.includes('غير موجود')) {
                         errorMsg = '❌ الرابط غير صالح أو منتهي الصلاحية';
                     }
-                    
                     showError(errorMsg);
                     showToast(errorMsg, 3000);
                     return false;
@@ -790,32 +551,9 @@
             }
 
             // ============================================================
-            // 8. EVENT LISTENERS
+            // 7. COPY FUNCTION
             // ============================================================
 
-            // 8.1 Copy Button
-            copyBtn.addEventListener('click', function() {
-                if (!currentText || currentText.trim() === '') {
-                    showToast('لا يوجد نص لنسخه', 1500);
-                    return;
-                }
-
-                // محاولة النسخ باستخدام Clipboard API
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(currentText)
-                        .then(() => {
-                            showToast('📋 تم نسخ النص بنجاح', 1500);
-                        })
-                        .catch(() => {
-                            // الطريقة البديلة
-                            copyTextFallback();
-                        });
-                } else {
-                    copyTextFallback();
-                }
-            });
-
-            // 8.2 Copy Text Fallback
             function copyTextFallback() {
                 const textarea = document.createElement('textarea');
                 textarea.value = currentText;
@@ -833,37 +571,47 @@
                 document.body.removeChild(textarea);
             }
 
-            // 8.3 Share Button
+            // ============================================================
+            // 8. EVENT LISTENERS
+            // ============================================================
+
+            copyBtn.addEventListener('click', function() {
+                if (!currentText || currentText.trim() === '') {
+                    showToast('لا يوجد نص لنسخه', 1500);
+                    return;
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(currentText)
+                        .then(() => showToast('📋 تم نسخ النص بنجاح', 1500))
+                        .catch(() => copyTextFallback());
+                } else {
+                    copyTextFallback();
+                }
+            });
+
             shareBtn.addEventListener('click', function() {
                 if (!currentText || currentText.trim() === '') {
                     showToast('لا يوجد نص للمشاركة', 1500);
                     return;
                 }
 
-                // استخدام Web Share API
                 if (navigator.share) {
                     navigator.share({
                         title: 'نص مرفوع',
                         text: currentText,
                     })
-                    .then(() => {
-                        showToast('تمت المشاركة بنجاح', 1500);
-                    })
+                    .then(() => showToast('تمت المشاركة بنجاح', 1500))
                     .catch((err) => {
                         if (err.name !== 'AbortError') {
                             showToast('تم إلغاء المشاركة', 1500);
                         }
                     });
                 } else {
-                    // في حال عدم دعم المشاركة، ننسخ النص
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(currentText)
-                            .then(() => {
-                                showToast('📋 تم نسخ النص للمشاركة', 1500);
-                            })
-                            .catch(() => {
-                                copyTextFallback();
-                            });
+                            .then(() => showToast('📋 تم نسخ النص للمشاركة', 1500))
+                            .catch(() => copyTextFallback());
                     } else {
                         copyTextFallback();
                     }
@@ -874,10 +622,9 @@
             // 9. PREVENT COPY ON DISPLAY
             // ============================================================
 
-            // منع النسخ من منطقة العرض
             displayContent.addEventListener('copy', (e) => {
                 e.preventDefault();
-                showToast('⛔ هذا النص غير قابل للنسخ المباشر، استخدم زر "نسخ النص"', 2000);
+                showToast('⛔ استخدم زر "نسخ النص"', 1500);
             });
 
             displayContent.addEventListener('contextmenu', (e) => {
@@ -885,26 +632,20 @@
                 showToast('⛔ القائمة محظورة', 1200);
             });
 
-            // منع تحديد النص بالماوس
             displayContent.addEventListener('selectstart', (e) => {
                 e.preventDefault();
             });
 
             // ============================================================
-            // 10. INIT - تشغيل التطبيق فوراً
+            // 10. INIT
             // ============================================================
 
-            // 🔥 التنفيذ الفوري - بدون أي تأخير
             (function init() {
-                // إظهار شاشة التحميل
                 loadingPlaceholder.style.display = 'flex';
-                displayPage.classList.remove('active');
-                
-                // بدء تحميل النص فوراً
+                displayContent.style.display = 'none';
+                actionRow.style.display = 'none';
                 loadFromURL();
-                
-                console.log('✅ أداة رفع النصوص - تحميل سريع');
-                console.log('📌 انتظر لحظة... جاري جلب النص');
+                console.log('✅ صفحة عرض النص - تم التحميل');
             })();
 
         })();
