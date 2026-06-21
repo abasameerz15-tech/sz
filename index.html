@@ -1,58 +1,89 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>أداة رفع النصوص</title>
     <style>
-        body { margin: 0; background-color: #0a0e14; color: white; font-family: sans-serif; }
-        .page { display: none; padding: 20px; }
+        /* التنسيق العام */
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(180deg, #001f3f, #0074D9); color: #fff; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .screen { display: none; text-align: center; width: 90%; max-width: 500px; }
         .active { display: block; }
-        .card { background: #151a21; border-radius: 20px; padding: 20px; margin-top: 20px; border: 1px solid #1c2630; }
-        .btn { background: #1c2630; padding: 15px; border-radius: 15px; margin-top: 10px; display: block; text-align: center; color: white; text-decoration: none; }
-        .nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #151a21; padding: 10px 0; justify-content: space-around; }
+        
+        /* نجوم متصاعدة */
+        .star { position: absolute; background: white; border-radius: 50%; animation: floatUp 5s linear infinite; }
+        @keyframes floatUp { from { transform: translateY(100vh); opacity: 1; } to { transform: translateY(-10vh); opacity: 0; } }
+
+        /* الأزرار والنصوص */
+        h1 { margin-bottom: 30px; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: none; font-size: 16px; box-sizing: border-box; }
+        .btn { padding: 12px 30px; margin: 10px; cursor: pointer; border-radius: 8px; border: none; background: #7FDBFF; color: #001f3f; font-weight: bold; transition: 0.3s; }
+        
+        /* مكان النص غير القابل للنسخ */
+        #display-area { user-select: none; -webkit-user-select: none; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; min-height: 100px; margin-bottom: 20px; }
+        
+        /* الأزرار الصغيرة */
+        .action-btn { padding: 5px 15px; border-radius: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-<!-- الصفحة 1: الرئيسية -->
-<div id="p1" class="page active">
-    <h1>EX DELTA EXPLOIT</h1>
-    <div class="card">
-        <h3>معلومات هاك دلتا</h3>
-        <p>أهلاً بك في المركز الرسمي... (نصك هنا)</p>
+    <div id="screen1" class="screen active">
+        <h1>مرحباً بك في أداة رفع النصوص ومشاركتها</h1>
+        <button class="btn" onclick="showScreen('screen2')">رفع نص</button>
     </div>
-</div>
 
-<!-- الصفحة 2: هاكاتنا (الأجهزة) -->
-<div id="p2" class="page">
-    <h1>EX DELTA EXPLOIT</h1>
-    <div class="card">
-        <h3>إصدارات الأجهزة</h3>
-        <a class="btn">iOS / iPhone</a>
-        <a class="btn">Android</a>
+    <div id="screen2" class="screen">
+        <textarea id="userInput" placeholder="اكتب نصك هنا..."></textarea><br>
+        <button class="btn" onclick="saveText()">إنشاء رابط دائم</button>
     </div>
-</div>
 
-<!-- الصفحة 3: قنواتنا -->
-<div id="p3" class="page">
-    <h1>قنواتنا ومجتمعاتنا</h1>
-    <div class="card">
-        <a class="btn" style="background:#5865F2;">ديسكورد EX DELTA</a>
-        <a class="btn" style="background:#26A5E4;">قناة تيليجرام</a>
+    <div id="screen3" class="screen">
+        <div id="display-area"></div>
+        <button class="btn action-btn" onclick="shareText()">📤 مشاركة</button>
+        <button class="btn action-btn" onclick="copyText()">📋 نسخ</button>
     </div>
-</div>
 
-<!-- شريط التنقل السفلي -->
-<div class="nav">
-    <button onclick="show('p1')">الرئيسية</button>
-    <button onclick="show('p2')">هاكاتنا</button>
-    <button onclick="show('p3')">قنواتنا</button>
-</div>
+    <script>
+        // الأصوات
+        const clickSound = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
 
-<script>
-    function show(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-</script>
+        // النجوم
+        function createStar() {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.width = s.style.height = Math.random() * 3 + 'px';
+            s.style.left = Math.random() * 100 + 'vw';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 5000);
+        }
+        setInterval(createStar, 300);
+
+        function showScreen(id) {
+            clickSound.play();
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function saveText() {
+            const txt = document.getElementById('userInput').value;
+            if (!txt) { alert("اكتب نصاً أولاً!"); return; }
+            document.getElementById('display-area').innerText = txt;
+            showScreen('screen3');
+        }
+
+        function copyText() {
+            const text = document.getElementById('display-area').innerText;
+            navigator.clipboard.writeText(text);
+            alert("تم النسخ بنجاح!");
+        }
+
+        function shareText() {
+            if (navigator.share) {
+                navigator.share({ text: document.getElementById('display-area').innerText });
+            } else {
+                alert("ميزة المشاركة غير مدعومة في متصفحك");
+            }
+        }
+    </script>
 </body>
 </html>
