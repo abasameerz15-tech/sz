@@ -4,8 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>رفع النصوص - احترافي</title>
-    <!-- Font Awesome 6 (مجاني) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -34,7 +38,6 @@
             transition: all 0.2s ease;
         }
 
-        /* ===== الهيدر ===== */
         .header-sky {
             background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 100%);
             padding: 40px 28px 32px 28px;
@@ -76,7 +79,6 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* ===== المحتوى الأسود المائل للرمادي ===== */
         .content-dark {
             background: #191f2e;
             padding: 32px 24px 40px 24px;
@@ -116,7 +118,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== الزر الرئيسي ===== */
         .btn-primary {
             display: flex;
             align-items: center;
@@ -148,7 +149,6 @@
             box-shadow: 0 4px 12px rgba(0, 80, 255, 0.6);
         }
 
-        /* ===== واجهة الكتابة ===== */
         .editor-zone {
             display: none;
             margin-top: 24px;
@@ -213,7 +213,6 @@
             color: #ffb347;
         }
 
-        /* ===== صفحة العرض (الرابط الدائم) ===== */
         .display-page {
             display: none;
             margin-top: 24px;
@@ -237,9 +236,9 @@
             font-size: 1rem;
             line-height: 1.6;
             box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
-            user-select: none; /* منع تحديد النص */
+            user-select: none;
             -webkit-user-select: none;
-            pointer-events: none; /* يمنع النسخ بالكامل */
+            pointer-events: none;
         }
 
         .display-box .watermark {
@@ -292,7 +291,6 @@
             color: #ffb74d;
         }
 
-        /* ===== رسالة منبثقة ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -320,7 +318,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ===== زر الرجوع ===== */
         .back-link {
             display: inline-block;
             margin-top: 18px;
@@ -340,10 +337,53 @@
             display: none;
         }
 
-        /* responsive */
+        /* رابط قصير أنيق */
+        .short-link-box {
+            background: #0c101e;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-top: 16px;
+            border: 1px solid #2b8cff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .short-link-box input {
+            background: transparent;
+            border: none;
+            color: #7fc9ff;
+            font-size: 0.9rem;
+            flex: 1;
+            outline: none;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            direction: ltr;
+        }
+
+        .short-link-box button {
+            background: #2b8cff;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .short-link-box button:active {
+            transform: scale(0.94);
+        }
+
         @media (max-width: 480px) {
             .header-sky h1 { font-size: 2.2rem; }
             .btn-primary { font-size: 1.4rem; }
+            .short-link-box { flex-wrap: wrap; }
+            .short-link-box input { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -351,27 +391,22 @@
 
 <div class="main-card" id="appContainer">
 
-    <!-- الهيدر السماوي -->
     <div class="header-sky">
         <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
         <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
     </div>
 
-    <!-- المحتوى الأساسي -->
     <div class="content-dark" id="mainContent">
 
-        <!-- الترحيب -->
         <div class="greeting-box" id="greetingBox">
             <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
             <div class="sub">في أداة رفع النصوص الذكية</div>
         </div>
 
-        <!-- زر رفع النص -->
         <button class="btn-primary" id="raiseBtn">
             <i class="fas fa-arrow-up"></i> رفع نص
         </button>
 
-        <!-- ===== واجهة الكتابة ===== -->
         <div class="editor-zone" id="editorZone">
             <textarea id="textInput" placeholder="اكتب أو الصق نصك هنا ..."></textarea>
             <button class="btn-secondary" id="createLinkBtn">
@@ -379,33 +414,51 @@
             </button>
         </div>
 
-        <!-- ===== صفحة العرض (الرابط الدائم) ===== -->
         <div class="display-page" id="displayPage">
             <div class="display-box" id="displayContent">
-                <!-- سيظهر النص هنا -->
                 <span style="color: #6b7f9e; font-style: italic;">النص المعروض</span>
                 <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
             </div>
 
+            <!-- صندوق الرابط القصير -->
+            <div class="short-link-box" id="shortLinkBox">
+                <input type="text" id="shortLinkInput" readonly value="جاري إنشاء الرابط..." />
+                <button id="copyLinkBtn"><i class="fas fa-copy"></i> نسخ</button>
+            </div>
+
             <div class="action-row">
-                <button class="action-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> نسخ</button>
+                <button class="action-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> نسخ النص</button>
                 <button class="action-btn share-btn" id="shareBtn"><i class="fas fa-share-alt"></i> مشاركة</button>
             </div>
 
             <span class="back-link" id="backToEditor"><i class="fas fa-arrow-left"></i> رجوع للتحرير</span>
         </div>
 
-    </div> <!-- end content-dark -->
-</div> <!-- end main-card -->
+    </div>
+</div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
     (function() {
         "use strict";
 
-        // عناصر DOM
+        // ========== إعدادات Firebase ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKey", // ❗ استبدل بمفتاحك الحقيقي
+            authDomain: "save-link-34c39.firebaseapp.com",
+            databaseURL: "https://save-link-34c39-default-rtdb.firebaseio.com/",
+            projectId: "save-link-34c39",
+            storageBucket: "save-link-34c39.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ========== العناصر ==========
         const raiseBtn = document.getElementById('raiseBtn');
         const editorZone = document.getElementById('editorZone');
         const textInput = document.getElementById('textInput');
@@ -417,12 +470,23 @@
         const backToEditor = document.getElementById('backToEditor');
         const toast = document.getElementById('toast');
         const greetingBox = document.getElementById('greetingBox');
+        const shortLinkInput = document.getElementById('shortLinkInput');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
 
-        // حالة التطبيق
         let currentText = '';
-        let isDisplayMode = false;
+        let currentShortKey = '';
 
-        // ---- دالة عرض الرسائل المنبثقة ----
+        // ========== دالة توليد مفتاح قصير (6 أحرف) ==========
+        function generateShortKey() {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let key = '';
+            for (let i = 0; i < 6; i++) {
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return key;
+        }
+
+        // ========== عرض الإشعارات ==========
         function showToast(msg, duration = 2000) {
             toast.textContent = msg;
             toast.classList.add('show');
@@ -432,79 +496,81 @@
             }, duration);
         }
 
-        // ---- تبديل الوضع: إظهار محرر أو صفحة العرض ----
+        // ========== تبديل الوضع ==========
         function setMode(mode) {
             if (mode === 'editor') {
                 editorZone.classList.add('active');
                 displayPage.classList.remove('active');
                 greetingBox.style.display = 'block';
-                isDisplayMode = false;
             } else if (mode === 'display') {
                 editorZone.classList.remove('active');
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'none';
-                isDisplayMode = true;
             }
         }
 
-        // ---- عرض النص في صفحة العرض ----
+        // ========== عرض النص ==========
         function renderDisplayText(text) {
             if (!text || text.trim() === '') {
                 displayContent.innerHTML = `<span style="color: #6b7f9e; font-style: italic;">لا يوجد نص لعرضه</span>
                                             <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>`;
                 return;
             }
-            // نعرض النص كما هو مع منع التحديد (عن طريق CSS pointer-events: none)
-            // نضيف علامة مائية
             displayContent.innerHTML = `${text.replace(/\n/g, '<br>')}
                                         <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>`;
         }
 
-        // ---- إنشاء رابط دائم (محاكاة) ----
-        function generatePermanentLink(text) {
-            // تخزين النص في localStorage مع مفتاح عشوائي
-            const key = 'text_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
-            try {
-                localStorage.setItem(key, text);
-            } catch (e) {
-                // في حال فشل التخزين نستخدم كائن مؤقت
-                return null;
-            }
-            // بناء رابط وهمي (لكن حقيقي داخل التطبيق)
-            // نستخدم الرابط الحالي مع بارامتر ?view=key
-            const baseUrl = window.location.href.split('?')[0];
-            return baseUrl + '?view=' + key;
+        // ========== حفظ النص في Firebase وإنشاء رابط قصير ==========
+        function saveTextToFirebase(text) {
+            return new Promise((resolve, reject) => {
+                const key = generateShortKey();
+                const ref = database.ref('texts/' + key);
+                
+                ref.set({
+                    content: text,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    resolve(key);
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
         }
 
-        // ---- استرجاع النص من الرابط (عند تحميل الصفحة) ----
-        function loadFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            const key = params.get('view');
-            if (key) {
-                try {
-                    const stored = localStorage.getItem(key);
-                    if (stored) {
-                        currentText = stored;
-                        renderDisplayText(currentText);
-                        setMode('display');
-                        // نزيل البارامتر من الرابط لكي لا يعيد التحميل
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        showToast('تم تحميل النص من الرابط الدائم', 2000);
-                        return true;
+        // ========== جلب النص من Firebase ==========
+        function getTextFromFirebase(key) {
+            return new Promise((resolve, reject) => {
+                const ref = database.ref('texts/' + key);
+                ref.once('value').then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data && data.content) {
+                        resolve(data.content);
                     } else {
-                        showToast('الرابط غير صالح أو منتهي الصلاحية', 2000);
+                        reject('النص غير موجود');
                     }
-                } catch (e) {
-                    showToast('حدث خطأ في قراءة الرابط', 2000);
-                }
-            }
-            return false;
+                }).catch((error) => {
+                    reject(error);
+                });
+            });
         }
 
-        // ---- رفع النص (زر رفع نص) ----
+        // ========== إنشاء رابط قصير ==========
+        async function createShortLink(text) {
+            try {
+                const key = await saveTextToFirebase(text);
+                // بناء الرابط القصير (استخدم رابط موقعك الحقيقي)
+                const baseURL = window.location.origin + window.location.pathname;
+                const shortURL = baseURL + '?v=' + key;
+                return { key, shortURL };
+            } catch (error) {
+                console.error('خطأ في الحفظ:', error);
+                throw error;
+            }
+        }
+
+        // ========== زر رفع النص ==========
         raiseBtn.addEventListener('click', function() {
             setMode('editor');
-            // إذا كان هناك نص مخزن سابقاً في المحرر نحتفظ به
             if (currentText) {
                 textInput.value = currentText;
             } else {
@@ -514,41 +580,67 @@
             showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
         });
 
-        // ---- إنشاء رابط دائم ----
-        createLinkBtn.addEventListener('click', function() {
+        // ========== إنشاء رابط دائم ==========
+        createLinkBtn.addEventListener('click', async function() {
             const raw = textInput.value;
             if (!raw || raw.trim() === '') {
                 showToast('⚠️ الرجاء كتابة نص أولاً', 1500);
                 return;
             }
+            
             currentText = raw.trim();
-
-            // توليد رابط دائم
-            const link = generatePermanentLink(currentText);
-            if (!link) {
-                showToast('فشل إنشاء الرابط، حاول مرة أخرى', 2000);
-                return;
+            
+            // تعطيل الزر مؤقتاً
+            createLinkBtn.disabled = true;
+            createLinkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
+            
+            try {
+                const { key, shortURL } = await createShortLink(currentText);
+                currentShortKey = key;
+                
+                // عرض النص
+                renderDisplayText(currentText);
+                setMode('display');
+                
+                // عرض الرابط القصير
+                shortLinkInput.value = shortURL;
+                
+                showToast('✅ تم إنشاء الرابط الدائم بنجاح!', 2000);
+                
+                // نسخ الرابط تلقائياً
+                try {
+                    await navigator.clipboard.writeText(shortURL);
+                    showToast('📋 تم نسخ الرابط القصير تلقائياً', 2000);
+                } catch (e) {
+                    // إذا فشل النسخ التلقائي
+                }
+                
+            } catch (error) {
+                showToast('❌ فشل إنشاء الرابط: ' + error.message, 3000);
+            } finally {
+                createLinkBtn.disabled = false;
+                createLinkBtn.innerHTML = '<i class="fas fa-link"></i> إنشاء رابط دائم';
             }
-
-            // عرض النص في صفحة العرض
-            renderDisplayText(currentText);
-            setMode('display');
-
-            // نعرض الرابط في رسالة (نسخ الرابط للمستخدم)
-            // ويمكن نسخه عبر زر مشاركة لاحقاً
-            // نضع الرابط في حافظة مؤقتة (اختياري)
-            navigator.clipboard.writeText(link).then(() => {
-                showToast('✅ تم إنشاء الرابط الدائم ونسخه تلقائياً', 2500);
-            }).catch(() => {
-                // إذا فشل النسخ التلقائي
-                showToast('🔗 تم إنشاء الرابط: ' + link, 3500);
-            });
-
-            // تخزين الرابط في خاصية للاستخدام
-            window._permanentLink = link;
         });
 
-        // ---- زر النسخ (نسخ النص المعروض) ----
+        // ========== نسخ الرابط القصير ==========
+        copyLinkBtn.addEventListener('click', function() {
+            const link = shortLinkInput.value;
+            if (!link || link === 'جاري إنشاء الرابط...') {
+                showToast('لا يوجد رابط لنسخه', 1500);
+                return;
+            }
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('📋 تم نسخ الرابط القصير', 1500);
+            }).catch(() => {
+                // طريقة بديلة
+                shortLinkInput.select();
+                document.execCommand('copy');
+                showToast('📋 تم نسخ الرابط', 1500);
+            });
+        });
+
+        // ========== نسخ النص ==========
         copyBtn.addEventListener('click', function() {
             if (!currentText) {
                 showToast('لا يوجد نص لنسخه', 1500);
@@ -557,7 +649,6 @@
             navigator.clipboard.writeText(currentText).then(() => {
                 showToast('📋 تم نسخ النص بنجاح', 1800);
             }).catch(() => {
-                // طريقة بديلة
                 const textarea = document.createElement('textarea');
                 textarea.value = currentText;
                 document.body.appendChild(textarea);
@@ -572,14 +663,13 @@
             });
         });
 
-        // ---- زر المشاركة (مشاركة النص أو الرابط) ----
+        // ========== مشاركة ==========
         shareBtn.addEventListener('click', function() {
             if (!currentText) {
                 showToast('لا يوجد نص للمشاركة', 1500);
                 return;
             }
 
-            // نحاول مشاركة النص عبر Web Share API
             if (navigator.share) {
                 navigator.share({
                     title: 'نص مرفوع',
@@ -592,18 +682,19 @@
                     }
                 });
             } else {
-                // دعم قديم: ننسخ الرابط الدائم إن وجد
-                const link = window._permanentLink || window.location.href;
-                navigator.clipboard.writeText(link).then(() => {
-                    showToast('🔗 تم نسخ الرابط الدائم، يمكنك مشاركته', 2500);
-                }).catch(() => {
-                    // عرض الرابط في رسالة
-                    showToast('شارك الرابط: ' + link, 3000);
-                });
+                // نسخ الرابط بدلاً من ذلك
+                const link = shortLinkInput.value;
+                if (link && link !== 'جاري إنشاء الرابط...') {
+                    navigator.clipboard.writeText(link).then(() => {
+                        showToast('🔗 تم نسخ الرابط، شاركه مع أصدقائك', 2500);
+                    });
+                } else {
+                    showToast('شارك النص: ' + currentText, 3000);
+                }
             }
         });
 
-        // ---- رجوع للتحرير ----
+        // ========== رجوع للتحرير ==========
         backToEditor.addEventListener('click', function() {
             setMode('editor');
             if (currentText) {
@@ -612,40 +703,60 @@
             showToast('↩️ عدت إلى التحرير', 1500);
         });
 
-        // ---- تحميل الصفحة: التحقق من رابط دائم ----
-        const hasLoaded = loadFromURL();
-        if (!hasLoaded) {
-            // وضع البداية: نعرض الترحيب والمحرر مخفي
-            setMode('editor'); // لكن editorZone يظهر مخفي في البداية، نجعله غير فعال
-            editorZone.classList.remove('active');
-            displayPage.classList.remove('active');
-            greetingBox.style.display = 'block';
-            // نضبط النص الافتراضي
-            textInput.value = '';
+        // ========== تحميل الرابط من URL ==========
+        async function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const key = params.get('v');
+            
+            if (key) {
+                try {
+                    const text = await getTextFromFirebase(key);
+                    currentText = text;
+                    currentShortKey = key;
+                    
+                    // عرض النص
+                    renderDisplayText(currentText);
+                    setMode('display');
+                    
+                    // عرض الرابط القصير
+                    const baseURL = window.location.origin + window.location.pathname;
+                    shortLinkInput.value = baseURL + '?v=' + key;
+                    
+                    showToast('📄 تم تحميل النص من الرابط', 2000);
+                    
+                    // تنظيف الرابط
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    return true;
+                } catch (error) {
+                    showToast('❌ الرابط غير صالح أو منتهي الصلاحية', 2500);
+                    return false;
+                }
+            }
+            return false;
         }
 
-        // إضافة بعض التحسينات: عند الضغط على Enter في textarea لا يحدث شيء
-        textInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.ctrlKey) {
-                // اختصار: Ctrl+Enter ينشئ الرابط
-                createLinkBtn.click();
-                e.preventDefault();
-            }
-        });
-
-        // منع النسخ من صفحة العرض بشكل إضافي (باستخدام حدث)
+        // ========== منع النسخ من صفحة العرض ==========
         displayContent.addEventListener('copy', (e) => {
             e.preventDefault();
             showToast('⛔ هذا النص غير قابل للنسخ', 1500);
         });
 
-        // منع القائمة المنبثقة (اختياري)
         displayContent.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             showToast('⛔ القائمة محظورة', 1200);
         });
 
-        console.log('✅ أداة رفع النصوص جاهزة - تصميم احترافي للجوال وجيثب');
+        // ========== تشغيل التطبيق ==========
+        const hasLoaded = loadFromURL();
+        if (!hasLoaded) {
+            setMode('editor');
+            editorZone.classList.remove('active');
+            displayPage.classList.remove('active');
+            greetingBox.style.display = 'block';
+            textInput.value = '';
+        }
+
+        console.log('✅ أداة رفع النصوص مع Firebase - روابط قصيرة وآمنة');
     })();
 </script>
 </body>
