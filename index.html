@@ -12,7 +12,7 @@
     
     <style>
         /* ================================================================
-           1. RESET & BASE (السطور 1-30)
+           1. RESET & BASE
            ================================================================ */
         * {
             margin: 0;
@@ -22,7 +22,7 @@
         }
 
         /* ================================================================
-           2. BODY & BACKGROUND (31-50)
+           2. BODY & BACKGROUND
            ================================================================ */
         body {
             background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
@@ -35,7 +35,7 @@
         }
 
         /* ================================================================
-           3. MAIN CARD (51-70)
+           3. MAIN CARD
            ================================================================ */
         .main-card {
             max-width: 480px;
@@ -50,7 +50,7 @@
         }
 
         /* ================================================================
-           4. HEADER - SKY GRADIENT (71-120)
+           4. HEADER - SKY GRADIENT
            ================================================================ */
         .header-sky {
             background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
@@ -136,7 +136,7 @@
         }
 
         /* ================================================================
-           5. CONTENT DARK (121-140)
+           5. CONTENT DARK
            ================================================================ */
         .content-dark {
             background: #191f2e;
@@ -147,7 +147,7 @@
         }
 
         /* ================================================================
-           6. GREETING BOX (141-170)
+           6. GREETING BOX
            ================================================================ */
         .greeting-box {
             background: rgba(255, 255, 255, 0.03);
@@ -184,7 +184,7 @@
         }
 
         /* ================================================================
-           7. EDITOR ZONE - واجهة الكتابة (171-240)
+           7. EDITOR ZONE - واجهة الكتابة
            ================================================================ */
         .editor-zone {
             display: none;
@@ -242,7 +242,7 @@
         }
 
         /* ================================================================
-           8. PRIMARY BUTTON - رفع نص (241-270)
+           8. PRIMARY BUTTON - رفع نص
            ================================================================ */
         .btn-primary {
             display: flex;
@@ -280,7 +280,7 @@
         }
 
         /* ================================================================
-           9. SECONDARY BUTTON - إنشاء رابط (271-300)
+           9. SECONDARY BUTTON - إنشاء رابط
            ================================================================ */
         .btn-secondary {
             width: 100%;
@@ -319,7 +319,7 @@
         }
 
         /* ================================================================
-           10. DISPLAY PAGE - صفحة العرض (301-350)
+           10. DISPLAY PAGE - صفحة العرض
            ================================================================ */
         .display-page {
             display: none;
@@ -331,7 +331,7 @@
         }
 
         /* ================================================================
-           11. DISPLAY BOX - عرض النص (351-400)
+           11. DISPLAY BOX - عرض النص
            ================================================================ */
         .display-box {
             background: #0c101e;
@@ -387,7 +387,7 @@
         }
 
         /* ================================================================
-           12. ACTION ROW - أزرار العرض (401-440)
+           12. ACTION ROW - أزرار العرض
            ================================================================ */
         .action-row {
             display: flex;
@@ -437,7 +437,7 @@
         }
 
         /* ================================================================
-           13. SHORT LINK BOX - عرض الرابط (441-480)
+           13. SHORT LINK BOX - عرض الرابط
            ================================================================ */
         .short-link-box {
             background: #0c101e;
@@ -445,10 +445,14 @@
             padding: 12px 16px;
             margin-top: 16px;
             border: 1px solid #2b8cff;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
+        }
+
+        .short-link-box.active {
+            display: flex;
         }
 
         .short-link-box input {
@@ -481,7 +485,7 @@
         }
 
         /* ================================================================
-           14. BACK LINK - رجوع للتحرير (481-500)
+           14. BACK LINK - رجوع للتحرير
            ================================================================ */
         .back-link {
             display: inline-block;
@@ -505,7 +509,7 @@
         }
 
         /* ================================================================
-           15. TOAST NOTIFICATION (501-530)
+           15. TOAST NOTIFICATION
            ================================================================ */
         .toast {
             position: fixed;
@@ -535,7 +539,7 @@
         }
 
         /* ================================================================
-           16. LOADING SPINNER (531-550)
+           16. LOADING SPINNER
            ================================================================ */
         .spinner {
             display: inline-block;
@@ -552,7 +556,7 @@
         }
 
         /* ================================================================
-           17. LOADING PLACEHOLDER (551-580)
+           17. LOADING PLACEHOLDER
            ================================================================ */
         .loading-placeholder {
             display: none;
@@ -575,7 +579,7 @@
         }
 
         /* ================================================================
-           18. FOOTER (581-600)
+           18. FOOTER
            ================================================================ */
         .footer {
             margin-top: 20px;
@@ -587,7 +591,7 @@
         }
 
         /* ================================================================
-           19. RESPONSIVE DESIGN (601-660)
+           19. RESPONSIVE DESIGN
            ================================================================ */
         @media (max-width: 480px) {
             .header-sky h1 { font-size: 2rem; }
@@ -611,7 +615,7 @@
         }
 
         /* ================================================================
-           20. SCROLLBAR (661-680)
+           20. SCROLLBAR
            ================================================================ */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0c101e; }
@@ -619,12 +623,12 @@
         ::-webkit-scrollbar-thumb:hover { background: #4a5a7a; }
 
         /* ================================================================
-           21. SELECTION COLOR (681-690)
+           21. SELECTION COLOR
            ================================================================ */
         ::selection { background: rgba(43, 140, 255, 0.3); color: #fff; }
 
         /* ================================================================
-           22. UTILITY CLASSES (691-710)
+           22. UTILITY CLASSES
            ================================================================ */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
@@ -633,40 +637,7 @@
         .flex-center { display: flex; align-items: center; justify-content: center; }
 
         /* ================================================================
-           23. STATUS DOT (711-725)
-           ================================================================ */
-        .status-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-
-        .status-dot.online {
-            background: #4caf50;
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-        }
-
-        .status-dot.offline {
-            background: #f44336;
-            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
-        }
-
-        /* ================================================================
-           24. ANIMATIONS (726-750)
-           ================================================================ */
-        @keyframes linkPulse {
-            0%, 100% { border-color: #2b8cff; }
-            50% { border-color: #7fc9ff; }
-        }
-
-        .short-link-box.new-link {
-            animation: linkPulse 2s ease-in-out 3;
-        }
-
-        /* ================================================================
-           25. EDITOR INFO (751-770)
+           23. EDITOR INFO
            ================================================================ */
         .editor-info {
             margin-top: 12px;
@@ -753,7 +724,7 @@
                 </div>
 
                 <!-- ===== SHORT LINK ===== -->
-                <div class="short-link-box" id="shortLinkBox" style="display: none;">
+                <div class="short-link-box" id="shortLinkBox">
                     <input type="text" id="shortLinkInput" readonly />
                     <button id="copyLinkBtn"><i class="fas fa-copy"></i> نسخ</button>
                 </div>
@@ -897,36 +868,34 @@
 
             function setMode(mode) {
                 if (mode === 'editor') {
-                    // إظهار المحرر وإخفاء العرض
                     editorZone.classList.add('active');
                     displayPage.classList.remove('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
-                    shortLinkBox.style.display = 'none';
+                    shortLinkBox.classList.remove('active');
                     isDisplayMode = false;
                 } else if (mode === 'display') {
-                    // إخفاء المحرر وإظهار العرض
                     editorZone.classList.remove('active');
                     displayPage.classList.add('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
+                    shortLinkBox.classList.add('active');
                     isDisplayMode = true;
                 } else if (mode === 'loading') {
-                    // وضع التحميل
                     editorZone.classList.remove('active');
                     displayPage.classList.remove('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'flex';
+                    shortLinkBox.classList.remove('active');
                     isDisplayMode = false;
                 }
             }
 
             function renderDisplayText(text, timestamp) {
-                // إخفاء التحميل وإظهار المحتوى
                 loadingPlaceholder.style.display = 'none';
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
-                shortLinkBox.style.display = 'flex';
+                shortLinkBox.classList.add('active');
                 actionRow.style.display = 'flex';
 
                 if (!text || text.trim() === '') {
@@ -958,7 +927,7 @@
                 loadingPlaceholder.style.display = 'none';
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
-                shortLinkBox.style.display = 'none';
+                shortLinkBox.classList.remove('active');
                 actionRow.style.display = 'flex';
 
                 displayContent.innerHTML = `
@@ -992,4 +961,70 @@
 
             function getTextFromFirebase(key) {
                 return new Promise((resolve, reject) => {
-                    const ref = database
+                    const ref = database.ref('save-link/' + key);
+                    ref.once('value')
+                        .then((snapshot) => {
+                            const data = snapshot.val();
+                            if (data && data.content) {
+                                resolve(data);
+                            } else {
+                                reject(new Error('النص غير موجود'));
+                            }
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        });
+                });
+            }
+
+            // ============================================================
+            // 7. CREATE SHORT LINK
+            // ============================================================
+
+            async function createShortLink(text) {
+                try {
+                    const key = await saveTextToFirebase(text);
+                    const baseURL = window.location.origin + window.location.pathname;
+                    const shortURL = baseURL + '?v=' + key;
+                    return { key, shortURL };
+                } catch (error) {
+                    console.error('Error:', error);
+                    throw error;
+                }
+            }
+
+            // ============================================================
+            // 8. EVENT LISTENERS
+            // ============================================================
+
+            // 8.1 Raise Button - 🔥 زر رفع نص
+            raiseBtn.addEventListener('click', function() {
+                setMode('editor');
+                textInput.focus();
+                showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
+            });
+
+            // 8.2 Create Link Button - 🔥 إنشاء رابط دائم
+            createLinkBtn.addEventListener('click', async function() {
+                const raw = textInput.value;
+                if (!raw || raw.trim() === '') {
+                    showToast('⚠️ الرجاء كتابة نص أولاً', 1500);
+                    return;
+                }
+                
+                currentText = raw.trim();
+                
+                createLinkBtn.disabled = true;
+                createLinkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
+                
+                try {
+                    const { key, shortURL } = await createShortLink(currentText);
+                    currentShortKey = key;
+                    
+                    renderDisplayText(currentText);
+                    setMode('display');
+                    
+                    shortLinkInput.value = shortURL;
+                    shortLinkBox.classList.add('active');
+                    
+                    showToast('✅ تم إن
