@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>رفع النصوص - رابط دائم</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0a0a0a;
@@ -18,298 +13,128 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
-        /* واجهة الترحيب */
         .welcome-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 20px;
         }
-        
         .welcome-header {
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 30px 50px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            text-align: center;
+            background-color: #1e90ff; color: #ffffff; padding: 30px 50px;
+            border-radius: 20px; margin-bottom: 40px; text-align: center;
             box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
         }
-        
-        .welcome-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-        
+        .welcome-header h1 { font-size: 2.5rem; font-weight: 700; }
         .upload-area {
-            background-color: #1a1a1a;
-            border: 2px dashed #333;
-            border-radius: 15px;
-            padding: 40px;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-            margin-bottom: 30px;
+            background-color: #1a1a1a; border: 2px dashed #333; border-radius: 15px;
+            padding: 40px; width: 90%; max-width: 600px; text-align: center; margin-bottom: 30px;
         }
-        
-        .upload-area p {
-            color: #888;
-            font-size: 1.1rem;
-        }
-        
+        .upload-area p { color: #888; font-size: 1.1rem; }
         .upload-btn {
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 18px 50px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
-            transition: all 0.3s ease;
+            background-color: #1e90ff; color: #ffffff; padding: 18px 50px; border: none;
+            border-radius: 50px; font-size: 1.3rem; font-weight: 600; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); transition: all 0.3s ease;
         }
-        
         .upload-btn:hover {
-            background-color: #1a7ad8;
-            transform: translateY(-3px);
+            background-color: #1a7ad8; transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
         }
-        
-        .upload-btn:active {
-            transform: translateY(0);
-        }
-        
-        /* واجهة الكتابة */
         .write-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            min-height: 100vh;
+            display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh;
         }
-        
-        .write-container {
-            width: 90%;
-            max-width: 700px;
-        }
-        
+        .write-container { width: 90%; max-width: 700px; }
         .write-header {
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 20px 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            text-align: center;
+            background-color: #1e90ff; color: #ffffff; padding: 20px 30px;
+            border-radius: 15px; margin-bottom: 30px; text-align: center;
         }
-        
-        .write-header h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-        
+        .write-header h2 { font-size: 1.8rem; font-weight: 600; }
         .textarea-area {
-            background-color: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 15px;
-            padding: 25px;
-            width: 100%;
-            margin-bottom: 30px;
+            background-color: #1a1a1a; border: 2px solid #333; border-radius: 15px;
+            padding: 25px; width: 100%; margin-bottom: 30px;
         }
-        
         #textInput {
-            width: 100%;
-            min-height: 300px;
-            background-color: #0a0a0a;
-            border: none;
-            color: #ffffff;
-            font-size: 1.2rem;
-            padding: 15px;
-            resize: vertical;
-            outline: none;
-            border-radius: 10px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 100%; min-height: 300px; background-color: #0a0a0a; border: none;
+            color: #ffffff; font-size: 1.2rem; padding: 15px; resize: vertical; outline: none;
+            border-radius: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        #textInput::placeholder {
-            color: #666;
-        }
-        
+        #textInput::placeholder { color: #666; }
         .create-btn {
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 18px 50px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
-            transition: all 0.3s ease;
-            width: 100%;
+            background-color: #1e90ff; color: #ffffff; padding: 18px 50px; border: none;
+            border-radius: 50px; font-size: 1.3rem; font-weight: 600; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); transition: all 0.3s ease; width: 100%;
         }
-        
         .create-btn:hover {
-            background-color: #1a7ad8;
-            transform: translateY(-3px);
+            background-color: #1a7ad8; transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
         }
-        
-        /* واجهة عرض النص (الواجهة الجديدة عند فتح الرابط) */
+        .create-btn:disabled { background-color: #555; cursor: not-allowed; transform: none; }
         .view-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            min-height: 100vh;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; min-height: 100vh;
         }
-        
-        .view-container {
-            width: 90%;
-            max-width: 700px;
-        }
-        
+        .view-container { width: 90%; max-width: 700px; }
         .view-header {
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 25px 35px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+            background-color: #1e90ff; color: #ffffff; padding: 25px 35px; border-radius: 15px;
+            margin-bottom: 25px; text-align: center; box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
         }
-        
-        .view-header h2 {
-            font-size: 1.6rem;
-            font-weight: 600;
-        }
-        
+        .view-header h2 { font-size: 1.6rem; font-weight: 600; }
         .text-display {
-            background-color: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 15px;
-            padding: 30px;
-            width: 100%;
-            margin-bottom: 25px;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            background-color: #1a1a1a; border: 2px solid #333; border-radius: 15px;
+            padding: 30px; width: 100%; margin-bottom: 25px; user-select: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
-        
-        .text-display p {
-            font-size: 1.3rem;
-            line-height: 1.9;
-            color: #ffffff;
-            word-wrap: break-word;
-        }
-        
-        .buttons-row {
-            display: flex;
-            gap: 15px;
-            width: 100%;
-        }
-        
+        .text-display p { font-size: 1.3rem; line-height: 1.9; color: #ffffff; word-wrap: break-word; }
+        .buttons-row { display: flex; gap: 15px; width: 100%; }
         .copy-btn, .share-btn {
-            padding: 16px 32px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
+            padding: 16px 32px; border: none; border-radius: 50px; font-size: 1.15rem;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease; flex: 1;
         }
-        
         .copy-btn {
-            background-color: #1e90ff;
-            color: #ffffff;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
+            background-color: #1e90ff; color: #ffffff; box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
         }
-        
         .copy-btn:hover {
-            background-color: #1a7ad8;
-            transform: translateY(-3px);
+            background-color: #1a7ad8; transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
         }
-        
         .share-btn {
-            background-color: #32cd32;
-            color: #ffffff;
-            box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
+            background-color: #32cd32; color: #ffffff; box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
         }
-        
         .share-btn:hover {
-            background-color: #2db82d;
-            transform: translateY(-3px);
+            background-color: #2db82d; transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(50, 205, 50, 0.5);
         }
-        
-        /* رسالة التنقل */
         .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #1e90ff;
-            color: #ffffff;
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
-            z-index: 1000;
-            display: none;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background-color: #1e90ff; color: #ffffff; padding: 15px 30px; border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); z-index: 1000; display: none;
         }
-        
-        .toast.show {
-            display: block;
-        }
+        .toast.show { display: block; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-msg { color: #ff4444; font-size: 1rem; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
-    <!-- واجهة الترحيب -->
     <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-header">
-            <h1>مرحباً بك</h1>
-        </div>
-        
-        <div class="upload-area">
-            <p>أداة رفع النصوص</p>
-        </div>
-        
+        <div class="welcome-header"><h1>مرحباً بك</h1></div>
+        <div class="upload-area"><p>أداة رفع النصوص</p></div>
         <button class="upload-btn" onclick="goToWriteScreen()">رفع نص</button>
     </div>
     
-    <!-- واجهة الكتابة -->
     <div class="write-screen" id="writeScreen">
         <div class="write-container">
-            <div class="write-header">
-                <h2>اكتب نصك هنا</h2>
-            </div>
-            
+            <div class="write-header"><h2>اكتب نصك هنا</h2></div>
             <div class="textarea-area">
                 <textarea id="textInput" placeholder="اكتب النص الذي تريد رفعه..."></textarea>
             </div>
-            
-            <button class="create-btn" onclick="createAndCopyLink()">إنشاء رابط دائم + نسخ</button>
+            <button class="create-btn" id="createBtn" onclick="createAndCopyLink()">إنشاء رابط دائم + نسخ</button>
+            <div class="error-msg" id="errorMsg"></div>
         </div>
     </div>
     
-    <!-- واجهة العرض (تظهر فقط عند فتح الرابط) -->
     <div class="view-screen" id="viewScreen">
         <div class="view-container">
-            <div class="view-header">
-                <h2>النص المرفوع</h2>
-            </div>
-            
-            <div class="text-display">
-                <p id="displayText"></p>
-            </div>
-            
+            <div class="view-header"><h2>النص المرفوع</h2></div>
+            <div class="text-display"><p id="displayText"></p></div>
             <div class="buttons-row">
                 <button class="copy-btn" onclick="copyText()">نسخ</button>
                 <button class="share-btn" onclick="shareText()">مشاركة</button>
@@ -317,127 +142,117 @@
         </div>
     </div>
     
-    <!-- رسالة التنقل -->
     <div class="toast" id="toast"></div>
     
     <script>
-        // الانتقال لواجهة الكتابة
-        function goToWriteScreen() {
+        async function goToWriteScreen() {
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('writeScreen').style.display = 'flex';
             document.getElementById('textInput').focus();
         }
         
-        // إنشاء رابط دائم ونسخه للحافظة فوراً
-        function createAndCopyLink() {
+        async function createAndCopyLink() {
             const text = document.getElementById('textInput').value.trim();
+            if (!text) { showToast('الرجاء كتابة نص أولاً!'); return; }
             
-            if (!text) {
-                showToast('الرجاء كتابة نص أولاً!');
-                return;
+            const createBtn = document.getElementById('createBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            createBtn.disabled = true;
+            createBtn.innerHTML = '<span class="loading"></span>جاري الإنشاء...';
+            errorMsg.style.display = 'none';
+            
+            try {
+                const response = await fetch('https://api.textbee.store/documents', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: text })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('خطأ في إنشاء الرابط');
+                }
+                
+                const data = await response.json();
+                const permanentLink = data.url || `https://textbee.store/${data.id}`;
+                
+                await navigator.clipboard.writeText(permanentLink);
+                showToast('تم نسخ الرابط للحافظة! ✓');
+                
+                document.getElementById('writeScreen').style.display = 'none';
+                document.getElementById('viewScreen').style.display = 'flex';
+                document.getElementById('displayText').textContent = text;
+                localStorage.setItem('current_text', text);
+                localStorage.setItem('current_link', permanentLink);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = 'خطأ: ' + error.message;
+                errorMsg.style.display = 'block';
+                showToast('فشل إنشاء الرابط!');
             }
             
-            // حفظ النص في localStorage مع ID فريد
-            const id = 'text_' + Date.now() + '_' + Math.random().toString(36).substr(2);
-            localStorage.setItem(id, text);
-            
-            // إنشاء رابط دائم (رابط كامل للموقع)
-            const permanentLink = window.location.origin + window.location.pathname + '?id=' + id;
-            
-            // نسخ الرابط للحافظة فوراً
-            navigator.clipboard.writeText(permanentLink).then(() => {
-                showToast('تم نسخ الرابط للحافظة! ✓');
-            }).catch(() => {
-                // طريقة بديلة للنسخ
-                const textarea = document.createElement('textarea');
-                textarea.value = permanentLink;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast('تم نسخ الرابط للحافظة! ✓');
-            });
-            
-            // حفظ النص والرابط الحالي
-            localStorage.setItem('current_text', text);
-            localStorage.setItem('current_link', permanentLink);
-            
-            // الانتقال لواجهة العرض في نفس الصفحة
-            document.getElementById('writeScreen').style.display = 'none';
-            document.getElementById('viewScreen').style.display = 'flex';
-            document.getElementById('displayText').textContent = text;
+            createBtn.disabled = false;
+            createBtn.innerHTML = 'إنشاء رابط دائم + نسخ';
         }
         
-        // نسخ النص (في الواجهة الجديدة)
-        function copyText() {
+        async function copyText() {
             const text = document.getElementById('displayText').textContent;
-            
-            navigator.clipboard.writeText(text).then(() => {
+            try {
+                await navigator.clipboard.writeText(text);
                 showToast('تم نسخ النص بنجاح! ✓');
-            }).catch(() => {
-                // طريقة بديلة للنسخ
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast('تم نسخ النص بنجاح! ✓');
-            });
+            } catch (error) {
+                showToast('خطأ في النسخ!');
+            }
         }
         
-        // مشاركة النص (في الواجهة الجديدة)
-        function shareText() {
+        async function shareText() {
             const text = document.getElementById('displayText').textContent;
             const link = localStorage.getItem('current_link') || window.location.href;
             
             if (navigator.share) {
-                navigator.share({
-                    title: 'النص المرفوع',
-                    text: text,
-                    url: link
-                }).catch(() => {
-                    showToast('تم إلغاء المشاركة');
-                });
+                try {
+                    await navigator.share({ title: 'النص المرفوع', text: text, url: link });
+                } catch (error) { showToast('تم إلغاء المشاركة'); }
             } else {
-                // طريقة بديلة للمشاركة (نسخ الرابط)
-                navigator.clipboard.writeText(link).then(() => {
+                try {
+                    await navigator.clipboard.writeText(link);
                     showToast('تم نسخ الرابط للمشاركة! ✓');
-                });
+                } catch (error) { showToast('خطأ في المشاركة!'); }
             }
         }
         
-        // عرض رسالة التنقل
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
         
-        // فحص إذا كان هناك ID في الرابط (للفتح من رابط دائم - الواجهة الجديدة)
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', async function() {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
             
             if (id) {
-                const text = localStorage.getItem(id);
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('writeScreen').style.display = 'none';
+                document.getElementById('viewScreen').style.display = 'flex';
                 
-                if (text) {
-                    // إخفاء واجهة الترحيب والكتابة، وعرض واجهة العرض فقط
-                    document.getElementById('welcomeScreen').style.display = 'none';
-                    document.getElementById('writeScreen').style.display = 'none';
-                    document.getElementById('viewScreen').style.display = 'flex';
-                    document.getElementById('displayText').textContent = text;
+                try {
+                    const response = await fetch(`https://api.textbee.store/documents/${id}`);
+                    if (!response.ok) {
+                        showToast('الرابط غير صحيح أو تم حذفه!');
+                        return;
+                    }
                     
-                    // حفظ النص والرابط الحالي
+                    const data = await response.json();
+                    const text = data.content || data.text;
+                    document.getElementById('displayText').textContent = text;
                     localStorage.setItem('current_text', text);
                     localStorage.setItem('current_link', window.location.href);
-                } else {
-                    showToast('الرابط غير صحيح أو تم حذفه!');
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('خطأ في جلب النص!');
                 }
             }
         });
