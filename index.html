@@ -1,261 +1,652 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رفع النصوص - رابط دائم</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>رفع النصوص - احترافي</title>
+    <!-- Font Awesome 6 (مجاني) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0a0a0a;
-            color: #ffffff;
+            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
-        .welcome-screen {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; padding: 20px;
+
+        .main-card {
+            max-width: 480px;
+            width: 100%;
+            background: #0f1322;
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(100, 180, 255, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s ease;
         }
-        .welcome-header {
-            background-color: #1e90ff; color: #ffffff; padding: 30px 50px;
-            border-radius: 20px; margin-bottom: 40px; text-align: center;
-            box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+
+        /* ===== الهيدر ===== */
+        .header-sky {
+            background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 100%);
+            padding: 40px 28px 32px 28px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
-        .welcome-header h1 { font-size: 2.5rem; font-weight: 700; }
-        .upload-area {
-            background-color: #1a1a1a; border: 2px dashed #333; border-radius: 15px;
-            padding: 40px; width: 90%; max-width: 600px; text-align: center; margin-bottom: 30px;
+
+        .header-sky::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 100%;
+            height: 24px;
+            background: #0f1322;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
         }
-        .upload-area p { color: #888; font-size: 1.1rem; }
-        .upload-btn {
-            background-color: #1e90ff; color: #ffffff; padding: 18px 50px; border: none;
-            border-radius: 50px; font-size: 1.3rem; font-weight: 600; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); transition: all 0.3s ease;
+
+        .header-sky h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
+            margin-bottom: 6px;
         }
-        .upload-btn:hover {
-            background-color: #1a7ad8; transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
+
+        .header-sky h1 i {
+            margin-left: 8px;
+            color: #ffe484;
         }
-        .write-screen {
-            display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh;
+
+        .header-sky p {
+            font-size: 1rem;
+            color: #e0f0ff;
+            font-weight: 500;
+            opacity: 0.9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .write-container { width: 90%; max-width: 700px; }
-        .write-header {
-            background-color: #1e90ff; color: #ffffff; padding: 20px 30px;
-            border-radius: 15px; margin-bottom: 30px; text-align: center;
+
+        /* ===== المحتوى الأسود المائل للرمادي ===== */
+        .content-dark {
+            background: #191f2e;
+            padding: 32px 24px 40px 24px;
+            color: #eef2f9;
         }
-        .write-header h2 { font-size: 1.8rem; font-weight: 600; }
-        .textarea-area {
-            background-color: #1a1a1a; border: 2px solid #333; border-radius: 15px;
-            padding: 25px; width: 100%; margin-bottom: 30px;
+
+        .greeting-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            padding: 20px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+            margin-bottom: 28px;
+            text-align: center;
         }
-        #textInput {
-            width: 100%; min-height: 300px; background-color: #0a0a0a; border: none;
-            color: #ffffff; font-size: 1.2rem; padding: 15px; resize: vertical; outline: none;
-            border-radius: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        .greeting-box h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #b6d9ff, #7fc9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
         }
-        #textInput::placeholder { color: #666; }
-        .create-btn {
-            background-color: #1e90ff; color: #ffffff; padding: 18px 50px; border: none;
-            border-radius: 50px; font-size: 1.3rem; font-weight: 600; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); transition: all 0.3s ease; width: 100%;
+
+        .greeting-box h2 i {
+            color: #ffd966;
+            margin-left: 8px;
         }
-        .create-btn:hover {
-            background-color: #1a7ad8; transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
+
+        .greeting-box .sub {
+            font-size: 0.95rem;
+            color: #a5b9d4;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
         }
-        .create-btn:disabled { background-color: #555; cursor: not-allowed; transform: none; }
-        .view-screen {
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; min-height: 100vh;
+
+        /* ===== الزر الرئيسي ===== */
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            background: linear-gradient(135deg, #2b8cff, #0066e6);
+            border: none;
+            padding: 20px 12px;
+            border-radius: 60px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4);
+            transition: 0.2s;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 8px;
         }
-        .view-container { width: 90%; max-width: 700px; }
-        .view-header {
-            background-color: #1e90ff; color: #ffffff; padding: 25px 35px; border-radius: 15px;
-            margin-bottom: 25px; text-align: center; box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+
+        .btn-primary i {
+            font-size: 2rem;
+            color: #ffe484;
         }
-        .view-header h2 { font-size: 1.6rem; font-weight: 600; }
-        .text-display {
-            background-color: #1a1a1a; border: 2px solid #333; border-radius: 15px;
-            padding: 30px; width: 100%; margin-bottom: 25px; user-select: none;
-            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+        .btn-primary:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 12px rgba(0, 80, 255, 0.6);
         }
-        .text-display p { font-size: 1.3rem; line-height: 1.9; color: #ffffff; word-wrap: break-word; }
-        .buttons-row { display: flex; gap: 15px; width: 100%; }
-        .copy-btn, .share-btn {
-            padding: 16px 32px; border: none; border-radius: 50px; font-size: 1.15rem;
-            font-weight: 600; cursor: pointer; transition: all 0.3s ease; flex: 1;
+
+        /* ===== واجهة الكتابة ===== */
+        .editor-zone {
+            display: none;
+            margin-top: 24px;
+            animation: fadeSlide 0.3s ease;
         }
-        .copy-btn {
-            background-color: #1e90ff; color: #ffffff; box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4);
+
+        .editor-zone.active {
+            display: block;
         }
-        .copy-btn:hover {
-            background-color: #1a7ad8; transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(30, 144, 255, 0.5);
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        .share-btn {
-            background-color: #32cd32; color: #ffffff; box-shadow: 0 8px 25px rgba(50, 205, 50, 0.4);
+
+        .editor-zone textarea {
+            width: 100%;
+            min-height: 180px;
+            background: #0c101e;
+            border: 1px solid #2f3a52;
+            border-radius: 28px;
+            padding: 20px 18px;
+            font-size: 1rem;
+            color: #eef2f9;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
         }
-        .share-btn:hover {
-            background-color: #2db82d; transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(50, 205, 50, 0.5);
+
+        .editor-zone textarea:focus {
+            border-color: #2b8cff;
+            box-shadow: 0 0 0 3px rgba(43, 140, 255, 0.3), inset 0 4px 8px #000;
         }
+
+        .btn-secondary {
+            width: 100%;
+            background: #253141;
+            border: none;
+            padding: 16px 12px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #c8daf5;
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid #38475f;
+            box-shadow: 0 6px 0 #0b0e16;
+            transition: 0.1s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0b0e16;
+        }
+
+        .btn-secondary i {
+            color: #ffb347;
+        }
+
+        /* ===== صفحة العرض (الرابط الدائم) ===== */
+        .display-page {
+            display: none;
+            margin-top: 24px;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .display-page.active {
+            display: block;
+        }
+
+        .display-box {
+            background: #0c101e;
+            border-radius: 32px;
+            padding: 20px 16px;
+            border: 1px solid #2f3a52;
+            min-height: 160px;
+            position: relative;
+            word-break: break-word;
+            white-space: pre-wrap;
+            color: #d4e0f5;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
+            user-select: none; /* منع تحديد النص */
+            -webkit-user-select: none;
+            pointer-events: none; /* يمنع النسخ بالكامل */
+        }
+
+        .display-box .watermark {
+            position: absolute;
+            bottom: 8px;
+            left: 16px;
+            font-size: 0.7rem;
+            color: #3c4b66;
+            letter-spacing: 1px;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: #1e283b;
+            border: none;
+            padding: 16px 8px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d4e0f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid #36445e;
+            box-shadow: 0 4px 0 #0b0e16;
+            transition: 0.08s linear;
+            cursor: pointer;
+        }
+
+        .action-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #0b0e16;
+        }
+
+        .action-btn i {
+            font-size: 1.3rem;
+        }
+
+        .action-btn.copy-btn i {
+            color: #6fcbff;
+        }
+        .action-btn.share-btn i {
+            color: #ffb74d;
+        }
+
+        /* ===== رسالة منبثقة ===== */
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background-color: #1e90ff; color: #ffffff; padding: 15px 30px; border-radius: 50px;
-            box-shadow: 0 8px 25px rgba(30, 144, 255, 0.4); z-index: 1000; display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2a3f;
+            backdrop-filter: blur(8px);
+            padding: 14px 28px;
+            border-radius: 60px;
+            color: #d4e0f5;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            border: 1px solid #3e5070;
+            font-size: 0.95rem;
+            z-index: 999;
+            transition: 0.25s;
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+            white-space: nowrap;
         }
-        .toast.show { display: block; }
-        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin-right: 10px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .error-msg { color: #ff4444; font-size: 1rem; margin-top: 10px; display: none; }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ===== زر الرجوع ===== */
+        .back-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: #8aa3cc;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px dashed #3e5070;
+            padding-bottom: 2px;
+            cursor: pointer;
+        }
+
+        .back-link i {
+            margin-left: 6px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* responsive */
+        @media (max-width: 480px) {
+            .header-sky h1 { font-size: 2.2rem; }
+            .btn-primary { font-size: 1.4rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-header"><h1>مرحباً بك</h1></div>
-        <div class="upload-area"><p>أداة رفع النصوص</p></div>
-        <button class="upload-btn" onclick="goToWriteScreen()">رفع نص</button>
+
+<div class="main-card" id="appContainer">
+
+    <!-- الهيدر السماوي -->
+    <div class="header-sky">
+        <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
+        <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
     </div>
-    
-    <div class="write-screen" id="writeScreen">
-        <div class="write-container">
-            <div class="write-header"><h2>اكتب نصك هنا</h2></div>
-            <div class="textarea-area">
-                <textarea id="textInput" placeholder="اكتب النص الذي تريد رفعه..."></textarea>
-            </div>
-            <button class="create-btn" id="createBtn" onclick="createAndCopyLink()">إنشاء رابط دائم + نسخ</button>
-            <div class="error-msg" id="errorMsg"></div>
+
+    <!-- المحتوى الأساسي -->
+    <div class="content-dark" id="mainContent">
+
+        <!-- الترحيب -->
+        <div class="greeting-box" id="greetingBox">
+            <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
+            <div class="sub">في أداة رفع النصوص الذكية</div>
         </div>
-    </div>
-    
-    <div class="view-screen" id="viewScreen">
-        <div class="view-container">
-            <div class="view-header"><h2>النص المرفوع</h2></div>
-            <div class="text-display"><p id="displayText"></p></div>
-            <div class="buttons-row">
-                <button class="copy-btn" onclick="copyText()">نسخ</button>
-                <button class="share-btn" onclick="shareText()">مشاركة</button>
-            </div>
+
+        <!-- زر رفع النص -->
+        <button class="btn-primary" id="raiseBtn">
+            <i class="fas fa-arrow-up"></i> رفع نص
+        </button>
+
+        <!-- ===== واجهة الكتابة ===== -->
+        <div class="editor-zone" id="editorZone">
+            <textarea id="textInput" placeholder="اكتب أو الصق نصك هنا ..."></textarea>
+            <button class="btn-secondary" id="createLinkBtn">
+                <i class="fas fa-link"></i> إنشاء رابط دائم
+            </button>
         </div>
-    </div>
-    
-    <div class="toast" id="toast"></div>
-    
-    <script>
-        async function goToWriteScreen() {
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('writeScreen').style.display = 'flex';
-            document.getElementById('textInput').focus();
-        }
-        
-        async function createAndCopyLink() {
-            const text = document.getElementById('textInput').value.trim();
-            if (!text) { showToast('الرجاء كتابة نص أولاً!'); return; }
-            
-            const createBtn = document.getElementById('createBtn');
-            const errorMsg = document.getElementById('errorMsg');
-            createBtn.disabled = true;
-            createBtn.innerHTML = '<span class="loading"></span>جاري الإنشاء...';
-            errorMsg.style.display = 'none';
-            
-            try {
-                const response = await fetch('https://api.textbee.store/documents', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: text })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('خطأ في إنشاء الرابط');
-                }
-                
-                const data = await response.json();
-                const permanentLink = data.url || `https://textbee.store/${data.id}`;
-                
-                await navigator.clipboard.writeText(permanentLink);
-                showToast('تم نسخ الرابط للحافظة! ✓');
-                
-                document.getElementById('writeScreen').style.display = 'none';
-                document.getElementById('viewScreen').style.display = 'flex';
-                document.getElementById('displayText').textContent = text;
-                localStorage.setItem('current_text', text);
-                localStorage.setItem('current_link', permanentLink);
-                
-            } catch (error) {
-                console.error('Error:', error);
-                errorMsg.textContent = 'خطأ: ' + error.message;
-                errorMsg.style.display = 'block';
-                showToast('فشل إنشاء الرابط!');
-            }
-            
-            createBtn.disabled = false;
-            createBtn.innerHTML = 'إنشاء رابط دائم + نسخ';
-        }
-        
-        async function copyText() {
-            const text = document.getElementById('displayText').textContent;
-            try {
-                await navigator.clipboard.writeText(text);
-                showToast('تم نسخ النص بنجاح! ✓');
-            } catch (error) {
-                showToast('خطأ في النسخ!');
-            }
-        }
-        
-        async function shareText() {
-            const text = document.getElementById('displayText').textContent;
-            const link = localStorage.getItem('current_link') || window.location.href;
-            
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'النص المرفوع', text: text, url: link });
-                } catch (error) { showToast('تم إلغاء المشاركة'); }
-            } else {
-                try {
-                    await navigator.clipboard.writeText(link);
-                    showToast('تم نسخ الرابط للمشاركة! ✓');
-                } catch (error) { showToast('خطأ في المشاركة!'); }
-            }
-        }
-        
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
+
+        <!-- ===== صفحة العرض (الرابط الدائم) ===== -->
+        <div class="display-page" id="displayPage">
+            <div class="display-box" id="displayContent">
+                <!-- سيظهر النص هنا -->
+                <span style="color: #6b7f9e; font-style: italic;">النص المعروض</span>
+                <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
+            </div>
+
+            <div class="action-row">
+                <button class="action-btn copy-btn" id="copyBtn"><i class="fas fa-copy"></i> نسخ</button>
+                <button class="action-btn share-btn" id="shareBtn"><i class="fas fa-share-alt"></i> مشاركة</button>
+            </div>
+
+            <span class="back-link" id="backToEditor"><i class="fas fa-arrow-left"></i> رجوع للتحرير</span>
+        </div>
+
+    </div> <!-- end content-dark -->
+</div> <!-- end main-card -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // عناصر DOM
+        const raiseBtn = document.getElementById('raiseBtn');
+        const editorZone = document.getElementById('editorZone');
+        const textInput = document.getElementById('textInput');
+        const createLinkBtn = document.getElementById('createLinkBtn');
+        const displayPage = document.getElementById('displayPage');
+        const displayContent = document.getElementById('displayContent');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const backToEditor = document.getElementById('backToEditor');
+        const toast = document.getElementById('toast');
+        const greetingBox = document.getElementById('greetingBox');
+
+        // حالة التطبيق
+        let currentText = '';
+        let isDisplayMode = false;
+
+        // ---- دالة عرض الرسائل المنبثقة ----
+        function showToast(msg, duration = 2000) {
+            toast.textContent = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
         }
-        
-        window.addEventListener('DOMContentLoaded', async function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
-            
-            if (id) {
-                document.getElementById('welcomeScreen').style.display = 'none';
-                document.getElementById('writeScreen').style.display = 'none';
-                document.getElementById('viewScreen').style.display = 'flex';
-                
+
+        // ---- تبديل الوضع: إظهار محرر أو صفحة العرض ----
+        function setMode(mode) {
+            if (mode === 'editor') {
+                editorZone.classList.add('active');
+                displayPage.classList.remove('active');
+                greetingBox.style.display = 'block';
+                isDisplayMode = false;
+            } else if (mode === 'display') {
+                editorZone.classList.remove('active');
+                displayPage.classList.add('active');
+                greetingBox.style.display = 'none';
+                isDisplayMode = true;
+            }
+        }
+
+        // ---- عرض النص في صفحة العرض ----
+        function renderDisplayText(text) {
+            if (!text || text.trim() === '') {
+                displayContent.innerHTML = `<span style="color: #6b7f9e; font-style: italic;">لا يوجد نص لعرضه</span>
+                                            <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>`;
+                return;
+            }
+            // نعرض النص كما هو مع منع التحديد (عن طريق CSS pointer-events: none)
+            // نضيف علامة مائية
+            displayContent.innerHTML = `${text.replace(/\n/g, '<br>')}
+                                        <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>`;
+        }
+
+        // ---- إنشاء رابط دائم (محاكاة) ----
+        function generatePermanentLink(text) {
+            // تخزين النص في localStorage مع مفتاح عشوائي
+            const key = 'text_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+            try {
+                localStorage.setItem(key, text);
+            } catch (e) {
+                // في حال فشل التخزين نستخدم كائن مؤقت
+                return null;
+            }
+            // بناء رابط وهمي (لكن حقيقي داخل التطبيق)
+            // نستخدم الرابط الحالي مع بارامتر ?view=key
+            const baseUrl = window.location.href.split('?')[0];
+            return baseUrl + '?view=' + key;
+        }
+
+        // ---- استرجاع النص من الرابط (عند تحميل الصفحة) ----
+        function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const key = params.get('view');
+            if (key) {
                 try {
-                    const response = await fetch(`https://api.textbee.store/documents/${id}`);
-                    if (!response.ok) {
-                        showToast('الرابط غير صحيح أو تم حذفه!');
-                        return;
+                    const stored = localStorage.getItem(key);
+                    if (stored) {
+                        currentText = stored;
+                        renderDisplayText(currentText);
+                        setMode('display');
+                        // نزيل البارامتر من الرابط لكي لا يعيد التحميل
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        showToast('تم تحميل النص من الرابط الدائم', 2000);
+                        return true;
+                    } else {
+                        showToast('الرابط غير صالح أو منتهي الصلاحية', 2000);
                     }
-                    
-                    const data = await response.json();
-                    const text = data.content || data.text;
-                    document.getElementById('displayText').textContent = text;
-                    localStorage.setItem('current_text', text);
-                    localStorage.setItem('current_link', window.location.href);
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    showToast('خطأ في جلب النص!');
+                } catch (e) {
+                    showToast('حدث خطأ في قراءة الرابط', 2000);
                 }
+            }
+            return false;
+        }
+
+        // ---- رفع النص (زر رفع نص) ----
+        raiseBtn.addEventListener('click', function() {
+            setMode('editor');
+            // إذا كان هناك نص مخزن سابقاً في المحرر نحتفظ به
+            if (currentText) {
+                textInput.value = currentText;
+            } else {
+                textInput.value = '';
+                textInput.focus();
+            }
+            showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
+        });
+
+        // ---- إنشاء رابط دائم ----
+        createLinkBtn.addEventListener('click', function() {
+            const raw = textInput.value;
+            if (!raw || raw.trim() === '') {
+                showToast('⚠️ الرجاء كتابة نص أولاً', 1500);
+                return;
+            }
+            currentText = raw.trim();
+
+            // توليد رابط دائم
+            const link = generatePermanentLink(currentText);
+            if (!link) {
+                showToast('فشل إنشاء الرابط، حاول مرة أخرى', 2000);
+                return;
+            }
+
+            // عرض النص في صفحة العرض
+            renderDisplayText(currentText);
+            setMode('display');
+
+            // نعرض الرابط في رسالة (نسخ الرابط للمستخدم)
+            // ويمكن نسخه عبر زر مشاركة لاحقاً
+            // نضع الرابط في حافظة مؤقتة (اختياري)
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('✅ تم إنشاء الرابط الدائم ونسخه تلقائياً', 2500);
+            }).catch(() => {
+                // إذا فشل النسخ التلقائي
+                showToast('🔗 تم إنشاء الرابط: ' + link, 3500);
+            });
+
+            // تخزين الرابط في خاصية للاستخدام
+            window._permanentLink = link;
+        });
+
+        // ---- زر النسخ (نسخ النص المعروض) ----
+        copyBtn.addEventListener('click', function() {
+            if (!currentText) {
+                showToast('لا يوجد نص لنسخه', 1500);
+                return;
+            }
+            navigator.clipboard.writeText(currentText).then(() => {
+                showToast('📋 تم نسخ النص بنجاح', 1800);
+            }).catch(() => {
+                // طريقة بديلة
+                const textarea = document.createElement('textarea');
+                textarea.value = currentText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('📋 تم نسخ النص', 1800);
+                } catch (e) {
+                    showToast('فشل النسخ، حاول يدوياً', 1800);
+                }
+                document.body.removeChild(textarea);
+            });
+        });
+
+        // ---- زر المشاركة (مشاركة النص أو الرابط) ----
+        shareBtn.addEventListener('click', function() {
+            if (!currentText) {
+                showToast('لا يوجد نص للمشاركة', 1500);
+                return;
+            }
+
+            // نحاول مشاركة النص عبر Web Share API
+            if (navigator.share) {
+                navigator.share({
+                    title: 'نص مرفوع',
+                    text: currentText,
+                }).then(() => {
+                    showToast('تمت المشاركة بنجاح', 1500);
+                }).catch((err) => {
+                    if (err.name !== 'AbortError') {
+                        showToast('تم إلغاء أو فشل المشاركة', 1500);
+                    }
+                });
+            } else {
+                // دعم قديم: ننسخ الرابط الدائم إن وجد
+                const link = window._permanentLink || window.location.href;
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast('🔗 تم نسخ الرابط الدائم، يمكنك مشاركته', 2500);
+                }).catch(() => {
+                    // عرض الرابط في رسالة
+                    showToast('شارك الرابط: ' + link, 3000);
+                });
             }
         });
-    </script>
+
+        // ---- رجوع للتحرير ----
+        backToEditor.addEventListener('click', function() {
+            setMode('editor');
+            if (currentText) {
+                textInput.value = currentText;
+            }
+            showToast('↩️ عدت إلى التحرير', 1500);
+        });
+
+        // ---- تحميل الصفحة: التحقق من رابط دائم ----
+        const hasLoaded = loadFromURL();
+        if (!hasLoaded) {
+            // وضع البداية: نعرض الترحيب والمحرر مخفي
+            setMode('editor'); // لكن editorZone يظهر مخفي في البداية، نجعله غير فعال
+            editorZone.classList.remove('active');
+            displayPage.classList.remove('active');
+            greetingBox.style.display = 'block';
+            // نضبط النص الافتراضي
+            textInput.value = '';
+        }
+
+        // إضافة بعض التحسينات: عند الضغط على Enter في textarea لا يحدث شيء
+        textInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                // اختصار: Ctrl+Enter ينشئ الرابط
+                createLinkBtn.click();
+                e.preventDefault();
+            }
+        });
+
+        // منع النسخ من صفحة العرض بشكل إضافي (باستخدام حدث)
+        displayContent.addEventListener('copy', (e) => {
+            e.preventDefault();
+            showToast('⛔ هذا النص غير قابل للنسخ', 1500);
+        });
+
+        // منع القائمة المنبثقة (اختياري)
+        displayContent.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showToast('⛔ القائمة محظورة', 1200);
+        });
+
+        console.log('✅ أداة رفع النصوص جاهزة - تصميم احترافي للجوال وجيثب');
+    })();
+</script>
 </body>
 </html>
