@@ -11,9 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        /* ================================================================
-           1. RESET & BASE
-           ================================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -21,9 +18,6 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        /* ================================================================
-           2. BODY & BACKGROUND
-           ================================================================ */
         body {
             background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
             min-height: 100vh;
@@ -31,50 +25,23 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            position: relative;
         }
 
-        /* ================================================================
-           3. MAIN CARD
-           ================================================================ */
         .main-card {
             max-width: 480px;
             width: 100%;
             background: #0f1322;
             border-radius: 48px 48px 32px 32px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 
-                        0 0 0 1px rgba(100, 180, 255, 0.15);
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(100, 180, 255, 0.15);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ================================================================
-           4. HEADER - SKY GRADIENT
-           ================================================================ */
         .header-sky {
             background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
             padding: 32px 28px 28px 28px;
             text-align: center;
             position: relative;
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-
-        .header-sky::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-            animation: shimmer 8s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(10%, 5%) rotate(3deg); }
         }
 
         .header-sky::after {
@@ -86,39 +53,24 @@
             height: 24px;
             background: #0f1322;
             border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-            z-index: 2;
         }
 
         .header-sky h1 {
             font-size: 2.4rem;
             font-weight: 800;
-            letter-spacing: 1px;
             color: #fff;
             text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
         }
 
         .header-sky h1 i {
             margin-left: 8px;
             color: #ffe484;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
         }
 
         .header-sky p {
             font-size: 0.95rem;
             color: #e0f0ff;
-            font-weight: 500;
             opacity: 0.9;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
         }
 
         .header-sky .badge {
@@ -131,24 +83,15 @@
             color: #fff;
             margin-top: 8px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            z-index: 1;
         }
 
-        /* ================================================================
-           5. CONTENT DARK
-           ================================================================ */
         .content-dark {
             background: #191f2e;
             padding: 24px 20px 32px 20px;
             color: #eef2f9;
             min-height: 300px;
-            position: relative;
         }
 
-        /* ================================================================
-           6. GREETING BOX
-           ================================================================ */
         .greeting-box {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(4px);
@@ -158,7 +101,6 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
             margin-bottom: 20px;
             text-align: center;
-            transition: all 0.3s ease;
         }
 
         .greeting-box h2 {
@@ -168,7 +110,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 1px;
         }
 
         .greeting-box h2 i {
@@ -180,12 +121,37 @@
             font-size: 0.85rem;
             color: #a5b9d4;
             margin-top: 2px;
-            letter-spacing: 0.5px;
         }
 
-        /* ================================================================
-           7. EDITOR ZONE - واجهة الكتابة
-           ================================================================ */
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            background: linear-gradient(135deg, #2b8cff, #0066e6);
+            border: none;
+            padding: 20px 12px;
+            border-radius: 60px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 8px;
+        }
+
+        .btn-primary i {
+            font-size: 2rem;
+            color: #ffe484;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
         .editor-zone {
             display: none;
             margin-top: 20px;
@@ -237,51 +203,6 @@
             box-shadow: 0 0 0 3px rgba(43, 140, 255, 0.3), inset 0 4px 8px #000;
         }
 
-        .editor-zone textarea::placeholder {
-            color: #4a5a7a;
-        }
-
-        /* ================================================================
-           8. PRIMARY BUTTON - رفع نص
-           ================================================================ */
-        .btn-primary {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            width: 100%;
-            background: linear-gradient(135deg, #2b8cff, #0066e6);
-            border: none;
-            padding: 20px 12px;
-            border-radius: 60px;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #fff;
-            box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: 8px;
-        }
-
-        .btn-primary i {
-            font-size: 2rem;
-            color: #ffe484;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ================================================================
-           9. SECONDARY BUTTON - إنشاء رابط
-           ================================================================ */
         .btn-secondary {
             width: 100%;
             background: #253141;
@@ -307,20 +228,10 @@
             box-shadow: 0 2px 0 #0b0e16;
         }
 
-        .btn-secondary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: 0 6px 0 #0b0e16;
-        }
-
         .btn-secondary i {
             color: #ffb347;
         }
 
-        /* ================================================================
-           10. DISPLAY PAGE - صفحة العرض
-           ================================================================ */
         .display-page {
             display: none;
             animation: fadeSlide 0.25s ease;
@@ -330,9 +241,6 @@
             display: block;
         }
 
-        /* ================================================================
-           11. DISPLAY BOX - عرض النص
-           ================================================================ */
         .display-box {
             background: #0c101e;
             border-radius: 28px;
@@ -358,7 +266,6 @@
             left: 16px;
             font-size: 0.65rem;
             color: #3c4b66;
-            letter-spacing: 1px;
         }
 
         .display-box .timestamp {
@@ -371,7 +278,6 @@
 
         .display-box .empty-state {
             color: #6b7f9e;
-            font-style: italic;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -386,9 +292,6 @@
             color: #3c4b66;
         }
 
-        /* ================================================================
-           12. ACTION ROW - أزرار العرض
-           ================================================================ */
         .action-row {
             display: flex;
             gap: 12px;
@@ -431,14 +334,6 @@
             color: #ffb74d;
         }
 
-        .action-btn:hover {
-            background: #253141;
-            border-color: #4a5a7a;
-        }
-
-        /* ================================================================
-           13. SHORT LINK BOX - عرض الرابط
-           ================================================================ */
         .short-link-box {
             background: #0c101e;
             border-radius: 20px;
@@ -484,9 +379,6 @@
             transform: scale(0.94);
         }
 
-        /* ================================================================
-           14. BACK LINK - رجوع للتحرير
-           ================================================================ */
         .back-link {
             display: inline-block;
             margin-top: 16px;
@@ -508,9 +400,6 @@
             margin-left: 6px;
         }
 
-        /* ================================================================
-           15. TOAST NOTIFICATION
-           ================================================================ */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -538,26 +427,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ================================================================
-           16. LOADING SPINNER
-           ================================================================ */
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ================================================================
-           17. LOADING PLACEHOLDER
-           ================================================================ */
         .loading-placeholder {
             display: none;
             flex-direction: column;
@@ -568,19 +437,20 @@
             color: #4a5a7a;
         }
 
-        .loading-placeholder .spinner {
+        .spinner {
+            display: inline-block;
             width: 32px;
             height: 32px;
-            border-width: 3px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .loading-placeholder p {
-            font-size: 0.9rem;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* ================================================================
-           18. FOOTER
-           ================================================================ */
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -590,9 +460,13 @@
             padding-top: 14px;
         }
 
-        /* ================================================================
-           19. RESPONSIVE DESIGN
-           ================================================================ */
+        .editor-info {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #4a5a7a;
+            text-align: center;
+        }
+
         @media (max-width: 480px) {
             .header-sky h1 { font-size: 2rem; }
             .header-sky { padding: 24px 20px 24px 20px; }
@@ -601,89 +475,39 @@
             .btn-secondary { font-size: 1.1rem; padding: 14px 12px; }
             .action-row { flex-direction: column; gap: 10px; }
             .action-btn { padding: 14px 8px; font-size: 1rem; }
-            .greeting-box h2 { font-size: 1.4rem; }
             .display-box { padding: 16px 14px; min-height: 120px; font-size: 0.95rem; }
-            .short-link-box { flex-wrap: wrap; }
-            .short-link-box input { font-size: 0.8rem; width: 100%; }
-            .short-link-box button { width: 100%; justify-content: center; }
             .toast { font-size: 0.8rem; padding: 10px 18px; white-space: normal; max-width: 90%; }
         }
 
-        @media (max-width: 380px) {
-            .header-sky h1 { font-size: 1.6rem; }
-            .greeting-box h2 { font-size: 1.2rem; }
-        }
-
-        /* ================================================================
-           20. SCROLLBAR
-           ================================================================ */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: #0c101e; }
         ::-webkit-scrollbar-thumb { background: #2f3a52; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4a5a7a; }
-
-        /* ================================================================
-           21. SELECTION COLOR
-           ================================================================ */
         ::selection { background: rgba(43, 140, 255, 0.3); color: #fff; }
-
-        /* ================================================================
-           22. UTILITY CLASSES
-           ================================================================ */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .mt-8 { margin-top: 8px; }
-        .mt-16 { margin-top: 16px; }
-        .flex-center { display: flex; align-items: center; justify-content: center; }
-
-        /* ================================================================
-           23. EDITOR INFO
-           ================================================================ */
-        .editor-info {
-            margin-top: 12px;
-            font-size: 0.75rem;
-            color: #4a5a7a;
-            text-align: center;
-        }
-
-        .editor-info i {
-            margin-right: 4px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ================================================================
-         MAIN CARD
-         ================================================================ -->
-    <div class="main-card" id="appContainer">
+    <div class="main-card">
 
-        <!-- ===== HEADER ===== -->
         <div class="header-sky">
             <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
             <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
             <div class="badge"><i class="fas fa-shield-alt"></i> روابط دائمة</div>
         </div>
 
-        <!-- ===== CONTENT ===== -->
-        <div class="content-dark" id="mainContent">
+        <div class="content-dark">
 
-            <!-- ===== GREETING ===== -->
             <div class="greeting-box" id="greetingBox">
                 <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
                 <div class="sub">في أداة رفع النصوص الذكية</div>
             </div>
 
-            <!-- ==========================================================
-                 القسم 1: واجهة الإنشاء (للرابط الأساسي)
-                 ========================================================== -->
-
-            <!-- ===== رفع نص ===== -->
+            <!-- ===== زر رفع نص ===== -->
             <button class="btn-primary" id="raiseBtn">
                 <i class="fas fa-arrow-up"></i> رفع نص
             </button>
 
-            <!-- ===== EDITOR ZONE ===== -->
+            <!-- ===== محرر الكتابة ===== -->
             <div class="editor-zone" id="editorZone">
                 <div class="label">
                     <i class="fas fa-pen"></i> اكتب نصك
@@ -700,20 +524,14 @@
                 </div>
             </div>
 
-            <!-- ==========================================================
-                 القسم 2: صفحة العرض (لما يدخل المستخدم من الرابط)
-                 ========================================================== -->
-
-            <!-- ===== LOADING ===== -->
+            <!-- ===== صفحة العرض ===== -->
             <div class="loading-placeholder" id="loadingPlaceholder">
                 <div class="spinner"></div>
                 <p>جاري تحميل النص...</p>
             </div>
 
-            <!-- ===== DISPLAY PAGE ===== -->
             <div class="display-page" id="displayPage">
                 
-                <!-- ===== DISPLAY BOX ===== -->
                 <div class="display-box" id="displayContent">
                     <div class="empty-state">
                         <i class="fas fa-file-alt"></i>
@@ -723,14 +541,12 @@
                     <div class="timestamp" id="displayTime"></div>
                 </div>
 
-                <!-- ===== SHORT LINK ===== -->
                 <div class="short-link-box" id="shortLinkBox">
                     <input type="text" id="shortLinkInput" readonly />
                     <button id="copyLinkBtn"><i class="fas fa-copy"></i> نسخ</button>
                 </div>
 
-                <!-- ===== ACTION BUTTONS ===== -->
-                <div class="action-row" id="actionRow">
+                <div class="action-row">
                     <button class="action-btn copy-btn" id="copyBtn">
                         <i class="fas fa-copy"></i> نسخ النص
                     </button>
@@ -739,13 +555,11 @@
                     </button>
                 </div>
 
-                <!-- ===== BACK LINK ===== -->
                 <span class="back-link" id="backToEditor">
                     <i class="fas fa-arrow-left"></i> رجوع للتحرير
                 </span>
             </div>
 
-            <!-- ===== FOOTER ===== -->
             <div class="footer">
                 <i class="fas fa-database"></i> محفوظ في Firebase
                 <span style="margin: 0 6px;">·</span>
@@ -755,21 +569,17 @@
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ================================================================
-         JAVASCRIPT
-         ================================================================ -->
     <script>
         (function() {
             "use strict";
 
             // ============================================================
-            // 1. FIREBASE CONFIGURATION
+            // 1. FIREBASE CONFIG - استبدل ببياناتك
             // ============================================================
             const firebaseConfig = {
-                apiKey: "AIzaSyDummyKey", // ❗ استبدل بمفتاحك الحقيقي
+                apiKey: "AIzaSyDummyKey",
                 authDomain: "save-link-34c39.firebaseapp.com",
                 databaseURL: "https://save-link-34c39-default-rtdb.firebaseio.com/",
                 projectId: "save-link-34c39",
@@ -784,14 +594,11 @@
             // ============================================================
             // 2. DOM ELEMENTS
             // ============================================================
-            // عناصر الإنشاء
             const raiseBtn = document.getElementById('raiseBtn');
             const editorZone = document.getElementById('editorZone');
             const textInput = document.getElementById('textInput');
             const charCount = document.getElementById('charCount');
             const createLinkBtn = document.getElementById('createLinkBtn');
-
-            // عناصر العرض
             const displayPage = document.getElementById('displayPage');
             const displayContent = document.getElementById('displayContent');
             const displayTime = document.getElementById('displayTime');
@@ -801,20 +608,15 @@
             const shortLinkInput = document.getElementById('shortLinkInput');
             const copyLinkBtn = document.getElementById('copyLinkBtn');
             const shortLinkBox = document.getElementById('shortLinkBox');
-
-            // عناصر عامة
             const toast = document.getElementById('toast');
             const greetingBox = document.getElementById('greetingBox');
             const loadingPlaceholder = document.getElementById('loadingPlaceholder');
-            const actionRow = document.getElementById('actionRow');
 
             // ============================================================
             // 3. STATE
             // ============================================================
             let currentText = '';
-            let currentShortKey = '';
             let toastTimer = null;
-            let isDisplayMode = false;
 
             // ============================================================
             // 4. UTILITY FUNCTIONS
@@ -873,21 +675,18 @@
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
                     shortLinkBox.classList.remove('active');
-                    isDisplayMode = false;
                 } else if (mode === 'display') {
                     editorZone.classList.remove('active');
                     displayPage.classList.add('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'none';
                     shortLinkBox.classList.add('active');
-                    isDisplayMode = true;
                 } else if (mode === 'loading') {
                     editorZone.classList.remove('active');
                     displayPage.classList.remove('active');
                     greetingBox.style.display = 'block';
                     loadingPlaceholder.style.display = 'flex';
                     shortLinkBox.classList.remove('active');
-                    isDisplayMode = false;
                 }
             }
 
@@ -896,7 +695,6 @@
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
                 shortLinkBox.classList.add('active');
-                actionRow.style.display = 'flex';
 
                 if (!text || text.trim() === '') {
                     displayContent.innerHTML = `
@@ -928,7 +726,6 @@
                 displayPage.classList.add('active');
                 greetingBox.style.display = 'block';
                 shortLinkBox.classList.remove('active');
-                actionRow.style.display = 'flex';
 
                 displayContent.innerHTML = `
                     <div class="empty-state">
@@ -997,14 +794,14 @@
             // 8. EVENT LISTENERS
             // ============================================================
 
-            // 8.1 Raise Button - 🔥 زر رفع نص
+            // 🔥 8.1 زر رفع نص - يظهر المحرر
             raiseBtn.addEventListener('click', function() {
                 setMode('editor');
                 textInput.focus();
                 showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
             });
 
-            // 8.2 Create Link Button - 🔥 إنشاء رابط دائم
+            // 🔥 8.2 زر إنشاء رابط دائم
             createLinkBtn.addEventListener('click', async function() {
                 const raw = textInput.value;
                 if (!raw || raw.trim() === '') {
@@ -1019,7 +816,6 @@
                 
                 try {
                     const { key, shortURL } = await createShortLink(currentText);
-                    currentShortKey = key;
                     
                     renderDisplayText(currentText);
                     setMode('display');
@@ -1027,4 +823,174 @@
                     shortLinkInput.value = shortURL;
                     shortLinkBox.classList.add('active');
                     
-                    showToast('✅ تم إن
+                    showToast('✅ تم إنشاء الرابط الدائم بنجاح!', 2000);
+                    
+                    try {
+                        await navigator.clipboard.writeText(shortURL);
+                        showToast('📋 تم نسخ الرابط القصير تلقائياً', 2000);
+                    } catch (e) {}
+                    
+                } catch (error) {
+                    let errorMsg = error.message || 'فشل إنشاء الرابط';
+                    if (errorMsg.includes('PERMISSION_DENIED')) {
+                        errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
+                    }
+                    showToast('❌ ' + errorMsg, 3000);
+                } finally {
+                    createLinkBtn.disabled = false;
+                    createLinkBtn.innerHTML = '<i class="fas fa-link"></i> إنشاء رابط دائم';
+                }
+            });
+
+            // 8.3 نسخ الرابط
+            copyLinkBtn.addEventListener('click', function() {
+                const link = shortLinkInput.value;
+                if (!link) {
+                    showToast('لا يوجد رابط لنسخه', 1500);
+                    return;
+                }
+                navigator.clipboard.writeText(link).then(() => {
+                    showToast('📋 تم نسخ الرابط القصير', 1500);
+                }).catch(() => {
+                    shortLinkInput.select();
+                    document.execCommand('copy');
+                    showToast('📋 تم نسخ الرابط', 1500);
+                });
+            });
+
+            // 8.4 نسخ النص
+            copyBtn.addEventListener('click', function() {
+                if (!currentText) {
+                    showToast('لا يوجد نص لنسخه', 1500);
+                    return;
+                }
+                navigator.clipboard.writeText(currentText).then(() => {
+                    showToast('📋 تم نسخ النص بنجاح', 1500);
+                }).catch(() => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = currentText;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showToast('📋 تم نسخ النص', 1500);
+                    } catch (e) {
+                        showToast('فشل النسخ، حاول يدوياً', 1500);
+                    }
+                    document.body.removeChild(textarea);
+                });
+            });
+
+            // 8.5 مشاركة
+            shareBtn.addEventListener('click', function() {
+                if (!currentText) {
+                    showToast('لا يوجد نص للمشاركة', 1500);
+                    return;
+                }
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'نص مرفوع',
+                        text: currentText,
+                    }).then(() => {
+                        showToast('تمت المشاركة بنجاح', 1500);
+                    }).catch((err) => {
+                        if (err.name !== 'AbortError') {
+                            showToast('تم إلغاء المشاركة', 1500);
+                        }
+                    });
+                } else {
+                    navigator.clipboard.writeText(currentText).then(() => {
+                        showToast('📋 تم نسخ النص للمشاركة', 1500);
+                    }).catch(() => {
+                        showToast('شارك النص: ' + currentText, 3000);
+                    });
+                }
+            });
+
+            // 8.6 رجوع للتحرير
+            backToEditor.addEventListener('click', function() {
+                setMode('editor');
+                if (currentText) {
+                    textInput.value = currentText;
+                }
+                showToast('↩️ عدت إلى التحرير', 1500);
+            });
+
+            // 8.7 عداد الأحرف
+            textInput.addEventListener('input', updateCharCount);
+
+            // ============================================================
+            // 9. LOAD FROM URL
+            // ============================================================
+
+            async function loadFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                const key = params.get('v');
+
+                if (key) {
+                    try {
+                        const data = await getTextFromFirebase(key);
+                        currentText = data.content;
+                        renderDisplayText(currentText, data.createdAt);
+                        setMode('display');
+                        
+                        const baseURL = window.location.origin + window.location.pathname;
+                        shortLinkInput.value = baseURL + '?v=' + key;
+                        shortLinkBox.classList.add('active');
+                        
+                        showToast('📄 تم تحميل النص من الرابط', 1500);
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        return true;
+                    } catch (error) {
+                        let errorMsg = 'حدث خطأ أثناء تحميل النص';
+                        if (error.message && error.message.includes('PERMISSION_DENIED')) {
+                            errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
+                        } else if (error.message && error.message.includes('غير موجود')) {
+                            errorMsg = '❌ الرابط غير صالح أو منتهي الصلاحية';
+                        }
+                        showError(errorMsg);
+                        showToast(errorMsg, 3000);
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            // ============================================================
+            // 10. منع النسخ من العرض
+            // ============================================================
+
+            displayContent.addEventListener('copy', (e) => {
+                e.preventDefault();
+                showToast('⛔ استخدم زر "نسخ النص"', 1500);
+            });
+
+            displayContent.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                showToast('⛔ القائمة محظورة', 1200);
+            });
+
+            displayContent.addEventListener('selectstart', (e) => {
+                e.preventDefault();
+            });
+
+            // ============================================================
+            // 11. INIT
+            // ============================================================
+
+            const hasLoaded = loadFromURL();
+            if (!hasLoaded) {
+                setMode('editor');
+                editorZone.classList.remove('active');
+                displayPage.classList.remove('active');
+                greetingBox.style.display = 'block';
+                textInput.value = '';
+            }
+
+            console.log('✅ أداة رفع النصوص جاهزة 100%');
+            
+        })();
+    </script>
+</body>
+</html>
