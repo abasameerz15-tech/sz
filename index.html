@@ -1,572 +1,454 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>رفع النصوص - احترافي</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    
-    <!-- Firebase SDK -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Script Vault • رفع سكربتات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+
     <style>
-        /* ===== RESET & BASE ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f2f 100%);
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 16px;
-        }
-
-        .main-card {
-            max-width: 480px;
-            width: 100%;
-            background: #0f1322;
-            border-radius: 48px 48px 32px 32px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(100, 180, 255, 0.15);
-            overflow: hidden;
-        }
-
-        /* ===== HEADER ===== */
-        .header-sky {
-            background: linear-gradient(135deg, #7fc9ff 0%, #2b8cff 50%, #0055cc 100%);
-            padding: 28px 24px 24px 24px;
-            text-align: center;
+            align-items: center;
+            padding: 20px;
             position: relative;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            overflow-x: hidden;
         }
 
-        .header-sky::after {
-            content: '';
+        body::before {
+            content: "";
             position: absolute;
-            bottom: -12px;
-            left: 0;
             width: 100%;
-            height: 24px;
-            background: #0f1322;
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(180, 0, 255, 0.06) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .header-sky h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 4px 12px rgba(0, 40, 80, 0.5);
+        .container {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 36px;
+            padding: 36px 28px;
+            max-width: 620px;
+            width: 100%;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            transition: all 0.3s ease;
         }
 
-        .header-sky h1 i {
-            margin-left: 8px;
-            color: #ffe484;
-        }
-
-        .header-sky p {
-            font-size: 0.9rem;
-            color: #e0f0ff;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-sky .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: #fff;
-            margin-top: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== CONTENT ===== */
-        .content-dark {
-            background: #191f2e;
-            padding: 24px 20px 28px 20px;
-            color: #eef2f9;
-            min-height: 250px;
-        }
-
-        /* ===== GREETING ===== */
-        .greeting-box {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(4px);
-            padding: 14px 12px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-            margin-bottom: 18px;
+        .logo-area {
             text-align: center;
+            margin-bottom: 24px;
         }
 
-        .greeting-box h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #b6d9ff, #7fc9ff);
+        .logo-icon {
+            font-size: 3.2rem;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            filter: drop-shadow(0 0 12px rgba(161, 140, 209, 0.5));
         }
 
-        .greeting-box h2 i {
-            color: #ffd966;
-            margin-left: 8px;
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 4px 0;
         }
 
-        .greeting-box .sub {
-            font-size: 0.8rem;
-            color: #a5b9d4;
-            margin-top: 2px;
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0 6px;
         }
 
-        /* ===== زر رفع نص ===== */
-        .btn-primary {
+        .badge {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #cdd9f4;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 14px;
-            width: 100%;
-            background: linear-gradient(135deg, #2b8cff, #0066e6);
-            border: none;
-            padding: 18px 12px;
-            border-radius: 60px;
-            font-size: 1.5rem;
+            gap: 6px;
+        }
+
+        .badge i {
+            color: #ffd966;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+            margin: 20px 0 18px;
+        }
+
+        .section-title {
+            color: #e2e8f4;
             font-weight: 700;
-            color: #fff;
-            box-shadow: 0 8px 24px rgba(0, 80, 255, 0.4);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #c084fc;
+        }
+
+        /* Textarea */
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: rgba(10, 10, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 18px;
+            font-size: 0.9rem;
+            font-family: 'Cairo', monospace;
+            color: #eef5ff;
+            resize: vertical;
+            outline: none;
+            transition: all 0.25s ease;
+            box-shadow: inset 0 6px 16px rgba(0,0,0,0.6);
+            line-height: 1.7;
+        }
+
+        textarea:focus {
+            border-color: #a78bfa;
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.25), inset 0 6px 16px #000;
+        }
+
+        textarea::placeholder {
+            color: #5b6e8c;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .char-counter {
+            text-align: left;
+            font-size: 0.75rem;
+            color: #7c8aa5;
             margin-top: 6px;
+            padding: 0 8px;
         }
 
-        .btn-primary i {
-            font-size: 1.8rem;
-            color: #ffe484;
+        /* CAPTCHA */
+        .captcha-box {
+            background: rgba(15, 15, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 16px;
+            margin: 18px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .btn-primary:active {
-            transform: scale(0.96);
+        .captcha-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ===== محرر الكتابة ===== */
-        .editor-zone {
-            display: none;
-            margin-top: 18px;
-            animation: fadeSlide 0.3s ease;
-        }
-
-        .editor-zone.active {
-            display: block !important;
-        }
-
-        @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(12px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .editor-zone .label {
-            font-size: 0.85rem;
-            color: #8aa3cc;
-            margin-bottom: 8px;
+        .captcha-header span {
+            font-weight: 700;
+            color: #d1d5f0;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .editor-zone .label .count {
-            margin-left: auto;
-            font-size: 0.75rem;
-            color: #6b7f9e;
+        .captcha-header i {
+            color: #fbbf24;
         }
 
-        .editor-zone textarea {
-            width: 100%;
-            min-height: 160px;
-            background: #0c101e;
-            border: 1px solid #2f3a52;
-            border-radius: 28px;
-            padding: 18px 16px;
-            font-size: 1rem;
-            color: #eef2f9;
-            resize: vertical;
+        .captcha-question {
+            background: #0b0b1a;
+            padding: 14px;
+            border-radius: 18px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: #fff;
+            user-select: none;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .captcha-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .captcha-input-row input {
+            flex: 1;
+            background: #0b0b1a;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 18px;
+            padding: 14px;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.1rem;
             outline: none;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
-            line-height: 1.6;
         }
 
-        .editor-zone textarea:focus {
-            border-color: #2b8cff;
-            box-shadow: 0 0 0 3px rgba(43, 140, 255, 0.3), inset 0 4px 8px #000;
+        .captcha-input-row input:focus {
+            border-color: #c084fc;
         }
 
-        .editor-zone textarea::placeholder {
-            color: #4a5a7a;
-        }
-
-        /* ===== زر إنشاء رابط ===== */
-        .btn-secondary {
-            width: 100%;
-            background: #253141;
+        .captcha-refresh {
+            background: #2d2a4a;
             border: none;
-            padding: 14px 12px;
-            border-radius: 60px;
+            color: #e0d7ff;
+            border-radius: 18px;
+            padding: 0 18px;
+            cursor: pointer;
             font-size: 1.2rem;
-            font-weight: 600;
-            color: #c8daf5;
-            margin-top: 16px;
+            transition: 0.2s;
+        }
+
+        .captcha-refresh:hover {
+            background: #3d3870;
+        }
+
+        /* IP info */
+        .ip-badge {
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            padding: 10px 18px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            border: 1px solid #38475f;
-            box-shadow: 0 6px 0 #0b0e16;
-            transition: all 0.1s ease;
-            cursor: pointer;
-        }
-
-        .btn-secondary:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #0b0e16;
-        }
-
-        .btn-secondary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: 0 6px 0 #0b0e16;
-        }
-
-        .btn-secondary i {
-            color: #ffb347;
-        }
-
-        .editor-info {
-            margin-top: 10px;
-            font-size: 0.7rem;
-            color: #4a5a7a;
-            text-align: center;
-        }
-
-        /* ===== صفحة العرض ===== */
-        .display-page {
-            display: none;
-            animation: fadeSlide 0.25s ease;
-        }
-
-        .display-page.active {
-            display: block;
-        }
-
-        /* ===== صندوق العرض ===== */
-        .display-box {
-            background: #0c101e;
-            border-radius: 24px;
-            padding: 18px 16px;
-            border: 1px solid #2f3a52;
-            min-height: 120px;
-            position: relative;
-            word-break: break-word;
-            white-space: pre-wrap;
-            color: #d4e0f5;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
-            user-select: none;
-            -webkit-user-select: none;
-            pointer-events: none;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #b4c2e0;
+            border: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 14px;
         }
 
-        .display-box .watermark {
-            position: absolute;
-            bottom: 6px;
-            left: 14px;
-            font-size: 0.6rem;
-            color: #3c4b66;
+        .ip-badge i {
+            color: #60a5fa;
         }
 
-        .display-box .empty-state {
-            color: #6b7f9e;
-            text-align: center;
+        /* Buttons */
+        .btn-glow {
+            width: 100%;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            border: none;
+            padding: 18px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #fff;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
-            gap: 6px;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.5);
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-top: 8px;
         }
 
-        .display-box .empty-state i {
-            font-size: 2rem;
-            color: #3c4b66;
+        .btn-glow:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 12px rgba(124,58,237,0.6);
         }
 
-        /* ===== أزرار العرض ===== */
+        .btn-glow:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Display page */
+        .display-card {
+            background: rgba(10, 10, 28, 0.8);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 14px 0;
+            min-height: 140px;
+            word-break: break-word;
+            white-space: pre-wrap;
+            color: #e0e7ff;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            user-select: none;
+            position: relative;
+        }
+
+        .display-card .watermark {
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+            font-size: 0.6rem;
+            color: #4b5675;
+        }
+
         .action-row {
             display: flex;
             gap: 12px;
-            margin-top: 4px;
+            margin-top: 14px;
         }
 
         .action-btn {
             flex: 1;
-            background: #1e283b;
-            border: none;
-            padding: 14px 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 14px;
             border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #d4e0f5;
+            font-weight: 700;
+            color: #e2e8f4;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            border: 1px solid #36445e;
-            box-shadow: 0 4px 0 #0b0e16;
-            transition: all 0.08s linear;
+            gap: 8px;
             cursor: pointer;
+            backdrop-filter: blur(6px);
         }
 
-        .action-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 1px 0 #0b0e16;
-        }
-
-        .action-btn i {
-            font-size: 1.2rem;
-        }
-
-        .action-btn.copy-btn i {
-            color: #6fcbff;
-        }
-
-        .action-btn.share-btn i {
-            color: #ffb74d;
-        }
-
-        .action-btn:hover {
-            background: #253141;
-            border-color: #4a5a7a;
-        }
-
-        /* ===== تحميل ===== */
-        .loading-placeholder {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 160px;
-            gap: 14px;
-            color: #4a5a7a;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-placeholder p {
-            font-size: 0.85rem;
-        }
-
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1f2a3f;
-            backdrop-filter: blur(8px);
-            padding: 10px 20px;
+            background: #1e1b3a;
+            color: #f0e9ff;
+            padding: 10px 24px;
             border-radius: 60px;
-            color: #d4e0f5;
-            font-weight: 500;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-            border: 1px solid #3e5070;
-            font-size: 0.85rem;
-            z-index: 999;
-            transition: all 0.25s ease;
+            font-weight: 600;
+            box-shadow: 0 12px 30px black;
+            z-index: 99;
             opacity: 0;
-            transform: translateX(-50%) translateY(20px);
+            transition: 0.2s;
             pointer-events: none;
-            white-space: nowrap;
         }
 
         .toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
         }
 
-        /* ===== FOOTER ===== */
-        .footer {
-            margin-top: 18px;
-            text-align: center;
-            font-size: 0.6rem;
-            color: #3c4b66;
-            border-top: 1px solid #1a2233;
-            padding-top: 12px;
+        .hidden {
+            display: none !important;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .header-sky h1 { font-size: 1.7rem; }
-            .header-sky { padding: 20px 16px 18px 16px; }
-            .content-dark { padding: 18px 14px 22px 14px; }
-            .btn-primary { font-size: 1.3rem; padding: 16px 12px; }
-            .btn-secondary { font-size: 1.1rem; padding: 12px 12px; }
-            .action-row { flex-direction: column; gap: 10px; }
-            .action-btn { padding: 12px 8px; font-size: 0.95rem; }
-            .display-box { padding: 14px 12px; min-height: 100px; font-size: 0.9rem; }
-            .greeting-box h2 { font-size: 1.3rem; }
-            .toast { font-size: 0.75rem; padding: 8px 16px; white-space: normal; max-width: 90%; }
+        @media (max-width: 500px) {
+            .container { padding: 24px 16px; }
+            .logo-text { font-size: 1.8rem; }
+            .action-row { flex-direction: column; }
         }
-
-        @media (max-width: 380px) {
-            .header-sky h1 { font-size: 1.4rem; }
-            .greeting-box h2 { font-size: 1.1rem; }
-        }
-
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: #0c101e; }
-        ::-webkit-scrollbar-thumb { background: #2f3a52; border-radius: 10px; }
-        ::selection { background: rgba(43, 140, 255, 0.3); color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
+    <div class="container" id="mainContainer">
+        <!-- ========== قسم الإنشاء (يظهر افتراضياً) ========== -->
+        <div id="createSection">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fas fa-shield-haltered"></i></div>
+                <div class="logo-text">Script Vault</div>
+                <div class="badge-row">
+                    <div class="badge"><i class="fas fa-lock"></i> Roblox Scripts</div>
+                    <div class="badge"><i class="fas fa-cloud"></i> روابط دائمة</div>
+                </div>
+            </div>
+            <div class="divider"></div>
 
-        <!-- ===== HEADER ===== -->
-        <div class="header-sky">
-            <h1><i class="fas fa-cloud-upload-alt"></i> رافع النصوص</h1>
-            <p><i class="fas fa-code"></i> احترافي · سريع · للجوال</p>
-            <div class="badge"><i class="fas fa-shield-alt"></i> روابط دائمة</div>
+            <!-- IP Info -->
+            <div class="ip-badge" id="ipDisplay">
+                <i class="fas fa-globe"></i> <span id="ipText">جاري فحص الاتصال...</span>
+            </div>
+
+            <div class="section-title"><i class="fas fa-code"></i> ارفع السكربت</div>
+            <div class="textarea-wrapper">
+                <textarea id="scriptInput" placeholder="الصق السكربت هنا... يجب أن يبدأ بـ loadstring أو --"></textarea>
+            </div>
+            <div class="char-counter"><span id="charCount">0</span> / 10000 حرف</div>
+
+            <!-- كابتشا احترافية -->
+            <div class="captcha-box">
+                <div class="captcha-header">
+                    <span><i class="fas fa-robot"></i> تأكيد بشري</span>
+                    <button class="captcha-refresh" id="refreshCaptcha"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div class="captcha-question" id="captchaQuestion">5 + 3 = ؟</div>
+                <div class="captcha-input-row">
+                    <input type="text" id="captchaInput" placeholder="أدخل الناتج" inputmode="numeric">
+                </div>
+            </div>
+
+            <button class="btn-glow" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt"></i> إنشاء رابط دائم
+            </button>
+            <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:#5a6480;">
+                <i class="fas fa-info-circle"></i> يُسمح فقط بالسكربتات التي تبدأ بـ loadstring أو --
+            </div>
         </div>
 
-        <!-- ===== CONTENT ===== -->
-        <div class="content-dark">
-
-            <!-- ===== GREETING ===== -->
-            <div class="greeting-box" id="greetingBox">
-                <h2><i class="fas fa-hand-peace"></i> مرحبٱ بك</h2>
-                <div class="sub">في أداة رفع النصوص الذكية</div>
-            </div>
-
-            <!-- ==========================================================
-                 القسم 1: واجهة الإنشاء (للرابط الأساسي)
-                 ========================================================== -->
-
-            <!-- ===== رفع نص ===== -->
-            <button class="btn-primary" id="raiseBtn">
-                <i class="fas fa-arrow-up"></i> رفع نص
-            </button>
-
-            <!-- ===== EDITOR ZONE ===== -->
-            <div class="editor-zone" id="editorZone">
-                <div class="label">
-                    <i class="fas fa-pen"></i> اكتب نصك
-                    <span class="count" id="charCount">0 حرف</span>
-                </div>
-                <textarea id="textInput" placeholder="اكتب أو الصق نصك هنا ..." maxlength="10000"></textarea>
-                
-                <button class="btn-secondary" id="createLinkBtn">
-                    <i class="fas fa-link"></i> إنشاء رابط دائم
-                </button>
-                
-                <div class="editor-info">
-                    <i class="fas fa-info-circle"></i> الحد الأقصى 10,000 حرف
+        <!-- ========== قسم العرض (يظهر عند وجود v=) ========== -->
+        <div id="displaySection" class="hidden">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fas fa-file-code"></i></div>
+                <div class="logo-text">Script Vault</div>
+                <div class="badge-row">
+                    <div class="badge"><i class="fas fa-eye"></i> نص مرفوع</div>
                 </div>
             </div>
+            <div class="divider"></div>
 
-            <!-- ==========================================================
-                 القسم 2: صفحة العرض (لما يدخل المستخدم من الرابط)
-                 ========================================================== -->
-
-            <!-- ===== LOADING ===== -->
-            <div class="loading-placeholder" id="loadingPlaceholder">
-                <div class="spinner"></div>
-                <p>جاري تحميل النص...</p>
+            <div class="display-card" id="displayContent">
+                <span style="color:#5b6e8c;">جاري التحميل...</span>
+                <div class="watermark"><i class="fas fa-shield"></i> غير قابل للتحديد</div>
             </div>
 
-            <!-- ===== DISPLAY PAGE ===== -->
-            <div class="display-page" id="displayPage">
-                
-                <!-- ===== DISPLAY BOX ===== -->
-                <div class="display-box" id="displayContent">
-                    <div class="empty-state">
-                        <i class="fas fa-file-alt"></i>
-                        <span>لا يوجد نص لعرضه</span>
-                    </div>
-                    <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                </div>
-
-                <!-- ===== ACTION BUTTONS ===== -->
-                <div class="action-row" id="actionRow">
-                    <button class="action-btn copy-btn" id="copyBtn">
-                        <i class="fas fa-copy"></i> نسخ النص
-                    </button>
-                    <button class="action-btn share-btn" id="shareBtn">
-                        <i class="fas fa-share-alt"></i> مشاركة
-                    </button>
-                </div>
+            <div class="action-row">
+                <button class="action-btn" id="copyDisplayBtn"><i class="fas fa-copy"></i> نسخ</button>
+                <button class="action-btn" id="shareDisplayBtn"><i class="fas fa-share-alt"></i> مشاركة</button>
             </div>
-
-            <!-- ===== FOOTER ===== -->
-            <div class="footer">
-                <i class="fas fa-database"></i> محفوظ في Firebase
-                <span style="margin: 0 6px;">·</span>
-                <i class="fas fa-bolt"></i> تحميل سريع
-            </div>
-
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ================================================================ -->
-    <!-- ===== JAVASCRIPT ===== -->
-    <!-- ================================================================ -->
     <script>
         (function() {
-            "use strict";
-
-            // ============================================================
-            // 1. FIREBASE CONFIG - استبدل ببياناتك
-            // ============================================================
+            // ========== FIREBASE CONFIG ==========
             const firebaseConfig = {
-                apiKey: "AIzaSyDummyKey", // ❗ استبدل
+                apiKey: "AIzaSyDummyKey", // ⚠️ استبدل بمفاتيحك
                 authDomain: "save-link-34c39.firebaseapp.com",
                 databaseURL: "https://save-link-34c39-default-rtdb.firebaseio.com/",
                 projectId: "save-link-34c39",
@@ -574,369 +456,172 @@
                 messagingSenderId: "123456789",
                 appId: "1:123456789:web:abcdef"
             };
-
             firebase.initializeApp(firebaseConfig);
-            const database = firebase.database();
+            const db = firebase.database();
 
-            // ============================================================
-            // 2. DOM ELEMENTS
-            // ============================================================
-            // الإنشاء
-            const raiseBtn = document.getElementById('raiseBtn');
-            const editorZone = document.getElementById('editorZone');
-            const textInput = document.getElementById('textInput');
+            // ========== DOM ==========
+            const createSection = document.getElementById('createSection');
+            const displaySection = document.getElementById('displaySection');
+            const scriptInput = document.getElementById('scriptInput');
             const charCount = document.getElementById('charCount');
-            const createLinkBtn = document.getElementById('createLinkBtn');
-
-            // العرض
-            const displayPage = document.getElementById('displayPage');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const captchaQuestion = document.getElementById('captchaQuestion');
+            const captchaInput = document.getElementById('captchaInput');
+            const refreshCaptcha = document.getElementById('refreshCaptcha');
+            const ipText = document.getElementById('ipText');
             const displayContent = document.getElementById('displayContent');
-            const copyBtn = document.getElementById('copyBtn');
-            const shareBtn = document.getElementById('shareBtn');
-
-            // عام
+            const copyDisplayBtn = document.getElementById('copyDisplayBtn');
+            const shareDisplayBtn = document.getElementById('shareDisplayBtn');
             const toast = document.getElementById('toast');
-            const greetingBox = document.getElementById('greetingBox');
-            const loadingPlaceholder = document.getElementById('loadingPlaceholder');
 
-            // ============================================================
-            // 3. STATE
-            // ============================================================
-            let currentText = '';
-            let toastTimer = null;
-            let isViewMode = false;
+            let currentCaptchaAnswer = 0;
+            let currentDisplayText = '';
 
-            // ============================================================
-            // 4. UTILITY FUNCTIONS
-            // ============================================================
-
-            function generateShortKey() {
-                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let key = '';
-                for (let i = 0; i < 6; i++) {
-                    key += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return key;
-            }
-
-            function showToast(msg, duration = 1800) {
+            // ========== TOAST ==========
+            function showToast(msg) {
                 toast.textContent = msg;
                 toast.classList.add('show');
-                clearTimeout(toastTimer);
-                toastTimer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, duration);
+                clearTimeout(window.toastTimer);
+                window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
             }
 
-            function escapeHTML(text) {
+            // ========== IP FETCH ==========
+            async function fetchIP() {
+                try {
+                    const res = await fetch('https://api.ipify.org?format=json');
+                    const data = await res.json();
+                    ipText.textContent = `IP: ${data.ip} • تم التحقق`;
+                } catch (e) {
+                    ipText.textContent = 'IP: غير معروف';
+                }
+            }
+            fetchIP();
+
+            // ========== CAPTCHA ==========
+            function generateCaptcha() {
+                const a = Math.floor(Math.random() * 12) + 2;
+                const b = Math.floor(Math.random() * 12) + 2;
+                const ops = ['+', '-', '×'];
+                const op = ops[Math.floor(Math.random() * ops.length)];
+                let answer;
+                switch(op) {
+                    case '+': answer = a + b; break;
+                    case '-': answer = a - b; break;
+                    case '×': answer = a * b; break;
+                    default: answer = a + b;
+                }
+                captchaQuestion.textContent = `${a} ${op} ${b} = ؟`;
+                currentCaptchaAnswer = answer;
+                captchaInput.value = '';
+            }
+            generateCaptcha();
+            refreshCaptcha.addEventListener('click', generateCaptcha);
+
+            // ========== VALIDATION ==========
+            function isValidScript(text) {
+                const trimmed = text.trim();
+                return trimmed.startsWith('loadstring') || trimmed.startsWith('--');
+            }
+
+            scriptInput.addEventListener('input', () => {
+                charCount.textContent = scriptInput.value.length;
+            });
+
+            // ========== UPLOAD ==========
+            uploadBtn.addEventListener('click', async () => {
+                const text = scriptInput.value.trim();
+                if (!text) return showToast('⚠️ الرجاء لصق السكربت');
+                if (!isValidScript(text)) {
+                    return showToast('❌ يجب أن يبدأ السكربت بـ loadstring أو --');
+                }
+                const userAnswer = parseInt(captchaInput.value.trim(), 10);
+                if (isNaN(userAnswer) || userAnswer !== currentCaptchaAnswer) {
+                    generateCaptcha();
+                    return showToast('❌ إجابة الكابتشا خاطئة');
+                }
+
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+
+                try {
+                    const key = generateKey();
+                    await db.ref('scripts/' + key).set({
+                        content: text,
+                        time: Date.now()
+                    });
+                    const shortURL = location.origin + location.pathname + '?v=' + key;
+                    currentDisplayText = text;
+                    switchToDisplay(text);
+                    showToast('✅ تم إنشاء الرابط');
+                    navigator.clipboard.writeText(shortURL).then(() => showToast('📋 الرابط تم نسخه'));
+                } catch (e) {
+                    showToast('❌ فشل الاتصال بقاعدة البيانات');
+                } finally {
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> إنشاء رابط دائم';
+                }
+            });
+
+            function generateKey() {
+                return Math.random().toString(36).substring(2, 8) + Date.now().toString(36);
+            }
+
+            // ========== DISPLAY ==========
+            function switchToDisplay(text) {
+                createSection.classList.add('hidden');
+                displaySection.classList.remove('hidden');
+                displayContent.innerHTML = escapeHTML(text).replace(/\n/g, '<br>') + 
+                    '<div class="watermark"><i class="fas fa-shield"></i> غير قابل للتحديد</div>';
+                currentDisplayText = text;
+            }
+
+            function escapeHTML(str) {
                 const div = document.createElement('div');
-                div.textContent = text;
+                div.textContent = str;
                 return div.innerHTML;
             }
 
-            function updateCharCount() {
-                const count = textInput.value.length;
-                charCount.textContent = count + ' حرف';
-                charCount.style.color = count > 9000 ? '#ffb74d' : '#6b7f9e';
-            }
+            // منع التحديد والنسخ من صندوق العرض
+            displayContent.addEventListener('copy', e => e.preventDefault());
+            displayContent.addEventListener('contextmenu', e => e.preventDefault());
+            displayContent.addEventListener('selectstart', e => e.preventDefault());
 
-            // ============================================================
-            // 5. UI MODE
-            // ============================================================
-
-            function setMode(mode) {
-                if (mode === 'editor') {
-                    editorZone.classList.add('active');
-                    displayPage.classList.remove('active');
-                    greetingBox.style.display = 'block';
-                    loadingPlaceholder.style.display = 'none';
-                    isViewMode = false;
-                } else if (mode === 'display') {
-                    editorZone.classList.remove('active');
-                    displayPage.classList.add('active');
-                    greetingBox.style.display = 'block';
-                    loadingPlaceholder.style.display = 'none';
-                    isViewMode = true;
-                } else if (mode === 'loading') {
-                    editorZone.classList.remove('active');
-                    displayPage.classList.remove('active');
-                    greetingBox.style.display = 'block';
-                    loadingPlaceholder.style.display = 'flex';
-                    isViewMode = false;
-                }
-            }
-
-            function renderDisplayText(text) {
-                loadingPlaceholder.style.display = 'none';
-                displayPage.classList.add('active');
-                greetingBox.style.display = 'block';
-
-                if (!text || text.trim() === '') {
-                    displayContent.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <span>لا يوجد نص لعرضه</span>
-                        </div>
-                        <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                    `;
-                    return;
-                }
-
-                const escapedText = escapeHTML(text);
-                displayContent.innerHTML = `
-                    ${escapedText.replace(/\n/g, '<br>')}
-                    <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                `;
-
-                currentText = text;
-            }
-
-            function showError(message) {
-                loadingPlaceholder.style.display = 'none';
-                displayPage.classList.add('active');
-                greetingBox.style.display = 'block';
-
-                displayContent.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle" style="color: #ffb74d;"></i>
-                        <span style="color: #ffb74d;">${message}</span>
-                    </div>
-                    <div class="watermark"><i class="fas fa-lock"></i> غير قابل للنسخ</div>
-                `;
-            }
-
-            // ============================================================
-            // 6. FIREBASE
-            // ============================================================
-
-            function saveTextToFirebase(text) {
-                return new Promise((resolve, reject) => {
-                    const key = generateShortKey();
-                    const ref = database.ref('save-link/' + key);
-
-                    ref.set({
-                        content: text,
-                        createdAt: firebase.database.ServerValue.TIMESTAMP
-                    }).then(() => {
-                        resolve(key);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                });
-            }
-
-            function getTextFromFirebase(key) {
-                return new Promise((resolve, reject) => {
-                    const ref = database.ref('save-link/' + key);
-                    ref.once('value')
-                        .then((snapshot) => {
-                            const data = snapshot.val();
-                            if (data && data.content) {
-                                resolve(data.content);
-                            } else {
-                                reject(new Error('النص غير موجود'));
-                            }
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        });
-                });
-            }
-
-            // ============================================================
-            // 7. CREATE SHORT LINK
-            // ============================================================
-
-            async function createShortLink(text) {
-                try {
-                    const key = await saveTextToFirebase(text);
-                    const baseURL = window.location.origin + window.location.pathname;
-                    const shortURL = baseURL + '?v=' + key;
-                    return { key, shortURL };
-                } catch (error) {
-                    throw error;
-                }
-            }
-
-            // ============================================================
-            // 8. EVENT LISTENERS
-            // ============================================================
-
-            // 8.1 زر رفع نص
-            raiseBtn.addEventListener('click', function() {
-                setMode('editor');
-                textInput.focus();
-                showToast('✍️ اكتب نصك ثم أنشئ رابطاً', 1800);
+            // نسخ ومشاركة
+            copyDisplayBtn.addEventListener('click', () => {
+                if (!currentDisplayText) return;
+                navigator.clipboard.writeText(currentDisplayText).then(() => showToast('📋 تم النسخ'));
             });
 
-            // 8.2 زر إنشاء رابط
-            createLinkBtn.addEventListener('click', async function() {
-                const raw = textInput.value;
-                if (!raw || raw.trim() === '') {
-                    showToast('⚠️ الرجاء كتابة نص أولاً', 1500);
-                    return;
-                }
-
-                createLinkBtn.disabled = true;
-                createLinkBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
-
-                try {
-                    const { key, shortURL } = await createShortLink(raw.trim());
-                    currentText = raw.trim();
-
-                    renderDisplayText(currentText);
-                    setMode('display');
-
-                    showToast('✅ تم إنشاء الرابط الدائم بنجاح!', 2000);
-
-                    try {
-                        await navigator.clipboard.writeText(shortURL);
-                        showToast('📋 تم نسخ الرابط تلقائياً', 2000);
-                    } catch (e) {}
-
-                } catch (error) {
-                    let errorMsg = 'فشل إنشاء الرابط';
-                    if (error.message && error.message.includes('PERMISSION_DENIED')) {
-                        errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
-                    }
-                    showToast('❌ ' + errorMsg, 3000);
-                } finally {
-                    createLinkBtn.disabled = false;
-                    createLinkBtn.innerHTML = '<i class="fas fa-link"></i> إنشاء رابط دائم';
-                }
-            });
-
-            // 8.3 نسخ النص
-            copyBtn.addEventListener('click', function() {
-                if (!currentText || currentText.trim() === '') {
-                    showToast('لا يوجد نص لنسخه', 1500);
-                    return;
-                }
-
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(currentText)
-                        .then(() => showToast('📋 تم نسخ النص بنجاح', 1500))
-                        .catch(() => copyFallback());
-                } else {
-                    copyFallback();
-                }
-            });
-
-            function copyFallback() {
-                const textarea = document.createElement('textarea');
-                textarea.value = currentText;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                textarea.style.left = '-9999px';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast('📋 تم نسخ النص', 1500);
-                } catch (e) {
-                    showToast('فشل النسخ، حاول يدوياً', 1500);
-                }
-                document.body.removeChild(textarea);
-            }
-
-            // 8.4 مشاركة
-            shareBtn.addEventListener('click', function() {
-                if (!currentText || currentText.trim() === '') {
-                    showToast('لا يوجد نص للمشاركة', 1500);
-                    return;
-                }
-
+            shareDisplayBtn.addEventListener('click', () => {
+                if (!currentDisplayText) return;
                 if (navigator.share) {
-                    navigator.share({
-                        title: 'نص مرفوع',
-                        text: currentText,
-                    })
-                    .then(() => showToast('تمت المشاركة بنجاح', 1500))
-                    .catch((err) => {
-                        if (err.name !== 'AbortError') {
-                            showToast('تم إلغاء المشاركة', 1500);
-                        }
-                    });
+                    navigator.share({ text: currentDisplayText }).catch(()=>{});
                 } else {
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(currentText)
-                            .then(() => showToast('📋 تم نسخ النص للمشاركة', 1500))
-                            .catch(() => copyFallback());
-                    } else {
-                        copyFallback();
-                    }
+                    navigator.clipboard.writeText(currentDisplayText).then(() => showToast('📋 تم النسخ للمشاركة'));
                 }
             });
 
-            // 8.5 عداد الأحرف
-            textInput.addEventListener('input', updateCharCount);
-
-            // ============================================================
-            // 9. منع النسخ من العرض
-            // ============================================================
-
-            displayContent.addEventListener('copy', (e) => {
-                e.preventDefault();
-                showToast('⛔ استخدم زر "نسخ النص"', 1500);
-            });
-
-            displayContent.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                showToast('⛔ القائمة محظورة', 1200);
-            });
-
-            displayContent.addEventListener('selectstart', (e) => {
-                e.preventDefault();
-            });
-
-            // ============================================================
-            // 10. LOAD FROM URL
-            // ============================================================
-
+            // ========== LOAD FROM URL ==========
             async function loadFromURL() {
-                const params = new URLSearchParams(window.location.search);
+                const params = new URLSearchParams(location.search);
                 const key = params.get('v');
-
-                if (key) {
-                    setMode('loading');
-
-                    try {
-                        const text = await getTextFromFirebase(key);
-                        currentText = text;
-                        renderDisplayText(text);
-                        setMode('display');
-                        showToast('📄 تم تحميل النص', 1500);
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        return true;
-                    } catch (error) {
-                        let errorMsg = 'حدث خطأ';
-                        if (error.message && error.message.includes('PERMISSION_DENIED')) {
-                            errorMsg = '⚠️ خطأ في الأذونات! تأكد من قواعد Firebase';
-                        } else if (error.message && error.message.includes('غير موجود')) {
-                            errorMsg = '❌ الرابط غير صالح';
-                        }
-                        showError(errorMsg);
-                        showToast(errorMsg, 3000);
-                        return false;
+                if (!key) return;
+                createSection.classList.add('hidden');
+                displaySection.classList.remove('hidden');
+                try {
+                    const snap = await db.ref('scripts/' + key).once('value');
+                    const data = snap.val();
+                    if (data && data.content) {
+                        switchToDisplay(data.content);
+                    } else {
+                        displayContent.innerHTML = '<span style="color:#f87171;">الرابط غير صالح أو منتهي</span>';
                     }
+                } catch (e) {
+                    displayContent.innerHTML = '<span style="color:#f87171;">خطأ في التحميل</span>';
                 }
-                return false;
             }
 
-            // ============================================================
-            // 11. INIT
-            // ============================================================
-
-            const hasLoaded = loadFromURL();
-            if (!hasLoaded) {
-                setMode('editor');
-                editorZone.classList.remove('active');
-                displayPage.classList.remove('active');
-                greetingBox.style.display = 'block';
-                textInput.value = '';
-            }
-
-            console.log('✅ أداة رفع النصوص - النسخة المتكاملة');
+            loadFromURL();
         })();
     </script>
 </body>
