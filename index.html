@@ -366,18 +366,184 @@
             display: none !important;
         }
 
+        /* Verification Section Styles */
+        .verify-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .welcome-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e0e7ff;
+            margin-bottom: 8px;
+        }
+
+        .welcome-sub {
+            font-size: 0.95rem;
+            color: #9ba9cc;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin: 24px 0;
+            cursor: pointer;
+        }
+
+        .custom-checkbox {
+            width: 26px;
+            height: 26px;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            color: transparent;
+            font-size: 1rem;
+        }
+
+        .custom-checkbox.checked {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(59,130,246,0.5);
+        }
+
+        .checkbox-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        .btn-verify {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            border: none;
+            padding: 16px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-verify:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Loading spinners */
+        .loading-verification {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            padding: 30px 0;
+        }
+
+        .spinner-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .spinner-circle {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255,255,255,0.15);
+            border-top-color: #a78bfa;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        .spinner-circle.done {
+            animation: none;
+            border: 3px solid #22c55e;
+            border-top-color: #22c55e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #22c55e;
+            font-size: 1rem;
+        }
+
+        .spinner-text {
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 500px) {
             .container { padding: 24px 16px; }
             .logo-text { font-size: 1.8rem; }
             .action-row { flex-direction: column; }
+            .welcome-text { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="container" id="mainContainer">
-        <!-- ========== قسم الإنشاء (يظهر افتراضياً) ========== -->
-        <div id="createSection">
+        <!-- ========== قسم التحقق الأولي ========== -->
+        <div id="verifySection">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fas fa-shield-haltered"></i></div>
+                <div class="logo-text">Script Vault</div>
+            </div>
+            <div class="verify-section">
+                <div class="welcome-text">مرحباً بك في موقع رفع سكربتات روبلوكس</div>
+                <div class="welcome-sub">أكمل التحقق وأرفع سكربتك الخاص</div>
+
+                <div class="checkbox-container" id="checkboxContainer">
+                    <div class="custom-checkbox" id="customCheckbox">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <span class="checkbox-label">الموافقة على التحقق الإنساني</span>
+                </div>
+
+                <button class="btn-verify" id="btnCompleteVerify" disabled>
+                    <i class="fas fa-shield-check"></i> أكمل التحقق
+                </button>
+            </div>
+        </div>
+
+        <!-- ========== قسم التحميل (الدوائر) ========== -->
+        <div id="loadingSection" class="hidden">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fas fa-spinner fa-spin"></i></div>
+                <div class="logo-text">جاري التحقق</div>
+            </div>
+            <div class="loading-verification">
+                <div class="spinner-item">
+                    <div class="spinner-circle" id="spinner1"></div>
+                    <span class="spinner-text">يتم التحقق من أنك إنسان ولست برنامج روبوت</span>
+                </div>
+                <div class="spinner-item">
+                    <div class="spinner-circle" id="spinner2"></div>
+                    <span class="spinner-text">يتم فحص IP الحقيقي ليتم التأكد</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== قسم الإنشاء (يظهر بعد التحقق) ========== -->
+        <div id="createSection" class="hidden">
             <div class="logo-area">
                 <div class="logo-icon"><i class="fas fa-shield-haltered"></i></div>
                 <div class="logo-text">Script Vault</div>
@@ -388,7 +554,6 @@
             </div>
             <div class="divider"></div>
 
-            <!-- IP Info -->
             <div class="ip-badge" id="ipDisplay">
                 <i class="fas fa-globe"></i> <span id="ipText">جاري فحص الاتصال...</span>
             </div>
@@ -399,7 +564,6 @@
             </div>
             <div class="char-counter"><span id="charCount">0</span> / 10000 حرف</div>
 
-            <!-- كابتشا احترافية -->
             <div class="captcha-box">
                 <div class="captcha-header">
                     <span><i class="fas fa-robot"></i> تأكيد بشري</span>
@@ -419,7 +583,7 @@
             </div>
         </div>
 
-        <!-- ========== قسم العرض (يظهر عند وجود v=) ========== -->
+        <!-- ========== قسم العرض ========== -->
         <div id="displaySection" class="hidden">
             <div class="logo-area">
                 <div class="logo-icon"><i class="fas fa-file-code"></i></div>
@@ -460,8 +624,15 @@
             const db = firebase.database();
 
             // ========== DOM ==========
+            const verifySection = document.getElementById('verifySection');
+            const loadingSection = document.getElementById('loadingSection');
             const createSection = document.getElementById('createSection');
             const displaySection = document.getElementById('displaySection');
+            const customCheckbox = document.getElementById('customCheckbox');
+            const checkboxContainer = document.getElementById('checkboxContainer');
+            const btnCompleteVerify = document.getElementById('btnCompleteVerify');
+            const spinner1 = document.getElementById('spinner1');
+            const spinner2 = document.getElementById('spinner2');
             const scriptInput = document.getElementById('scriptInput');
             const charCount = document.getElementById('charCount');
             const uploadBtn = document.getElementById('uploadBtn');
@@ -476,6 +647,7 @@
 
             let currentCaptchaAnswer = 0;
             let currentDisplayText = '';
+            let isVerified = false;
 
             // ========== TOAST ==========
             function showToast(msg) {
@@ -495,7 +667,6 @@
                     ipText.textContent = 'IP: غير معروف';
                 }
             }
-            fetchIP();
 
             // ========== CAPTCHA ==========
             function generateCaptcha() {
@@ -514,8 +685,6 @@
                 currentCaptchaAnswer = answer;
                 captchaInput.value = '';
             }
-            generateCaptcha();
-            refreshCaptcha.addEventListener('click', generateCaptcha);
 
             // ========== VALIDATION ==========
             function isValidScript(text) {
@@ -569,6 +738,8 @@
             // ========== DISPLAY ==========
             function switchToDisplay(text) {
                 createSection.classList.add('hidden');
+                verifySection.classList.add('hidden');
+                loadingSection.classList.add('hidden');
                 displaySection.classList.remove('hidden');
                 displayContent.innerHTML = escapeHTML(text).replace(/\n/g, '<br>') + 
                     '<div class="watermark"><i class="fas fa-shield"></i> غير قابل للتحديد</div>';
@@ -586,7 +757,6 @@
             displayContent.addEventListener('contextmenu', e => e.preventDefault());
             displayContent.addEventListener('selectstart', e => e.preventDefault());
 
-            // نسخ ومشاركة
             copyDisplayBtn.addEventListener('click', () => {
                 if (!currentDisplayText) return;
                 navigator.clipboard.writeText(currentDisplayText).then(() => showToast('📋 تم النسخ'));
@@ -605,7 +775,10 @@
             async function loadFromURL() {
                 const params = new URLSearchParams(location.search);
                 const key = params.get('v');
-                if (!key) return;
+                if (!key) return false;
+                // إخفاء كل الأقسام وإظهار العرض
+                verifySection.classList.add('hidden');
+                loadingSection.classList.add('hidden');
                 createSection.classList.add('hidden');
                 displaySection.classList.remove('hidden');
                 try {
@@ -619,9 +792,55 @@
                 } catch (e) {
                     displayContent.innerHTML = '<span style="color:#f87171;">خطأ في التحميل</span>';
                 }
+                return true;
             }
 
-            loadFromURL();
+            // ========== VERIFICATION FLOW ==========
+            checkboxContainer.addEventListener('click', () => {
+                if (customCheckbox.classList.contains('checked')) {
+                    customCheckbox.classList.remove('checked');
+                    btnCompleteVerify.disabled = true;
+                } else {
+                    customCheckbox.classList.add('checked');
+                    btnCompleteVerify.disabled = false;
+                }
+            });
+
+            btnCompleteVerify.addEventListener('click', () => {
+                if (!customCheckbox.classList.contains('checked')) return;
+                // إخفاء التحقق الأولي وإظهار التحميل
+                verifySection.classList.add('hidden');
+                loadingSection.classList.remove('hidden');
+                
+                // محاكاة الفحص لمدة 5 ثواني
+                setTimeout(() => {
+                    // إيقاف السبينرز وإظهار علامة صح
+                    spinner1.classList.add('done');
+                    spinner1.innerHTML = '<i class="fas fa-check"></i>';
+                    spinner2.classList.add('done');
+                    spinner2.innerHTML = '<i class="fas fa-check"></i>';
+                    
+                    // بعد لحظة، إخفاء التحميل وإظهار واجهة الرفع
+                    setTimeout(() => {
+                        loadingSection.classList.add('hidden');
+                        createSection.classList.remove('hidden');
+                        fetchIP(); // جلب IP
+                        generateCaptcha();
+                        isVerified = true;
+                    }, 800);
+                }, 5000);
+            });
+
+            // ========== INIT ==========
+            loadFromURL().then(loaded => {
+                if (!loaded) {
+                    // عرض واجهة التحقق الافتراضية
+                    verifySection.classList.remove('hidden');
+                    loadingSection.classList.add('hidden');
+                    createSection.classList.add('hidden');
+                    displaySection.classList.add('hidden');
+                }
+            });
         })();
     </script>
 </body>
