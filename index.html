@@ -165,86 +165,6 @@
             padding: 0 8px;
         }
 
-        /* CAPTCHA */
-        .captcha-box {
-            background: rgba(15, 15, 30, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 16px;
-            margin: 18px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .captcha-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .captcha-header span {
-            font-weight: 700;
-            color: #d1d5f0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .captcha-header i {
-            color: #fbbf24;
-        }
-
-        .captcha-question {
-            background: #0b0b1a;
-            padding: 14px;
-            border-radius: 18px;
-            text-align: center;
-            font-weight: 800;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            color: #fff;
-            user-select: none;
-            border: 1px dashed rgba(255,255,255,0.2);
-        }
-
-        .captcha-input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .captcha-input-row input {
-            flex: 1;
-            background: #0b0b1a;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 18px;
-            padding: 14px;
-            color: #fff;
-            font-weight: 700;
-            text-align: center;
-            font-size: 1.1rem;
-            outline: none;
-        }
-
-        .captcha-input-row input:focus {
-            border-color: #c084fc;
-        }
-
-        .captcha-refresh {
-            background: #2d2a4a;
-            border: none;
-            color: #e0d7ff;
-            border-radius: 18px;
-            padding: 0 18px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: 0.2s;
-        }
-
-        .captcha-refresh:hover {
-            background: #3d3870;
-        }
-
         /* IP info */
         .ip-badge {
             background: rgba(255,255,255,0.05);
@@ -564,16 +484,7 @@
             </div>
             <div class="char-counter"><span id="charCount">0</span> / 10000 حرف</div>
 
-            <div class="captcha-box">
-                <div class="captcha-header">
-                    <span><i class="fas fa-robot"></i> تأكيد بشري</span>
-                    <button class="captcha-refresh" id="refreshCaptcha"><i class="fas fa-sync-alt"></i></button>
-                </div>
-                <div class="captcha-question" id="captchaQuestion">5 + 3 = ؟</div>
-                <div class="captcha-input-row">
-                    <input type="text" id="captchaInput" placeholder="أدخل الناتج" inputmode="numeric">
-                </div>
-            </div>
+            <!-- تم حذف الكابتشا الرياضية نهائياً -->
 
             <button class="btn-glow" id="uploadBtn">
                 <i class="fas fa-cloud-upload-alt"></i> إنشاء رابط دائم
@@ -636,16 +547,12 @@
             const scriptInput = document.getElementById('scriptInput');
             const charCount = document.getElementById('charCount');
             const uploadBtn = document.getElementById('uploadBtn');
-            const captchaQuestion = document.getElementById('captchaQuestion');
-            const captchaInput = document.getElementById('captchaInput');
-            const refreshCaptcha = document.getElementById('refreshCaptcha');
             const ipText = document.getElementById('ipText');
             const displayContent = document.getElementById('displayContent');
             const copyDisplayBtn = document.getElementById('copyDisplayBtn');
             const shareDisplayBtn = document.getElementById('shareDisplayBtn');
             const toast = document.getElementById('toast');
 
-            let currentCaptchaAnswer = 0;
             let currentDisplayText = '';
             let isVerified = false;
 
@@ -668,24 +575,6 @@
                 }
             }
 
-            // ========== CAPTCHA ==========
-            function generateCaptcha() {
-                const a = Math.floor(Math.random() * 12) + 2;
-                const b = Math.floor(Math.random() * 12) + 2;
-                const ops = ['+', '-', '×'];
-                const op = ops[Math.floor(Math.random() * ops.length)];
-                let answer;
-                switch(op) {
-                    case '+': answer = a + b; break;
-                    case '-': answer = a - b; break;
-                    case '×': answer = a * b; break;
-                    default: answer = a + b;
-                }
-                captchaQuestion.textContent = `${a} ${op} ${b} = ؟`;
-                currentCaptchaAnswer = answer;
-                captchaInput.value = '';
-            }
-
             // ========== VALIDATION ==========
             function isValidScript(text) {
                 const trimmed = text.trim();
@@ -702,11 +591,6 @@
                 if (!text) return showToast('⚠️ الرجاء لصق السكربت');
                 if (!isValidScript(text)) {
                     return showToast('❌ يجب أن يبدأ السكربت بـ loadstring أو --');
-                }
-                const userAnswer = parseInt(captchaInput.value.trim(), 10);
-                if (isNaN(userAnswer) || userAnswer !== currentCaptchaAnswer) {
-                    generateCaptcha();
-                    return showToast('❌ إجابة الكابتشا خاطئة');
                 }
 
                 uploadBtn.disabled = true;
@@ -825,7 +709,6 @@
                         loadingSection.classList.add('hidden');
                         createSection.classList.remove('hidden');
                         fetchIP(); // جلب IP
-                        generateCaptcha();
                         isVerified = true;
                     }, 800);
                 }, 5000);
