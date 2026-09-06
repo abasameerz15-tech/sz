@@ -6,26 +6,37 @@
 
 <title>SZ Video Cleaner</title>
 
-<!-- MediaPipe -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial,Tahoma,sans-serif;
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
 }
 
 body{
     min-height:100vh;
     background:
-        radial-gradient(circle at top,#25203d 0%,#0d0d14 42%,#07070b 100%);
+        radial-gradient(
+            circle at 50% 0%,
+            #302052 0%,
+            #111019 38%,
+            #07070a 100%
+        );
+
     color:white;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:20px;
+
+    padding:18px;
 }
 
 .container{
@@ -34,21 +45,29 @@ body{
 }
 
 .card{
-    background:rgba(18,18,28,.86);
+    background:rgba(17,17,25,.88);
+
     border:1px solid rgba(255,255,255,.08);
+
     border-radius:28px;
+
     padding:24px;
+
     box-shadow:
-        0 25px 80px rgba(0,0,0,.55),
-        inset 0 1px 0 rgba(255,255,255,.04);
+        0 30px 90px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.04);
+
     backdrop-filter:blur(20px);
 }
 
 .logo{
     text-align:center;
+
     font-size:30px;
+
     font-weight:900;
-    letter-spacing:1px;
+
+    letter-spacing:.5px;
 }
 
 .logo span{
@@ -57,208 +76,296 @@ body{
 
 .subtitle{
     text-align:center;
-    color:#9b9baa;
-    font-size:13px;
-    margin-top:8px;
+
+    color:#898896;
+
+    font-size:12px;
+
+    margin-top:7px;
     margin-bottom:22px;
 }
 
 .upload{
-    width:100%;
-    min-height:170px;
-    border:2px dashed rgba(155,108,255,.45);
+    min-height:175px;
+
+    border:2px dashed rgba(153,104,255,.42);
+
     border-radius:22px;
-    background:rgba(155,108,255,.055);
+
+    background:rgba(153,104,255,.045);
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     justify-content:center;
+
     cursor:pointer;
-    transition:.25s;
+
+    transition:.2s;
 }
 
 .upload:hover{
-    background:rgba(155,108,255,.11);
-    border-color:#9b6cff;
+    border-color:#9d70ff;
+
+    background:rgba(153,104,255,.09);
+
     transform:translateY(-2px);
 }
 
 .upload-icon{
-    width:65px;
-    height:65px;
+    width:64px;
+    height:64px;
+
     border-radius:20px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    background:linear-gradient(135deg,#9b6cff,#6240c9);
-    font-size:28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a16cff,
+            #613bc9
+        );
+
+    font-size:30px;
+
+    box-shadow:
+        0 12px 35px rgba(119,72,230,.3);
+
     margin-bottom:13px;
-    box-shadow:0 10px 35px rgba(125,80,255,.3);
 }
 
 .upload-title{
-    font-size:17px;
+    font-size:16px;
     font-weight:bold;
 }
 
 .upload-info{
-    color:#888895;
-    font-size:12px;
+    color:#777582;
+    font-size:11px;
     margin-top:6px;
 }
 
-input[type=file]{
+input{
     display:none;
 }
 
 .status{
     display:none;
+
     margin-top:18px;
-    background:rgba(255,255,255,.045);
-    border-radius:16px;
+
     padding:14px;
+
+    border-radius:17px;
+
+    background:rgba(255,255,255,.035);
 }
 
-.status-text{
+.status-title{
     font-size:13px;
-    color:#d6d6df;
+
     margin-bottom:10px;
+
+    color:#dddde5;
 }
 
 .progress{
-    height:7px;
     width:100%;
-    background:#242431;
+    height:7px;
+
     border-radius:20px;
+
+    background:#25242f;
+
     overflow:hidden;
 }
 
 .progress-bar{
     width:0%;
     height:100%;
-    background:linear-gradient(90deg,#7244ff,#b18cff);
+
     border-radius:20px;
-    transition:.2s;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7245ef,
+            #b08aff
+        );
+
+    transition:width .15s;
+}
+
+.error{
+    display:none;
+
+    margin-top:15px;
+
+    padding:13px;
+
+    border-radius:15px;
+
+    background:rgba(255,60,80,.08);
+
+    border:1px solid rgba(255,60,80,.15);
+
+    color:#ff9da8;
+
+    font-size:12px;
+
+    line-height:1.6;
 }
 
 .preview{
     display:none;
+
     margin-top:20px;
 }
 
 .preview-title{
     font-size:14px;
+
     font-weight:bold;
+
     margin-bottom:10px;
 }
 
 .video-box{
-    position:relative;
     width:100%;
-    min-height:250px;
+
+    min-height:270px;
+
     border-radius:20px;
+
     overflow:hidden;
 
-    background-color:#15151e;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background-color:#171720;
 
     background-image:
-        linear-gradient(45deg,#252532 25%,transparent 25%),
-        linear-gradient(-45deg,#252532 25%,transparent 25%),
-        linear-gradient(45deg,transparent 75%,#252532 75%),
-        linear-gradient(-45deg,transparent 75%,#252532 75%);
+        linear-gradient(45deg,#292934 25%,transparent 25%),
+        linear-gradient(-45deg,#292934 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#292934 75%),
+        linear-gradient(-45deg,transparent 75%,#292934 75%);
 
-    background-size:24px 24px;
-    background-position:0 0,0 12px,12px -12px,-12px 0;
+    background-size:26px 26px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background-position:
+        0 0,
+        0 13px,
+        13px -13px,
+        -13px 0;
 }
 
 #resultVideo{
     width:100%;
+
+    max-width:360px;
+
     max-height:360px;
+
     object-fit:contain;
 }
 
 .info{
     display:flex;
-    justify-content:space-between;
+
     gap:8px;
+
     margin-top:10px;
 }
 
 .info-box{
     flex:1;
-    background:rgba(255,255,255,.045);
+
+    background:rgba(255,255,255,.04);
+
     border-radius:13px;
+
     padding:10px;
+
     text-align:center;
 }
 
 .info-label{
-    color:#777786;
+    color:#777582;
+
     font-size:10px;
 }
 
 .info-value{
     margin-top:4px;
+
     font-size:12px;
+
     font-weight:bold;
 }
 
 .download{
     width:100%;
+
     border:0;
+
     border-radius:16px;
+
     padding:15px;
+
     margin-top:13px;
 
-    background:linear-gradient(135deg,#9b6cff,#6842d5);
+    background:
+        linear-gradient(
+            135deg,
+            #9b6cff,
+            #6842d5
+        );
+
     color:white;
 
     font-size:15px;
+
     font-weight:bold;
 
     cursor:pointer;
 
-    box-shadow:0 12px 30px rgba(105,65,220,.25);
+    box-shadow:
+        0 12px 30px rgba(105,65,220,.25);
+
     transition:.2s;
 }
 
 .download:hover{
-    transform:translateY(-2px);
     filter:brightness(1.08);
+
+    transform:translateY(-2px);
 }
 
 .download:active{
     transform:scale(.98);
 }
 
-.error{
-    display:none;
-    margin-top:15px;
-    padding:13px;
-    border-radius:14px;
-    background:rgba(255,60,80,.09);
-    border:1px solid rgba(255,60,80,.15);
-    color:#ff9ca7;
-    font-size:12px;
-    line-height:1.6;
-}
-
 .note{
     text-align:center;
-    margin-top:16px;
-    color:#656572;
+
+    color:#5f5e69;
+
     font-size:10px;
+
     line-height:1.6;
+
+    margin-top:15px;
 }
 
-.hidden-video,
-#workCanvas{
-    display:none;
-}
 </style>
 </head>
 
@@ -266,358 +373,345 @@ input[type=file]{
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <div class="logo">
-            SZ <span>Video Cleaner</span>
+    <div class="logo">
+        SZ <span>VIDEO CLEANER</span>
+    </div>
+
+    <div class="subtitle">
+        إزالة الخلفية وتحويل الفيديو إلى WebM شفاف
+    </div>
+
+    <label class="upload" for="videoInput">
+
+        <div class="upload-icon">
+            ↑
         </div>
 
-        <div class="subtitle">
-            إزالة الخلفية وتحويل الفيديو تلقائيًا إلى WebM
+        <div class="upload-title">
+            اضغط لرفع الفيديو
         </div>
 
-        <label class="upload" for="videoInput">
+        <div class="upload-info">
+            MP4 / MOV / WebM
+        </div>
 
-            <div class="upload-icon">
-                ↑
-            </div>
+    </label>
 
-            <div class="upload-title">
-                اضغط لرفع الفيديو
-            </div>
+    <input
+        id="videoInput"
+        type="file"
+        accept="video/*"
+    >
 
-            <div class="upload-info">
-                WebM / MP4 / MOV
-            </div>
+    <div class="status" id="status">
 
-        </label>
-
-        <input
-            id="videoInput"
-            type="file"
-            accept="video/*"
+        <div
+            class="status-title"
+            id="statusText"
         >
-
-        <div class="status" id="status">
-
-            <div class="status-text" id="statusText">
-                جاري تجهيز الفيديو...
-            </div>
-
-            <div class="progress">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-
+            جاري التجهيز...
         </div>
 
-        <div class="error" id="error"></div>
+        <div class="progress">
 
-        <div class="preview" id="preview">
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
 
-            <div class="preview-title">
-                النتيجة النهائية
-            </div>
-
-            <div class="video-box">
-
-                <video
-                    id="resultVideo"
-                    controls
-                    playsinline
-                    loop
-                ></video>
-
-            </div>
-
-            <div class="info">
-
-                <div class="info-box">
-                    <div class="info-label">
-                        المقاس
-                    </div>
-
-                    <div class="info-value">
-                        100 × 100
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-label">
-                        الصيغة
-                    </div>
-
-                    <div class="info-value">
-                        WebM
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-label">
-                        الحجم
-                    </div>
-
-                    <div class="info-value" id="fileSize">
-                        --
-                    </div>
-                </div>
-
-            </div>
-
-            <button
-                class="download"
-                id="downloadBtn"
-            >
-                تحميل الفيديو
-            </button>
-
-        </div>
-
-        <div class="note">
-            تتم المعالجة داخل المتصفح قدر الإمكان، ولا يتم رفع الفيديو
-            إلى سيرفر من هذا الكود.
         </div>
 
     </div>
+
+    <div
+        class="error"
+        id="error"
+    ></div>
+
+    <div
+        class="preview"
+        id="preview"
+    >
+
+        <div class="preview-title">
+            النتيجة النهائية
+        </div>
+
+        <div class="video-box">
+
+            <video
+                id="resultVideo"
+                controls
+                loop
+                playsinline
+            ></video>
+
+        </div>
+
+        <div class="info">
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    المقاس
+                </div>
+
+                <div class="info-value">
+                    100×100
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    الصيغة
+                </div>
+
+                <div class="info-value">
+                    WebM
+                </div>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    الحجم
+                </div>
+
+                <div
+                    class="info-value"
+                    id="fileSize"
+                >
+                    --
+                </div>
+
+            </div>
+
+        </div>
+
+        <button
+            class="download"
+            id="downloadBtn"
+        >
+            تحميل WebM
+        </button>
+
+    </div>
+
+    <div class="note">
+        تتم معالجة الفيديو داخل جهازك.
+        الحد النهائي للملف 64KB.
+    </div>
+
+</div>
 
 </div>
 
 
 <video
     id="sourceVideo"
-    class="hidden-video"
     muted
     playsinline
+    style="display:none"
 ></video>
 
+<!--
+    نستخدم 200×200 أثناء المعالجة
+    ثم نصدر 100×100
+    لتحسين حواف الشخصية
+-->
 <canvas
-    id="workCanvas"
+    id="sourceCanvas"
+    width="200"
+    height="200"
+    style="display:none"
+></canvas>
+
+<canvas
+    id="outputCanvas"
     width="100"
     height="100"
+    style="display:none"
 ></canvas>
 
 
 <script>
 
-const videoInput = document.getElementById("videoInput");
-const sourceVideo = document.getElementById("sourceVideo");
-const resultVideo = document.getElementById("resultVideo");
+/* =====================================
+   العناصر
+===================================== */
 
-const canvas = document.getElementById("workCanvas");
-const ctx = canvas.getContext("2d", {
-    alpha:true,
-    willReadFrequently:false
-});
+const input =
+    document.getElementById("videoInput");
 
-const statusBox = document.getElementById("status");
-const statusText = document.getElementById("statusText");
-const progressBar = document.getElementById("progressBar");
+const sourceVideo =
+    document.getElementById("sourceVideo");
 
-const preview = document.getElementById("preview");
-const errorBox = document.getElementById("error");
+const sourceCanvas =
+    document.getElementById("sourceCanvas");
 
-const fileSize = document.getElementById("fileSize");
-const downloadBtn = document.getElementById("downloadBtn");
+const outputCanvas =
+    document.getElementById("outputCanvas");
+
+const sourceCtx =
+    sourceCanvas.getContext("2d", {
+        alpha:true
+    });
+
+const outputCtx =
+    outputCanvas.getContext("2d", {
+        alpha:true
+    });
+
+const resultVideo =
+    document.getElementById("resultVideo");
+
+const status =
+    document.getElementById("status");
+
+const statusText =
+    document.getElementById("statusText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const preview =
+    document.getElementById("preview");
+
+const errorBox =
+    document.getElementById("error");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
 
 let finalBlob = null;
+
 let finalURL = null;
 
+let currentMask = null;
 
-/* =========================
-   إعداد إزالة الخلفية
-========================= */
 
-const selfieSegmentation = new SelfieSegmentation({
-    locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+/* =====================================
+   MediaPipe
+===================================== */
+
+const segmentation =
+    new SelfieSegmentation({
+
+        locateFile:(file)=>{
+
+            return
+            `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+
+        }
+
+    });
+
+
+segmentation.setOptions({
+
+    modelSelection:1
+
+});
+
+
+/* =====================================
+   إعداد نتيجة الماسك
+===================================== */
+
+segmentation.onResults(
+    function(results){
+
+        currentMask =
+            results.segmentationMask;
+
     }
-});
-
-selfieSegmentation.setOptions({
-    modelSelection: 1
-});
+);
 
 
-/* =========================
-   تغيير الحالة
-========================= */
+/* =====================================
+   الحالة
+===================================== */
 
-function setStatus(text, percent){
+function setStatus(text,percent){
 
-    statusBox.style.display = "block";
+    status.style.display = "block";
 
     statusText.textContent = text;
 
     progressBar.style.width =
-        Math.max(0,Math.min(100,percent)) + "%";
+        Math.max(
+            0,
+            Math.min(
+                100,
+                percent
+            )
+        ) + "%";
+
 }
 
 
-/* =========================
-   الأخطاء
-========================= */
+/* =====================================
+   الخطأ
+===================================== */
 
-function showError(message){
+function showError(text){
 
     errorBox.style.display = "block";
-    errorBox.textContent = message;
+
+    errorBox.textContent = text;
 
 }
 
 function hideError(){
 
     errorBox.style.display = "none";
+
 }
 
 
-/* =========================
-   تحويل الحجم
-========================= */
+/* =====================================
+   حجم الملف
+===================================== */
 
-function formatBytes(bytes){
+function formatSize(bytes){
 
     if(bytes < 1024){
+
         return bytes + " B";
+
     }
 
     if(bytes < 1024 * 1024){
-        return (bytes / 1024).toFixed(1) + " KB";
-    }
 
-    return (bytes / 1024 / 1024).toFixed(2) + " MB";
-}
-
-
-/* =========================
-   حساب مكان الفيديو
-========================= */
-
-function drawCover(video){
-
-    const vw = video.videoWidth;
-    const vh = video.videoHeight;
-
-    const size = Math.min(vw,vh);
-
-    const sx = (vw - size) / 2;
-    const sy = (vh - size) / 2;
-
-    ctx.clearRect(0,0,100,100);
-
-    ctx.drawImage(
-        video,
-        sx,
-        sy,
-        size,
-        size,
-        0,
-        0,
-        100,
-        100
-    );
-}
-
-
-/* =========================
-   حفظ نسخة النتيجة
-========================= */
-
-let lastSegmentation = null;
-
-selfieSegmentation.onResults((results) => {
-
-    lastSegmentation = results;
-
-});
-
-
-/* =========================
-   معالجة فريم
-========================= */
-
-async function processFrame(){
-
-    drawCover(sourceVideo);
-
-    await selfieSegmentation.send({
-        image:canvas
-    });
-
-    if(!lastSegmentation || !lastSegmentation.segmentationMask){
-        return;
-    }
-
-    const mask = lastSegmentation.segmentationMask;
-
-    /*
-       نحصل على الماسك من MediaPipe
-       ثم نطبقه على الـ Canvas
-    */
-
-    const temp = document.createElement("canvas");
-
-    temp.width = 100;
-    temp.height = 100;
-
-    const tctx = temp.getContext("2d");
-
-    tctx.drawImage(
-        mask,
-        0,
-        0,
-        100,
-        100
-    );
-
-    const image = ctx.getImageData(
-        0,
-        0,
-        100,
-        100
-    );
-
-    const maskData = tctx.getImageData(
-        0,
-        0,
-        100,
-        100
-    );
-
-    for(let i=0;i<image.data.length;i+=4){
-
-        const alpha = maskData.data[i];
-
-        /*
-           تنعيم حواف الشخصية
-        */
-
-        if(alpha < 70){
-
-            image.data[i+3] = 0;
-
-        }else{
-
-            image.data[i+3] =
-                Math.min(
-                    255,
-                    Math.max(
-                        0,
-                        (alpha - 30) * 1.25
-                    )
-                );
-
-        }
+        return (
+            bytes / 1024
+        ).toFixed(2) + " KB";
 
     }
 
-    ctx.putImageData(image,0,0);
+    return (
+        bytes /
+        1024 /
+        1024
+    ).toFixed(2) + " MB";
+
 }
 
 
-/* =========================
-   اختيار نوع WebM
-========================= */
+/* =====================================
+   اختيار MIME
+===================================== */
 
-function getMimeType(){
+function getMime(){
 
     const types = [
 
@@ -629,10 +723,13 @@ function getMimeType(){
 
     ];
 
-    for(const type of types){
+    for(
+        const type of types
+    ){
 
         if(
-            MediaRecorder.isTypeSupported(type)
+            MediaRecorder
+            .isTypeSupported(type)
         ){
 
             return type;
@@ -641,65 +738,251 @@ function getMimeType(){
 
     }
 
-    return "";
+    return null;
 
 }
 
 
-/* =========================
-   تسجيل Canvas
-========================= */
+/* =====================================
+   رسم الفيديو بشكل مربع
+===================================== */
 
-async function recordVideo(){
+function drawSource(){
 
-    const mime = getMimeType();
+    const w =
+        sourceVideo.videoWidth;
 
-    if(!mime){
+    const h =
+        sourceVideo.videoHeight;
 
-        throw new Error(
-            "المتصفح لا يدعم إنشاء WebM."
-        );
+    const size =
+        Math.min(w,h);
 
-    }
+    const x =
+        (w - size) / 2;
 
-    /*
-       نستخدم 100x100
-       مع FPS منخفض حتى نقدر نوصل لحجم صغير.
-    */
+    const y =
+        (h - size) / 2;
 
-    const stream = canvas.captureStream(8);
 
-    const chunks = [];
-
-    const recorder = new MediaRecorder(
-        stream,
-        {
-            mimeType:mime,
-
-            videoBitsPerSecond:18000
-        }
+    sourceCtx.clearRect(
+        0,
+        0,
+        200,
+        200
     );
 
 
-    recorder.ondataavailable = (event) => {
+    sourceCtx.drawImage(
 
-        if(event.data.size > 0){
+        sourceVideo,
 
-            chunks.push(event.data);
+        x,
+        y,
+        size,
+        size,
 
-        }
+        0,
+        0,
+        200,
+        200
 
-    };
+    );
+
+}
 
 
-    const stopped = new Promise((resolve) => {
+/* =====================================
+   معالجة الفريم
+===================================== */
 
-        recorder.onstop = resolve;
+async function processFrame(){
+
+    drawSource();
+
+    currentMask = null;
+
+
+    await segmentation.send({
+
+        image:sourceCanvas
 
     });
 
 
-    recorder.start();
+    /*
+       ننتظر وصول الماسك
+    */
+
+    let tries = 0;
+
+    while(
+        !currentMask &&
+        tries < 20
+    ){
+
+        await new Promise(
+            r => requestAnimationFrame(r)
+        );
+
+        tries++;
+
+    }
+
+
+    if(!currentMask){
+
+        return;
+
+    }
+
+
+    /*
+       نضع صورة الفيديو
+    */
+
+    outputCtx.clearRect(
+        0,
+        0,
+        100,
+        100
+    );
+
+
+    outputCtx.drawImage(
+
+        sourceCanvas,
+
+        0,
+        0,
+        100,
+        100
+
+    );
+
+
+    /*
+       الماسك
+    */
+
+    const maskCanvas =
+        document.createElement("canvas");
+
+    maskCanvas.width = 100;
+    maskCanvas.height = 100;
+
+    const maskCtx =
+        maskCanvas.getContext("2d");
+
+
+    maskCtx.drawImage(
+
+        currentMask,
+
+        0,
+        0,
+        100,
+        100
+
+    );
+
+
+    /*
+       إزالة الخلفية
+    */
+
+    outputCtx.globalCompositeOperation =
+        "destination-in";
+
+
+    outputCtx.drawImage(
+
+        maskCanvas,
+
+        0,
+        0,
+        100,
+        100
+
+    );
+
+
+    /*
+       إعادة الوضع الطبيعي
+    */
+
+    outputCtx.globalCompositeOperation =
+        "source-over";
+
+}
+
+
+/* =====================================
+   تسجيل الفيديو
+===================================== */
+
+async function recordVideo(
+    bitrate,
+    fps
+){
+
+    const mime =
+        getMime();
+
+
+    if(!mime){
+
+        throw new Error(
+            "متصفحك لا يدعم WebM."
+        );
+
+    }
+
+
+    const stream =
+        outputCanvas.captureStream(fps);
+
+
+    const recorder =
+        new MediaRecorder(
+            stream,
+            {
+
+                mimeType:mime,
+
+                videoBitsPerSecond:
+                    Math.round(bitrate)
+
+            }
+        );
+
+
+    const chunks = [];
+
+
+    recorder.ondataavailable =
+        function(e){
+
+            if(e.data.size){
+
+                chunks.push(e.data);
+
+            }
+
+        };
+
+
+    const stopped =
+        new Promise(resolve => {
+
+            recorder.onstop =
+                resolve;
+
+        });
+
+
+    recorder.start(100);
+
 
     sourceVideo.currentTime = 0;
 
@@ -707,304 +990,472 @@ async function recordVideo(){
 
 
     const duration =
-        Math.min(
-            sourceVideo.duration || 5,
-            10
-        );
-
-    const start =
-        performance.now();
+        sourceVideo.duration;
 
 
-    return new Promise(async (resolve) => {
+    const endTime =
+        duration;
 
-        async function render(){
 
-            if(
-                sourceVideo.ended ||
-                sourceVideo.currentTime >= duration
-            ){
+    let lastTime = -1;
 
-                sourceVideo.pause();
 
-                recorder.stop();
+    return new Promise(
+        async resolve => {
 
-                await stopped;
+            async function render(){
 
-                const blob = new Blob(
-                    chunks,
-                    {
-                        type:"video/webm"
-                    }
+                if(
+                    sourceVideo.paused ||
+                    sourceVideo.ended ||
+                    sourceVideo.currentTime >= endTime
+                ){
+
+                    sourceVideo.pause();
+
+                    recorder.stop();
+
+                    await stopped;
+
+
+                    const blob =
+                        new Blob(
+                            chunks,
+                            {
+                                type:"video/webm"
+                            }
+                        );
+
+
+                    resolve(blob);
+
+                    return;
+
+                }
+
+
+                /*
+                   منع معالجة نفس الفريم
+                   أكثر من مرة
+                */
+
+                if(
+                    sourceVideo.currentTime !==
+                    lastTime
+                ){
+
+                    lastTime =
+                        sourceVideo.currentTime;
+
+                    await processFrame();
+
+                }
+
+
+                const percent =
+                    (
+                        sourceVideo.currentTime /
+                        duration
+                    ) * 100;
+
+
+                setStatus(
+
+                    "جاري معالجة الفيديو...",
+
+                    percent
+
                 );
 
-                resolve(blob);
 
-                return;
+                requestAnimationFrame(
+                    render
+                );
 
             }
 
 
-            await processFrame();
-
-
-            const elapsed =
-                performance.now() - start;
-
-            const percent =
-                Math.min(
-                    100,
-                    (sourceVideo.currentTime / duration) * 100
-                );
-
-            setStatus(
-                "جاري إزالة الخلفية وتحسين الفيديو...",
-                percent
-            );
-
-
-            requestAnimationFrame(render);
+            render();
 
         }
 
-        render();
-
-    });
+    );
 
 }
 
 
-/* =========================
-   محاولة ضغط إضافية
-========================= */
+/* =====================================
+   تحديد Bitrate مناسب
+===================================== */
 
-async function createFinalVideo(){
-
-    let blob = await recordVideo();
+function calculateBitrate(
+    duration
+){
 
     /*
-       إذا تجاوز 64KB:
-       نحاول إعادة التسجيل بإعدادات أصغر.
-       لأن MediaRecorder لا يسمح بتعديل bitrate
-       أثناء التسجيل، نقوم بمحاولات منفصلة.
+       64KB = 524288 bits
+
+       نترك مساحة بسيطة
+       للـWebM container.
+
+       الهدف حوالي 92%
+       من المساحة.
     */
 
-    if(blob.size <= 64 * 1024){
+    const availableBits =
+        64 * 1024 * 8 * 0.92;
+
+
+    let bitrate =
+        availableBits /
+        Math.max(
+            duration,
+            0.5
+        );
+
+
+    /*
+       حدود منطقية
+    */
+
+    bitrate =
+        Math.max(
+            8000,
+            bitrate
+        );
+
+
+    bitrate =
+        Math.min(
+            220000,
+            bitrate
+        );
+
+
+    return bitrate;
+
+}
+
+
+/* =====================================
+   Padding إلى 64KB
+===================================== */
+
+function padTo64KB(blob){
+
+    const target =
+        64 * 1024;
+
+
+    if(blob.size >= target){
 
         return blob;
 
     }
 
 
-    setStatus(
-        "الحجم أكبر من 64KB، جاري ضغطه...",
-        100
-    );
-
-
     /*
-       إعادة تسجيل بإعدادات أخف
+       نضيف Bytes في نهاية الـBlob.
+
+       هذا لا يعيد ضغط الفيديو
+       ولا يغير الفريمات.
     */
 
-    const mime = getMimeType();
-
-    const stream = canvas.captureStream(5);
-
-    const chunks = [];
-
-    const recorder = new MediaRecorder(
-        stream,
-        {
-            mimeType:mime,
-            videoBitsPerSecond:7000
-        }
-    );
-
-    recorder.ondataavailable = e => {
-
-        if(e.data.size > 0){
-
-            chunks.push(e.data);
-
-        }
-
-    };
-
-
-    const stopped = new Promise(resolve => {
-
-        recorder.onstop = resolve;
-
-    });
-
-
-    recorder.start();
-
-    sourceVideo.currentTime = 0;
-
-    await sourceVideo.play();
-
-
-    const duration =
-        Math.min(
-            sourceVideo.duration || 5,
-            6
+    const padding =
+        new Uint8Array(
+            target - blob.size
         );
 
 
-    return new Promise(resolve => {
+    return new Blob(
 
-        async function loop(){
+        [
+            blob,
+            padding
 
-            if(
-                sourceVideo.ended ||
-                sourceVideo.currentTime >= duration
-            ){
+        ],
 
-                sourceVideo.pause();
-
-                recorder.stop();
-
-                await stopped;
-
-                const newBlob =
-                    new Blob(
-                        chunks,
-                        {
-                            type:"video/webm"
-                        }
-                    );
-
-                resolve(newBlob);
-
-                return;
-
-            }
-
-
-            await processFrame();
-
-            setStatus(
-                "ضغط الفيديو للوصول إلى أقل من 64KB...",
-                (sourceVideo.currentTime / duration) * 100
-            );
-
-            requestAnimationFrame(loop);
-
+        {
+            type:"video/webm"
         }
 
-        loop();
-
-    });
+    );
 
 }
 
 
-/* =========================
-   رفع الفيديو
-========================= */
+/* =====================================
+   إنشاء النسخة النهائية
+===================================== */
 
-videoInput.addEventListener(
+async function createFinal(){
+
+    const duration =
+        sourceVideo.duration;
+
+
+    let bitrate =
+        calculateBitrate(
+            duration
+        );
+
+
+    /*
+       محاولات الضغط
+    */
+
+    for(
+        let attempt = 0;
+        attempt < 8;
+        attempt++
+    ){
+
+        setStatus(
+
+            "جاري إنشاء نسخة عالية الجودة...",
+
+            10 + attempt * 5
+
+        );
+
+
+        const blob =
+            await recordVideo(
+                bitrate,
+                24
+            );
+
+
+        /*
+           ممتاز
+        */
+
+        if(
+            blob.size <=
+            64 * 1024
+        ){
+
+            return padTo64KB(blob);
+
+        }
+
+
+        /*
+           إذا أكبر من 64KB
+           نقلل الـBitrate تدريجيًا
+        */
+
+        const ratio =
+            (
+                64 * 1024
+            ) /
+            blob.size;
+
+
+        bitrate =
+            bitrate *
+            ratio *
+            0.94;
+
+
+        /*
+           لا ننزل إلى Bitrate
+           منخفض جدًا بسرعة.
+        */
+
+        bitrate =
+            Math.max(
+                5000,
+                bitrate
+            );
+
+    }
+
+
+    /*
+       محاولة أخيرة
+    */
+
+    const last =
+        await recordVideo(
+            5000,
+            15
+        );
+
+
+    if(
+        last.size <=
+        64 * 1024
+    ){
+
+        return padTo64KB(last);
+
+    }
+
+
+    throw new Error(
+        "الفيديو طويل أو معقد جدًا للوصول إلى 64KB مع الجودة المطلوبة."
+    );
+
+}
+
+
+/* =====================================
+   رفع الفيديو
+===================================== */
+
+input.addEventListener(
     "change",
     async function(){
 
-        const file = this.files[0];
+        const file =
+            this.files[0];
+
 
         if(!file){
+
             return;
+
         }
+
 
         hideError();
 
-        preview.style.display = "none";
-
-        finalBlob = null;
-
-        if(finalURL){
-
-            URL.revokeObjectURL(finalURL);
-
-        }
+        preview.style.display =
+            "none";
 
 
         try{
 
             setStatus(
                 "جاري تحميل الفيديو...",
-                5
+                3
             );
+
+
+            if(finalURL){
+
+                URL.revokeObjectURL(
+                    finalURL
+                );
+
+                finalURL = null;
+
+            }
+
+
+            finalBlob = null;
 
 
             const url =
                 URL.createObjectURL(file);
 
+
             sourceVideo.src = url;
 
 
-            await new Promise((resolve,reject) => {
+            await new Promise(
+                (resolve,reject)=>{
 
-                sourceVideo.onloadedmetadata =
-                    resolve;
+                    sourceVideo.onloadedmetadata =
+                        resolve;
 
-                sourceVideo.onerror =
-                    reject;
+                    sourceVideo.onerror =
+                        reject;
 
-            });
-
-
-            /*
-               نحدد مدة الفيديو.
-               لأن 64KB مع فيديو طويل جدًا
-               سيؤدي إلى جودة شديدة الانخفاض.
-            */
-
-            if(sourceVideo.duration > 10){
-
-                showError(
-                    "الفيديو أطول من 10 ثوانٍ. سيتم استخدام أول 10 ثوانٍ حتى نحافظ على جودة وحجم مناسبين."
-                );
-
-            }
-
-
-            setStatus(
-                "جاري تجهيز الذكاء الاصطناعي...",
-                10
+                }
             );
 
 
-            await new Promise(r => setTimeout(r,500));
-
-
-            setStatus(
-                "جاري إزالة الخلفية...",
-                20
-            );
-
-
-            finalBlob =
-                await createFinalVideo();
-
-
-            if(!finalBlob){
+            if(
+                !sourceVideo.videoWidth ||
+                !sourceVideo.videoHeight
+            ){
 
                 throw new Error(
-                    "تعذر إنشاء الفيديو."
+                    "تعذر قراءة الفيديو."
+                );
+
+            }
+
+
+            setStatus(
+                "جاري تشغيل محرك إزالة الخلفية...",
+                8
+            );
+
+
+            /*
+               تجهيز أول فريم
+            */
+
+            sourceVideo.currentTime = 0;
+
+            await new Promise(
+                resolve => {
+
+                    sourceVideo.onseeked =
+                        resolve;
+
+                }
+            );
+
+
+            await processFrame();
+
+
+            setStatus(
+                "جاري تحسين الحواف...",
+                15
+            );
+
+
+            await new Promise(
+                r => setTimeout(r,300)
+            );
+
+
+            /*
+               إنشاء الفيديو
+            */
+
+            finalBlob =
+                await createFinal();
+
+
+            if(
+                finalBlob.size >
+                64 * 1024
+            ){
+
+                throw new Error(
+                    "تعذر الوصول إلى 64KB."
                 );
 
             }
 
 
             /*
-               التحقق من الحجم
+               تأكيد الحجم
             */
 
-            const maxSize =
-                64 * 1024;
+            if(
+                finalBlob.size <
+                64 * 1024
+            ){
+
+                finalBlob =
+                    padTo64KB(
+                        finalBlob
+                    );
+
+            }
 
 
             finalURL =
-                URL.createObjectURL(finalBlob);
+                URL.createObjectURL(
+                    finalBlob
+                );
 
 
             resultVideo.src =
@@ -1015,40 +1466,41 @@ videoInput.addEventListener(
 
 
             fileSize.textContent =
-                formatBytes(finalBlob.size);
+                formatSize(
+                    finalBlob.size
+                );
 
 
             preview.style.display =
                 "block";
 
 
-            if(finalBlob.size > maxSize){
+            setStatus(
+                "تم الانتهاء ✓",
+                100
+            );
 
-                showError(
-                    "تم إنشاء الفيديو، لكن المتصفح لم يستطع ضغطه إلى أقل من 64KB مع الحفاظ على الفيديو. الحجم الحالي: " +
-                    formatBytes(finalBlob.size)
-                );
 
-            }else{
+            /*
+               تشغيل المعاينة
+            */
 
-                setStatus(
-                    "تم الانتهاء بنجاح ✓",
-                    100
-                );
-
-            }
+            resultVideo.play()
+                .catch(()=>{});
 
 
         }catch(error){
 
             console.error(error);
 
+
             showError(
-                "حدث خطأ أثناء معالجة الفيديو: " +
-                error.message
+                error.message ||
+                "حدث خطأ أثناء معالجة الفيديو."
             );
 
-            statusBox.style.display =
+
+            status.style.display =
                 "none";
 
         }
@@ -1057,9 +1509,9 @@ videoInput.addEventListener(
 );
 
 
-/* =========================
-   التحميل
-========================= */
+/* =====================================
+   تحميل
+===================================== */
 
 downloadBtn.addEventListener(
     "click",
@@ -1073,7 +1525,9 @@ downloadBtn.addEventListener(
 
 
         const url =
-            URL.createObjectURL(finalBlob);
+            URL.createObjectURL(
+                finalBlob
+            );
 
 
         const a =
@@ -1083,7 +1537,7 @@ downloadBtn.addEventListener(
         a.href = url;
 
         a.download =
-            "SZ-Video-100x100.webm";
+            "SZ-100x100-64KB.webm";
 
 
         document.body.appendChild(a);
@@ -1093,11 +1547,12 @@ downloadBtn.addEventListener(
         a.remove();
 
 
-        setTimeout(() => {
-
-            URL.revokeObjectURL(url);
-
-        },1000);
+        setTimeout(
+            ()=>{
+                URL.revokeObjectURL(url);
+            },
+            1000
+        );
 
     }
 );
