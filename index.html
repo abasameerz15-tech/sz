@@ -2,22 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-<title>SZ Video Cleaner</title>
+<title>SZ Video Cleaner V2</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:
-        Arial,
-        Tahoma,
-        sans-serif;
+    font-family:Arial,Tahoma,sans-serif;
 }
 
 body{
@@ -25,17 +22,14 @@ body{
     background:
         radial-gradient(
             circle at 50% 0%,
-            #302052 0%,
-            #111019 38%,
-            #07070a 100%
+            #35205a 0%,
+            #15121e 38%,
+            #07070b 100%
         );
-
     color:white;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     padding:18px;
 }
 
@@ -45,28 +39,19 @@ body{
 }
 
 .card{
-    background:rgba(17,17,25,.88);
-
+    background:rgba(15,15,23,.92);
     border:1px solid rgba(255,255,255,.08);
-
     border-radius:28px;
-
     padding:24px;
-
     box-shadow:
         0 30px 90px rgba(0,0,0,.55),
         inset 0 1px rgba(255,255,255,.04);
-
-    backdrop-filter:blur(20px);
 }
 
 .logo{
     text-align:center;
-
     font-size:30px;
-
     font-weight:900;
-
     letter-spacing:.5px;
 }
 
@@ -76,188 +61,156 @@ body{
 
 .subtitle{
     text-align:center;
-
-    color:#898896;
-
+    color:#8d8b98;
     font-size:12px;
-
     margin-top:7px;
     margin-bottom:22px;
 }
 
 .upload{
     min-height:175px;
-
-    border:2px dashed rgba(153,104,255,.42);
-
+    border:2px dashed #9563ff;
     border-radius:22px;
-
-    background:rgba(153,104,255,.045);
-
+    background:rgba(140,90,255,.055);
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     justify-content:center;
-
     cursor:pointer;
-
     transition:.2s;
 }
 
+.upload:active{
+    transform:scale(.985);
+}
+
 .upload:hover{
-    border-color:#9d70ff;
-
-    background:rgba(153,104,255,.09);
-
-    transform:translateY(-2px);
+    background:rgba(140,90,255,.10);
 }
 
 .upload-icon{
     width:64px;
     height:64px;
-
     border-radius:20px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #a16cff,
-            #613bc9
-        );
-
-    font-size:30px;
-
-    box-shadow:
-        0 12px 35px rgba(119,72,230,.3);
-
+    background:linear-gradient(
+        135deg,
+        #a36bff,
+        #6339ce
+    );
+    font-size:31px;
     margin-bottom:13px;
+    box-shadow:
+        0 12px 35px rgba(120,70,240,.3);
 }
 
 .upload-title{
-    font-size:16px;
+    font-size:17px;
     font-weight:bold;
 }
 
 .upload-info{
     color:#777582;
     font-size:11px;
-    margin-top:6px;
+    margin-top:7px;
 }
 
-input{
+#videoInput{
     display:none;
 }
 
 .status{
     display:none;
-
     margin-top:18px;
-
     padding:14px;
-
     border-radius:17px;
-
     background:rgba(255,255,255,.035);
 }
 
-.status-title{
+.status-text{
     font-size:13px;
-
+    color:#dedee6;
     margin-bottom:10px;
-
-    color:#dddde5;
 }
 
 .progress{
     width:100%;
     height:7px;
-
     border-radius:20px;
-
-    background:#25242f;
-
     overflow:hidden;
+    background:#272631;
 }
 
 .progress-bar{
     width:0%;
     height:100%;
-
     border-radius:20px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #7245ef,
-            #b08aff
-        );
-
+    background:linear-gradient(
+        90deg,
+        #7040e8,
+        #b28cff
+    );
     transition:width .15s;
 }
 
 .error{
     display:none;
-
     margin-top:15px;
-
     padding:13px;
-
     border-radius:15px;
-
-    background:rgba(255,60,80,.08);
-
-    border:1px solid rgba(255,60,80,.15);
-
+    background:rgba(255,50,70,.08);
+    border:1px solid rgba(255,50,70,.15);
     color:#ff9da8;
-
     font-size:12px;
-
     line-height:1.6;
 }
 
 .preview{
     display:none;
-
     margin-top:20px;
 }
 
 .preview-title{
     font-size:14px;
-
     font-weight:bold;
-
     margin-bottom:10px;
 }
 
 .video-box{
     width:100%;
-
     min-height:270px;
-
     border-radius:20px;
-
     overflow:hidden;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
-    background-color:#171720;
+    background-color:#181820;
 
     background-image:
-        linear-gradient(45deg,#292934 25%,transparent 25%),
-        linear-gradient(-45deg,#292934 25%,transparent 25%),
-        linear-gradient(45deg,transparent 75%,#292934 75%),
-        linear-gradient(-45deg,transparent 75%,#292934 75%);
+        linear-gradient(
+            45deg,
+            #292934 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            -45deg,
+            #292934 25%,
+            transparent 25%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 75%,
+            #292934 75%
+        ),
+        linear-gradient(
+            -45deg,
+            transparent 75%,
+            #292934 75%
+        );
 
     background-size:26px 26px;
 
@@ -270,84 +223,56 @@ input{
 
 #resultVideo{
     width:100%;
-
-    max-width:360px;
-
-    max-height:360px;
-
+    max-width:350px;
+    max-height:350px;
     object-fit:contain;
 }
 
 .info{
     display:flex;
-
     gap:8px;
-
     margin-top:10px;
 }
 
 .info-box{
     flex:1;
-
     background:rgba(255,255,255,.04);
-
     border-radius:13px;
-
     padding:10px;
-
     text-align:center;
 }
 
 .info-label{
     color:#777582;
-
     font-size:10px;
 }
 
 .info-value{
     margin-top:4px;
-
     font-size:12px;
-
     font-weight:bold;
 }
 
 .download{
     width:100%;
-
     border:0;
-
     border-radius:16px;
-
     padding:15px;
-
     margin-top:13px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #9b6cff,
-            #6842d5
-        );
+    background:linear-gradient(
+        135deg,
+        #9b6cff,
+        #6842d5
+    );
 
     color:white;
-
     font-size:15px;
-
     font-weight:bold;
-
     cursor:pointer;
 
     box-shadow:
         0 12px 30px rgba(105,65,220,.25);
-
-    transition:.2s;
-}
-
-.download:hover{
-    filter:brightness(1.08);
-
-    transform:translateY(-2px);
 }
 
 .download:active{
@@ -356,16 +281,18 @@ input{
 
 .note{
     text-align:center;
-
-    color:#5f5e69;
-
+    color:#62606c;
     font-size:10px;
-
     line-height:1.6;
-
     margin-top:15px;
 }
 
+
+/* Canvas مخفي */
+canvas,
+#sourceVideo{
+    display:none;
+}
 </style>
 </head>
 
@@ -383,7 +310,10 @@ input{
         إزالة الخلفية وتحويل الفيديو إلى WebM شفاف
     </div>
 
-    <label class="upload" for="videoInput">
+    <label
+        class="upload"
+        for="videoInput"
+    >
 
         <div class="upload-icon">
             ↑
@@ -405,10 +335,14 @@ input{
         accept="video/*"
     >
 
-    <div class="status" id="status">
+
+    <div
+        class="status"
+        id="status"
+    >
 
         <div
-            class="status-title"
+            class="status-text"
             id="statusText"
         >
             جاري التجهيز...
@@ -425,10 +359,12 @@ input{
 
     </div>
 
+
     <div
         class="error"
         id="error"
     ></div>
+
 
     <div
         class="preview"
@@ -450,6 +386,7 @@ input{
 
         </div>
 
+
         <div class="info">
 
             <div class="info-box">
@@ -464,6 +401,7 @@ input{
 
             </div>
 
+
             <div class="info-box">
 
                 <div class="info-label">
@@ -475,6 +413,7 @@ input{
                 </div>
 
             </div>
+
 
             <div class="info-box">
 
@@ -493,6 +432,7 @@ input{
 
         </div>
 
+
         <button
             class="download"
             id="downloadBtn"
@@ -502,9 +442,9 @@ input{
 
     </div>
 
+
     <div class="note">
-        تتم معالجة الفيديو داخل جهازك.
-        الحد النهائي للملف 64KB.
+        تتم المعالجة داخل جهازك • الحد النهائي 64KB
     </div>
 
 </div>
@@ -516,49 +456,43 @@ input{
     id="sourceVideo"
     muted
     playsinline
-    style="display:none"
 ></video>
 
-<!--
-    نستخدم 200×200 أثناء المعالجة
-    ثم نصدر 100×100
-    لتحسين حواف الشخصية
--->
+
 <canvas
-    id="sourceCanvas"
+    id="workCanvas"
     width="200"
     height="200"
-    style="display:none"
 ></canvas>
+
 
 <canvas
     id="outputCanvas"
     width="100"
     height="100"
-    style="display:none"
 ></canvas>
 
 
 <script>
 
-/* =====================================
+/* =========================================
    العناصر
-===================================== */
+========================================= */
 
-const input =
+const videoInput =
     document.getElementById("videoInput");
 
 const sourceVideo =
     document.getElementById("sourceVideo");
 
-const sourceCanvas =
-    document.getElementById("sourceCanvas");
+const workCanvas =
+    document.getElementById("workCanvas");
 
 const outputCanvas =
     document.getElementById("outputCanvas");
 
-const sourceCtx =
-    sourceCanvas.getContext("2d", {
+const workCtx =
+    workCanvas.getContext("2d", {
         alpha:true
     });
 
@@ -596,20 +530,41 @@ let finalBlob = null;
 
 let finalURL = null;
 
-let currentMask = null;
+let maskCanvas =
+    document.createElement("canvas");
+
+let maskCtx =
+    maskCanvas.getContext("2d", {
+        willReadFrequently:false
+    });
 
 
-/* =====================================
-   MediaPipe
-===================================== */
+/* =========================================
+   إعداد MediaPipe
+========================================= */
+
+if(
+    typeof SelfieSegmentation ===
+    "undefined"
+){
+
+    throw new Error(
+        "تعذر تحميل محرك إزالة الخلفية."
+    );
+
+}
+
 
 const segmentation =
     new SelfieSegmentation({
 
-        locateFile:(file)=>{
+        locateFile:function(file){
 
-            return
-            `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+            return (
+                "https://cdn.jsdelivr.net/npm/" +
+                "@mediapipe/selfie_segmentation/" +
+                file
+            );
 
         }
 
@@ -623,29 +578,20 @@ segmentation.setOptions({
 });
 
 
-/* =====================================
-   إعداد نتيجة الماسك
-===================================== */
+/* =========================================
+   تحديث الحالة
+========================================= */
 
-segmentation.onResults(
-    function(results){
+function setStatus(
+    text,
+    percent
+){
 
-        currentMask =
-            results.segmentationMask;
+    status.style.display =
+        "block";
 
-    }
-);
-
-
-/* =====================================
-   الحالة
-===================================== */
-
-function setStatus(text,percent){
-
-    status.style.display = "block";
-
-    statusText.textContent = text;
+    statusText.textContent =
+        text;
 
     progressBar.style.width =
         Math.max(
@@ -659,28 +605,31 @@ function setStatus(text,percent){
 }
 
 
-/* =====================================
-   الخطأ
-===================================== */
+/* =========================================
+   الأخطاء
+========================================= */
 
 function showError(text){
 
-    errorBox.style.display = "block";
+    errorBox.style.display =
+        "block";
 
-    errorBox.textContent = text;
+    errorBox.textContent =
+        text;
 
 }
 
 function hideError(){
 
-    errorBox.style.display = "none";
+    errorBox.style.display =
+        "none";
 
 }
 
 
-/* =====================================
+/* =========================================
    حجم الملف
-===================================== */
+========================================= */
 
 function formatSize(bytes){
 
@@ -690,30 +639,20 @@ function formatSize(bytes){
 
     }
 
-    if(bytes < 1024 * 1024){
-
-        return (
-            bytes / 1024
-        ).toFixed(2) + " KB";
-
-    }
-
     return (
-        bytes /
-        1024 /
-        1024
-    ).toFixed(2) + " MB";
+        bytes / 1024
+    ).toFixed(2) + " KB";
 
 }
 
 
-/* =====================================
-   اختيار MIME
-===================================== */
+/* =========================================
+   MIME
+========================================= */
 
-function getMime(){
+function getMimeType(){
 
-    const types = [
+    const list = [
 
         "video/webm;codecs=vp9",
 
@@ -723,13 +662,14 @@ function getMime(){
 
     ];
 
+
     for(
-        const type of types
+        const type of list
     ){
 
         if(
             MediaRecorder
-            .isTypeSupported(type)
+                .isTypeSupported(type)
         ){
 
             return type;
@@ -738,14 +678,15 @@ function getMime(){
 
     }
 
+
     return null;
 
 }
 
 
-/* =====================================
-   رسم الفيديو بشكل مربع
-===================================== */
+/* =========================================
+   تجهيز الـCanvas
+========================================= */
 
 function drawSource(){
 
@@ -755,17 +696,31 @@ function drawSource(){
     const h =
         sourceVideo.videoHeight;
 
+
+    if(!w || !h){
+
+        return;
+
+    }
+
+
+    /*
+       نأخذ مربعًا من منتصف الفيديو.
+       ثم نكبره إلى 200×200 قبل إزالة الخلفية.
+    */
+
     const size =
         Math.min(w,h);
 
-    const x =
+
+    const sx =
         (w - size) / 2;
 
-    const y =
+    const sy =
         (h - size) / 2;
 
 
-    sourceCtx.clearRect(
+    workCtx.clearRect(
         0,
         0,
         200,
@@ -773,12 +728,12 @@ function drawSource(){
     );
 
 
-    sourceCtx.drawImage(
+    workCtx.drawImage(
 
         sourceVideo,
 
-        x,
-        y,
+        sx,
+        sy,
         size,
         size,
 
@@ -792,53 +747,92 @@ function drawSource(){
 }
 
 
-/* =====================================
-   معالجة الفريم
-===================================== */
+/* =========================================
+   إزالة الخلفية من الفريم
+========================================= */
 
 async function processFrame(){
 
     drawSource();
 
-    currentMask = null;
+
+    /*
+       MediaPipe يعالج الفريم
+    */
+
+    let result = null;
+
+
+    const handler =
+        function(results){
+
+            result = results;
+
+        };
+
+
+    /*
+       MediaPipe يسمح بتغيير callback.
+       نحفظ القديم.
+    */
+
+    const oldCallback =
+        segmentation.onResults;
+
+
+    let received = false;
+
+
+    const promise =
+        new Promise(
+            resolve => {
+
+                segmentation.onResults =
+                    function(results){
+
+                        received = true;
+
+                        resolve(results);
+
+                    };
+
+            }
+        );
 
 
     await segmentation.send({
 
-        image:sourceCanvas
+        image:workCanvas
 
     });
 
 
+    const results =
+        await promise;
+
+
     /*
-       ننتظر وصول الماسك
+       إعادة callback الأساسي
     */
 
-    let tries = 0;
+    segmentation.onResults =
+        oldCallback;
 
-    while(
-        !currentMask &&
-        tries < 20
+
+    if(
+        !results ||
+        !results.segmentationMask
     ){
 
-        await new Promise(
-            r => requestAnimationFrame(r)
+        throw new Error(
+            "تعذر اكتشاف الشخصية في الفيديو."
         );
-
-        tries++;
-
-    }
-
-
-    if(!currentMask){
-
-        return;
 
     }
 
 
     /*
-       نضع صورة الفيديو
+       رسم الفيديو
     */
 
     outputCtx.clearRect(
@@ -851,7 +845,7 @@ async function processFrame(){
 
     outputCtx.drawImage(
 
-        sourceCanvas,
+        workCanvas,
 
         0,
         0,
@@ -862,22 +856,24 @@ async function processFrame(){
 
 
     /*
-       الماسك
+       تجهيز الماسك
     */
-
-    const maskCanvas =
-        document.createElement("canvas");
 
     maskCanvas.width = 100;
     maskCanvas.height = 100;
 
-    const maskCtx =
-        maskCanvas.getContext("2d");
+
+    maskCtx.clearRect(
+        0,
+        0,
+        100,
+        100
+    );
 
 
     maskCtx.drawImage(
 
-        currentMask,
+        results.segmentationMask,
 
         0,
         0,
@@ -888,7 +884,7 @@ async function processFrame(){
 
 
     /*
-       إزالة الخلفية
+       تطبيق الشفافية
     */
 
     outputCtx.globalCompositeOperation =
@@ -907,19 +903,41 @@ async function processFrame(){
     );
 
 
-    /*
-       إعادة الوضع الطبيعي
-    */
-
     outputCtx.globalCompositeOperation =
         "source-over";
 
 }
 
 
-/* =====================================
-   تسجيل الفيديو
-===================================== */
+/* =========================================
+   انتظار الفيديو
+========================================= */
+
+function waitForEvent(
+    element,
+    event
+){
+
+    return new Promise(
+        resolve => {
+
+            element.addEventListener(
+                event,
+                resolve,
+                {
+                    once:true
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   تسجيل WebM
+========================================= */
 
 async function recordVideo(
     bitrate,
@@ -927,13 +945,13 @@ async function recordVideo(
 ){
 
     const mime =
-        getMime();
+        getMimeType();
 
 
     if(!mime){
 
         throw new Error(
-            "متصفحك لا يدعم WebM."
+            "هذا المتصفح لا يدعم WebM."
         );
 
     }
@@ -947,12 +965,10 @@ async function recordVideo(
         new MediaRecorder(
             stream,
             {
-
                 mimeType:mime,
 
                 videoBitsPerSecond:
-                    Math.round(bitrate)
-
+                    Math.floor(bitrate)
             }
         );
 
@@ -961,11 +977,16 @@ async function recordVideo(
 
 
     recorder.ondataavailable =
-        function(e){
+        function(event){
 
-            if(e.data.size){
+            if(
+                event.data &&
+                event.data.size > 0
+            ){
 
-                chunks.push(e.data);
+                chunks.push(
+                    event.data
+                );
 
             }
 
@@ -973,18 +994,27 @@ async function recordVideo(
 
 
     const stopped =
-        new Promise(resolve => {
+        new Promise(
+            resolve => {
 
-            recorder.onstop =
-                resolve;
+                recorder.onstop =
+                    resolve;
 
-        });
+            }
+        );
 
 
-    recorder.start(100);
+    recorder.start(250);
 
 
     sourceVideo.currentTime = 0;
+
+
+    await waitForEvent(
+        sourceVideo,
+        "seeked"
+    );
+
 
     await sourceVideo.play();
 
@@ -993,264 +1023,300 @@ async function recordVideo(
         sourceVideo.duration;
 
 
-    const endTime =
-        duration;
+    const start =
+        performance.now();
 
 
-    let lastTime = -1;
+    /*
+       حلقة معالجة الفريمات
+    */
+
+    while(
+        sourceVideo.currentTime <
+        duration
+    ){
+
+        await processFrame();
 
 
-    return new Promise(
-        async resolve => {
+        /*
+           نعطي الـCanvas وقتًا
+           لالتقاط الفريم
+        */
 
-            async function render(){
-
-                if(
-                    sourceVideo.paused ||
-                    sourceVideo.ended ||
-                    sourceVideo.currentTime >= endTime
-                ){
-
-                    sourceVideo.pause();
-
-                    recorder.stop();
-
-                    await stopped;
-
-
-                    const blob =
-                        new Blob(
-                            chunks,
-                            {
-                                type:"video/webm"
-                            }
-                        );
-
-
-                    resolve(blob);
-
-                    return;
-
-                }
-
-
-                /*
-                   منع معالجة نفس الفريم
-                   أكثر من مرة
-                */
-
-                if(
-                    sourceVideo.currentTime !==
-                    lastTime
-                ){
-
-                    lastTime =
-                        sourceVideo.currentTime;
-
-                    await processFrame();
-
-                }
-
-
-                const percent =
-                    (
-                        sourceVideo.currentTime /
-                        duration
-                    ) * 100;
-
-
-                setStatus(
-
-                    "جاري معالجة الفيديو...",
-
-                    percent
-
-                );
-
-
+        await new Promise(
+            resolve =>
                 requestAnimationFrame(
-                    render
-                );
+                    resolve
+                )
+        );
 
-            }
+
+        const progress =
+            sourceVideo.currentTime /
+            duration *
+            100;
 
 
-            render();
+        setStatus(
+
+            "جاري معالجة الفيديو...",
+
+            progress
+
+        );
+
+
+        /*
+           حماية من التعليق
+        */
+
+        if(
+            performance.now() -
+            start >
+            120000
+        ){
+
+            recorder.stop();
+
+            sourceVideo.pause();
+
+            throw new Error(
+                "الفيديو طويل جدًا للمعالجة على هذا الجهاز."
+            );
 
         }
 
+    }
+
+
+    sourceVideo.pause();
+
+
+    /*
+       نعطي MediaRecorder
+       فرصة لالتقاط آخر فريم
+    */
+
+    await new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                150
+            )
+    );
+
+
+    recorder.stop();
+
+
+    await stopped;
+
+
+    stream.getTracks()
+        .forEach(
+            track =>
+                track.stop()
+        );
+
+
+    return new Blob(
+        chunks,
+        {
+            type:"video/webm"
+        }
     );
 
 }
 
 
-/* =====================================
-   تحديد Bitrate مناسب
-===================================== */
+/* =========================================
+   إضافة Padding إلى 64KB
+========================================= */
 
-function calculateBitrate(
-    duration
-){
+function makeExactly64KB(blob){
 
-    /*
-       64KB = 524288 bits
-
-       نترك مساحة بسيطة
-       للـWebM container.
-
-       الهدف حوالي 92%
-       من المساحة.
-    */
-
-    const availableBits =
-        64 * 1024 * 8 * 0.92;
-
-
-    let bitrate =
-        availableBits /
-        Math.max(
-            duration,
-            0.5
-        );
-
-
-    /*
-       حدود منطقية
-    */
-
-    bitrate =
-        Math.max(
-            8000,
-            bitrate
-        );
-
-
-    bitrate =
-        Math.min(
-            220000,
-            bitrate
-        );
-
-
-    return bitrate;
-
-}
-
-
-/* =====================================
-   Padding إلى 64KB
-===================================== */
-
-function padTo64KB(blob){
-
-    const target =
+    const TARGET =
         64 * 1024;
 
 
-    if(blob.size >= target){
+    /*
+       إذا كان أكبر،
+       لا نستطيع إضافة Padding.
+    */
+
+    if(blob.size > TARGET){
+
+        return null;
+
+    }
+
+
+    if(blob.size === TARGET){
 
         return blob;
 
     }
 
 
-    /*
-       نضيف Bytes في نهاية الـBlob.
-
-       هذا لا يعيد ضغط الفيديو
-       ولا يغير الفريمات.
-    */
-
-    const padding =
+    const extra =
         new Uint8Array(
-            target - blob.size
+            TARGET - blob.size
         );
 
 
     return new Blob(
-
         [
             blob,
-            padding
-
+            extra
         ],
-
         {
             type:"video/webm"
         }
-
     );
 
 }
 
 
-/* =====================================
-   إنشاء النسخة النهائية
-===================================== */
+/* =========================================
+   إنشاء أفضل نسخة تحت 64KB
+========================================= */
 
-async function createFinal(){
+async function createVideo(){
 
     const duration =
         sourceVideo.duration;
 
 
+    const LIMIT =
+        64 * 1024;
+
+
+    /*
+       نترك مساحة بسيطة للـContainer.
+    */
+
+    const targetBytes =
+        62 * 1024;
+
+
+    /*
+       نحسب Bitrate مبدئي عالي نسبيًا.
+    */
+
     let bitrate =
-        calculateBitrate(
-            duration
+        (
+            targetBytes *
+            8
+        ) /
+        Math.max(
+            duration,
+            .5
         );
 
 
     /*
-       محاولات الضغط
+       لا نبدأ بضغط سيئ.
+    */
+
+    bitrate =
+        Math.max(
+            12000,
+            bitrate
+        );
+
+
+    bitrate =
+        Math.min(
+            400000,
+            bitrate
+        );
+
+
+    /*
+       نحاول عدة مرات.
     */
 
     for(
         let attempt = 0;
-        attempt < 8;
+        attempt < 10;
         attempt++
     ){
 
         setStatus(
 
-            "جاري إنشاء نسخة عالية الجودة...",
+            "جاري التصدير بجودة عالية...",
 
-            10 + attempt * 5
+            5 + attempt * 4
 
         );
+
+
+        /*
+           في البداية 24FPS.
+        */
+
+        let fps = 24;
+
+
+        /*
+           فقط إذا احتجنا ضغطًا شديدًا،
+           نستخدم 20 ثم 15.
+        */
+
+        if(
+            bitrate < 30000
+        ){
+
+            fps = 20;
+
+        }
+
+        if(
+            bitrate < 15000
+        ){
+
+            fps = 15;
+
+        }
 
 
         const blob =
             await recordVideo(
                 bitrate,
-                24
+                fps
             );
 
 
         /*
-           ممتاز
+           إذا دخلنا تحت الحد
         */
 
         if(
             blob.size <=
-            64 * 1024
+            LIMIT
         ){
 
-            return padTo64KB(blob);
+            return makeExactly64KB(
+                blob
+            );
 
         }
 
 
         /*
-           إذا أكبر من 64KB
-           نقلل الـBitrate تدريجيًا
+           نحسب نسبة التصغير
         */
 
         const ratio =
-            (
-                64 * 1024
-            ) /
+            targetBytes /
             blob.size;
 
+
+        /*
+           نقلل الـBitrate
+           تدريجيًا وليس بشكل مفاجئ.
+        */
 
         bitrate =
             bitrate *
@@ -1258,14 +1324,9 @@ async function createFinal(){
             0.94;
 
 
-        /*
-           لا ننزل إلى Bitrate
-           منخفض جدًا بسرعة.
-        */
-
         bitrate =
             Math.max(
-                5000,
+                4500,
                 bitrate
             );
 
@@ -1273,38 +1334,45 @@ async function createFinal(){
 
 
     /*
-       محاولة أخيرة
+       محاولة أخيرة بأقل إعداد
     */
+
+    setStatus(
+        "جاري محاولة الوصول إلى 64KB...",
+        90
+    );
+
 
     const last =
         await recordVideo(
-            5000,
-            15
+            4500,
+            12
         );
 
 
     if(
-        last.size <=
-        64 * 1024
+        last.size <= LIMIT
     ){
 
-        return padTo64KB(last);
+        return makeExactly64KB(
+            last
+        );
 
     }
 
 
     throw new Error(
-        "الفيديو طويل أو معقد جدًا للوصول إلى 64KB مع الجودة المطلوبة."
+        "لم يمكن ضغط هذا الفيديو إلى 64KB مع إعدادات WebM المتاحة في المتصفح."
     );
 
 }
 
 
-/* =====================================
+/* =========================================
    رفع الفيديو
-===================================== */
+========================================= */
 
-input.addEventListener(
+videoInput.addEventListener(
     "change",
     async function(){
 
@@ -1325,43 +1393,75 @@ input.addEventListener(
             "none";
 
 
+        finalBlob = null;
+
+
+        if(finalURL){
+
+            URL.revokeObjectURL(
+                finalURL
+            );
+
+            finalURL = null;
+
+        }
+
+
         try{
 
             setStatus(
-                "جاري تحميل الفيديو...",
+                "جاري قراءة الفيديو...",
                 3
             );
-
-
-            if(finalURL){
-
-                URL.revokeObjectURL(
-                    finalURL
-                );
-
-                finalURL = null;
-
-            }
-
-
-            finalBlob = null;
 
 
             const url =
                 URL.createObjectURL(file);
 
 
-            sourceVideo.src = url;
+            sourceVideo.src =
+                url;
 
+
+            /*
+               انتظار البيانات
+            */
 
             await new Promise(
                 (resolve,reject)=>{
 
-                    sourceVideo.onloadedmetadata =
-                        resolve;
+                    const loaded =
+                        function(){
 
-                    sourceVideo.onerror =
-                        reject;
+                            resolve();
+
+                        };
+
+
+                    const failed =
+                        function(){
+
+                            reject(
+                                new Error(
+                                    "تعذر قراءة الفيديو."
+                                )
+                            );
+
+                        };
+
+
+                    sourceVideo.addEventListener(
+                        "loadedmetadata",
+                        loaded,
+                        {once:true}
+                    );
+
+
+                    sourceVideo.addEventListener(
+                        "error",
+                        failed,
+                        {once:true}
+                    );
 
                 }
             );
@@ -1373,7 +1473,7 @@ input.addEventListener(
             ){
 
                 throw new Error(
-                    "تعذر قراءة الفيديو."
+                    "أبعاد الفيديو غير صالحة."
                 );
 
             }
@@ -1386,71 +1486,100 @@ input.addEventListener(
 
 
             /*
-               تجهيز أول فريم
+               تحميل أول فريم
             */
 
             sourceVideo.currentTime = 0;
 
+
             await new Promise(
                 resolve => {
 
-                    sourceVideo.onseeked =
-                        resolve;
+                    if(
+                        sourceVideo.readyState >= 2
+                    ){
+
+                        resolve();
+
+                    }else{
+
+                        sourceVideo.addEventListener(
+                            "loadeddata",
+                            resolve,
+                            {once:true}
+                        );
+
+                    }
 
                 }
             );
 
 
+            /*
+               اختبار إزالة الخلفية
+            */
+
             await processFrame();
 
 
             setStatus(
-                "جاري تحسين الحواف...",
-                15
-            );
-
-
-            await new Promise(
-                r => setTimeout(r,300)
+                "تم اكتشاف الشخصية ✓",
+                12
             );
 
 
             /*
-               إنشاء الفيديو
+               إنشاء WebM
             */
 
             finalBlob =
-                await createFinal();
+                await createVideo();
 
 
             if(
-                finalBlob.size >
-                64 * 1024
+                !finalBlob
             ){
 
                 throw new Error(
-                    "تعذر الوصول إلى 64KB."
+                    "فشل إنشاء الملف."
                 );
 
             }
 
 
             /*
-               تأكيد الحجم
+               تأكيد 64KB
             */
 
             if(
-                finalBlob.size <
+                finalBlob.size !==
                 64 * 1024
             ){
 
-                finalBlob =
-                    padTo64KB(
+                const exact =
+                    makeExactly64KB(
                         finalBlob
                     );
 
+
+                if(!exact){
+
+                    throw new Error(
+                        "الملف تجاوز 64KB."
+                    );
+
+                }
+
+
+                finalBlob =
+                    exact;
+
             }
 
+
+            /*
+               معاينة
+            */
 
             finalURL =
                 URL.createObjectURL(
@@ -1476,7 +1605,7 @@ input.addEventListener(
 
 
             setStatus(
-                "تم الانتهاء ✓",
+                "تم الانتهاء بنجاح ✓",
                 100
             );
 
@@ -1485,18 +1614,23 @@ input.addEventListener(
                تشغيل المعاينة
             */
 
-            resultVideo.play()
-                .catch(()=>{});
+            resultVideo
+                .play()
+                .catch(
+                    ()=>{}
+                );
 
 
         }catch(error){
 
-            console.error(error);
+            console.error(
+                error
+            );
 
 
             showError(
                 error.message ||
-                "حدث خطأ أثناء معالجة الفيديو."
+                "حدث خطأ غير معروف."
             );
 
 
@@ -1509,9 +1643,9 @@ input.addEventListener(
 );
 
 
-/* =====================================
+/* =========================================
    تحميل
-===================================== */
+========================================= */
 
 downloadBtn.addEventListener(
     "click",
@@ -1549,9 +1683,11 @@ downloadBtn.addEventListener(
 
         setTimeout(
             ()=>{
-                URL.revokeObjectURL(url);
+                URL.revokeObjectURL(
+                    url
+                );
             },
-            1000
+            1500
         );
 
     }
