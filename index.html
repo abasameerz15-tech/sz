@@ -2,1133 +2,2031 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>إزالة خلفية الفيديو</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js"></script>
+<title>منصة الاشتراك الإجباري</title>
 
 <style>
 *{
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#07080d;
+    --card:rgba(18,20,30,.88);
+    --card2:#11131d;
+    --border:rgba(255,255,255,.09);
+    --text:#fff;
+    --muted:#9da3b5;
+    --primary:#7c5cff;
+    --primary2:#5d3df2;
+    --success:#22c55e;
+    --danger:#ef4444;
 }
 
 body{
-    margin:0;
     min-height:100vh;
-    background:#080808;
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:18px;
+    font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 50% -10%,#39258a 0%,transparent 35%),
+        radial-gradient(circle at 100% 80%,#17245c 0%,transparent 30%),
+        var(--bg);
+    overflow-x:hidden;
 }
 
-.app{
-    width:100%;
-    max-width:520px;
-    background:#111;
-    border:1px solid #292929;
+body:before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:rgba(124,92,255,.08);
+    filter:blur(100px);
+    border-radius:50%;
+    top:-250px;
+    left:-150px;
+    pointer-events:none;
+}
+
+.container{
+    width:min(720px,92%);
+    margin:auto;
+    padding:35px 0 70px;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:25px;
+    animation:fadeUp .6s ease;
+}
+
+.logo{
+    width:72px;
+    height:72px;
+    margin:0 auto 18px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    background:linear-gradient(145deg,var(--primary),#3f2ab6);
+    box-shadow:
+        0 15px 50px rgba(124,92,255,.35),
+        inset 0 1px rgba(255,255,255,.3);
+}
+
+.hero h1{
+    font-size:27px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.9;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
     border-radius:24px;
     padding:22px;
-    box-shadow:0 20px 70px #000;
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.04);
+    backdrop-filter:blur(18px);
+    animation:fadeUp .5s ease;
 }
 
-h1{
-    text-align:center;
-    margin:4px 0 8px;
-    font-size:25px;
+.hidden{
+    display:none!important;
 }
 
-.sub{
-    text-align:center;
-    color:#999;
-    font-size:14px;
+.section-title{
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.section-description{
+    color:var(--muted);
+    font-size:13px;
     margin-bottom:20px;
 }
 
-.upload{
-    border:2px dashed #444;
-    border-radius:18px;
-    padding:28px 15px;
-    text-align:center;
-    cursor:pointer;
+.input-label{
+    display:block;
+    margin-bottom:9px;
+    font-size:13px;
+    color:#dce0eb;
+}
+
+textarea,
+input{
+    width:100%;
+    border:1px solid var(--border);
+    outline:none;
+    color:#fff;
+    background:#090b12;
+    border-radius:15px;
+    padding:15px;
+    font-size:14px;
     transition:.2s;
 }
 
-.upload:hover{
-    border-color:#777;
-    background:#151515;
+textarea{
+    min-height:220px;
+    resize:vertical;
+    direction:ltr;
+    text-align:left;
+    font-family:Consolas,monospace;
 }
 
-.upload strong{
-    display:block;
-    font-size:18px;
-    margin-bottom:7px;
+textarea:focus,
+input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(124,92,255,.12);
 }
 
-.upload span{
-    color:#888;
+textarea::placeholder,
+input::placeholder{
+    color:#626878;
+}
+
+.btn{
+    width:100%;
+    border:0;
+    outline:0;
+    border-radius:15px;
+    padding:15px 18px;
+    margin-top:15px;
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    box-shadow:0 12px 30px rgba(93,61,242,.25);
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:scale(.98);
+}
+
+.btn.secondary{
+    background:#181b26;
+    box-shadow:none;
+    border:1px solid var(--border);
+}
+
+.platforms{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.platform{
+    min-height:90px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#0d0f17;
+    color:#fff;
+    cursor:pointer;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.2s;
+}
+
+.platform:hover{
+    transform:translateY(-2px);
+    border-color:rgba(124,92,255,.5);
+}
+
+.platform.selected{
+    background:rgba(124,92,255,.13);
+    border-color:var(--primary);
+}
+
+.platform .icon{
+    font-size:27px;
+}
+
+.check{
+    position:absolute;
+    top:9px;
+    left:9px;
+    width:23px;
+    height:23px;
+    border-radius:50%;
+    background:#222632;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-size:13px;
 }
 
-input[type=file]{
-    display:none;
+.platform.selected .check{
+    background:var(--success);
 }
 
-.previewBox{
-    display:none;
-    margin-top:18px;
-    background:#080808;
-    border-radius:18px;
-    padding:12px;
+.requirement{
+    border:1px solid var(--border);
+    background:#0c0e15;
+    border-radius:19px;
+    padding:17px;
+    margin-bottom:14px;
 }
 
-video{
-    width:100%;
-    max-height:330px;
+.requirement-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.requirement-icon{
+    width:40px;
+    height:40px;
     border-radius:12px;
-    background:#000;
-    display:block;
+    background:#171a25;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
 }
 
-.info{
-    margin-top:12px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
+.requirement h3{
+    font-size:15px;
 }
 
-.info div{
-    background:#181818;
-    border-radius:10px;
-    padding:10px;
-    text-align:center;
+.requirement p{
     font-size:12px;
-    color:#aaa;
-}
-
-.info b{
-    display:block;
-    color:#fff;
+    color:var(--muted);
     margin-top:4px;
 }
 
-button{
-    width:100%;
-    border:0;
-    border-radius:13px;
+.field{
+    margin-top:12px;
+}
+
+.success-box{
+    text-align:center;
+    padding:20px;
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.2);
+    border-radius:18px;
+}
+
+.success-icon{
+    font-size:40px;
+    margin-bottom:8px;
+}
+
+.link-box{
+    direction:ltr;
+    text-align:left;
+    word-break:break-all;
     padding:14px;
+    background:#080a10;
+    border:1px solid var(--border);
+    border-radius:14px;
+    color:#a99cff;
+    font-size:12px;
     margin-top:14px;
-    font-size:16px;
+}
+
+.viewer-top{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.viewer-top .shield{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.viewer-top h1{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.viewer-top p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.9;
+}
+
+.task{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:15px;
+    border-radius:17px;
+    border:1px solid var(--border);
+    background:#0d0f16;
+    margin-bottom:11px;
+    transition:.2s;
+}
+
+.task-icon{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    background:#181b26;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    flex-shrink:0;
+}
+
+.task-content{
+    flex:1;
+}
+
+.task-content strong{
+    display:block;
+    font-size:14px;
+}
+
+.task-content span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-top:5px;
+}
+
+.task button{
+    width:auto;
+    min-width:85px;
+    margin:0;
+    padding:11px 13px;
+    border-radius:12px;
+    border:0;
+    color:#fff;
+    background:var(--primary);
     font-weight:bold;
     cursor:pointer;
-    background:#fff;
-    color:#000;
 }
 
-button:disabled{
-    opacity:.4;
-    cursor:not-allowed;
+.task.locked{
+    opacity:.42;
 }
 
-.progress{
-    display:none;
-    margin-top:16px;
+.task.completed{
+    border-color:rgba(34,197,94,.35);
 }
 
-.progressText{
-    display:flex;
-    justify-content:space-between;
-    color:#aaa;
-    font-size:13px;
-    margin-bottom:7px;
+.task.completed .task-icon{
+    background:rgba(34,197,94,.15);
 }
 
-.bar{
-    height:8px;
-    background:#222;
-    border-radius:20px;
-    overflow:hidden;
+.task.completed button{
+    background:var(--success);
 }
 
-.barInner{
-    width:0%;
-    height:100%;
-    background:#fff;
-    transition:.1s;
-}
-
-.status{
-    text-align:center;
-    margin-top:12px;
-    color:#aaa;
-    font-size:13px;
-    min-height:20px;
-}
-
-.output{
-    display:none;
+.unlock{
     margin-top:18px;
-    background:#151515;
-    border-radius:18px;
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+    box-shadow:0 15px 35px rgba(34,197,94,.2);
+}
+
+.copy-area{
+    direction:ltr;
+    text-align:left;
+    background:#080a10;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:18px;
+    min-height:180px;
+    white-space:pre-wrap;
+    word-break:break-word;
+
+    /* منع تحديد النص */
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+.action-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.action-btn{
+    border:1px solid var(--border);
+    background:#151823;
+    color:#fff;
+    border-radius:15px;
     padding:14px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.output canvas{
-    width:180px;
-    height:180px;
-    display:block;
-    margin:auto;
-    border-radius:12px;
-    background:
-      linear-gradient(45deg,#333 25%,transparent 25%),
-      linear-gradient(-45deg,#333 25%,transparent 25%),
-      linear-gradient(45deg,transparent 75%,#333 75%),
-      linear-gradient(-45deg,transparent 75%,#333 75%);
-    background-size:20px 20px;
-    background-position:0 0,0 10px,10px -10px,-10px 0;
+.action-btn.primary{
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    border:0;
 }
 
-.download{
-    background:#fff;
+.notice{
+    padding:13px 15px;
+    border-radius:14px;
+    background:rgba(124,92,255,.08);
+    border:1px solid rgba(124,92,255,.16);
+    color:#c9c3ff;
+    font-size:12px;
+    line-height:1.8;
+    margin-bottom:15px;
 }
 
-.note{
-    margin-top:15px;
-    text-align:center;
-    color:#666;
-    font-size:11px;
-    line-height:1.7;
+.toast{
+    position:fixed;
+    bottom:22px;
+    left:50%;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    background:#151823;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:13px 20px;
+    font-size:13px;
+    z-index:9999;
+    transition:.25s;
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+.loading{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    color:var(--muted);
+    padding:20px;
+}
+
+.spinner{
+    width:18px;
+    height:18px;
+    border:2px solid #333746;
+    border-top-color:var(--primary);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:500px){
+    .container{
+        width:94%;
+        padding-top:25px;
+    }
+
+    .card{
+        padding:17px;
+        border-radius:21px;
+    }
+
+    .hero h1{
+        font-size:23px;
+    }
+
+    .platforms{
+        gap:9px;
+    }
+
+    .platform{
+        min-height:82px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-    <h1>إزالة خلفية الفيديو</h1>
+    <!-- =========================
+         CREATE PAGE
+    ========================== -->
 
-    <div class="sub">
-        يحافظ على مدة وحركة الفيديو قدر الإمكان
-    </div>
+    <section id="createPage">
 
-    <label class="upload" for="file">
-        <strong>📁 اختر فيديو</strong>
-        <span>MP4 / WebM / MOV</span>
-    </label>
+        <div class="hero">
+            <div class="logo">🔐</div>
 
-    <input id="file" type="file" accept="video/*">
+            <h1>اهلًا بك في موقع الاشتراك الإجباري</h1>
 
-    <div class="previewBox" id="previewBox">
+            <p>
+                ارفع نصك واجعله مجاني مقابل شروط بسيطة
+            </p>
+        </div>
 
-        <video id="video"
-               playsinline
-               muted
-               controls></video>
+        <!-- STEP 1 -->
 
-        <div class="info">
-            <div>
-                المدة
-                <b id="duration">--</b>
+        <div id="step1" class="card">
+
+            <div class="section-title">
+                📝 رفع النص
             </div>
 
-            <div>
-                الدقة
-                <b id="resolution">--</b>
+            <div class="section-description">
+                اكتب النص الذي تريد حمايته بشروط الاشتراك.
             </div>
+
+            <button
+                class="btn"
+                onclick="showStep(2)"
+            >
+                رفع نص
+            </button>
+
         </div>
 
-        <button id="startBtn">
-            إزالة الخلفية
-        </button>
 
-    </div>
+        <!-- STEP 2 -->
 
-    <div class="progress" id="progress">
+        <div id="step2" class="card hidden">
 
-        <div class="progressText">
-            <span id="status">جاري المعالجة...</span>
-            <span id="percent">0%</span>
+            <div class="section-title">
+                ✍️ اكتب نصك
+            </div>
+
+            <div class="section-description">
+                يجب أن يبدأ النص بـ <b>loadstring</b>
+            </div>
+
+            <label class="input-label">
+                النص
+            </label>
+
+            <textarea
+                id="scriptText"
+                placeholder="loadstring(game:HttpGet('https://example.com/script.lua'))()"
+                spellcheck="false"
+            ></textarea>
+
+            <button
+                class="btn"
+                onclick="validateText()"
+            >
+                رفع
+            </button>
+
+            <button
+                class="btn secondary"
+                onclick="backTo(1)"
+            >
+                رجوع
+            </button>
+
         </div>
 
-        <div class="bar">
-            <div class="barInner" id="barInner"></div>
+
+        <!-- STEP 3 -->
+
+        <div id="step3" class="card hidden">
+
+            <div class="section-title">
+                📱 اختر الاشتراكات
+            </div>
+
+            <div class="section-description">
+                يمكنك اختيار منصة واحدة أو عدة منصات.
+            </div>
+
+            <div class="platforms">
+
+                <button
+                    class="platform"
+                    data-platform="youtube"
+                    onclick="togglePlatform(this)"
+                >
+                    <span class="check">✓</span>
+                    <span class="icon">▶️</span>
+                    <span>يوتيوب</span>
+                </button>
+
+                <button
+                    class="platform"
+                    data-platform="tiktok"
+                    onclick="togglePlatform(this)"
+                >
+                    <span class="check">✓</span>
+                    <span class="icon">🎵</span>
+                    <span>تيك توك</span>
+                </button>
+
+                <button
+                    class="platform"
+                    data-platform="instagram"
+                    onclick="togglePlatform(this)"
+                >
+                    <span class="check">✓</span>
+                    <span class="icon">📸</span>
+                    <span>انستغرام</span>
+                </button>
+
+                <button
+                    class="platform"
+                    data-platform="telegram"
+                    onclick="togglePlatform(this)"
+                >
+                    <span class="check">✓</span>
+                    <span class="icon">✈️</span>
+                    <span>تيليجرام</span>
+                </button>
+
+                <button
+                    class="platform"
+                    data-platform="facebook"
+                    onclick="togglePlatform(this)"
+                >
+                    <span class="check">✓</span>
+                    <span class="icon">ⓕ</span>
+                    <span>فيسبوك</span>
+                </button>
+
+            </div>
+
+            <button
+                class="btn"
+                onclick="startRequirements()"
+            >
+                بدء العملية
+            </button>
+
+            <button
+                class="btn secondary"
+                onclick="backTo(2)"
+            >
+                رجوع
+            </button>
+
         </div>
 
-    </div>
 
-    <div class="output" id="output">
+        <!-- STEP 4 -->
 
-        <canvas id="previewCanvas"
-                width="100"
-                height="100"></canvas>
+        <div id="step4" class="card hidden">
 
-        <button class="download" id="downloadBtn">
-            ⬇️ تحميل WebM شفاف
-        </button>
+            <div class="section-title">
+                ⚙️ إعداد الشروط
+            </div>
 
-    </div>
+            <div class="section-description">
+                أضف الروابط التي تريد أن يفتحها المستخدم لإكمال الشروط.
+            </div>
 
-    <div class="status" id="mainStatus"></div>
+            <div id="requirementsContainer"></div>
 
-    <div class="note">
-        تتم المعالجة داخل المتصفح ولا يتم رفع الفيديو إلى سيرفر.
-    </div>
+            <button
+                class="btn"
+                onclick="confirmCreation()"
+            >
+                تأكيد
+            </button>
+
+            <button
+                class="btn secondary"
+                onclick="backTo(3)"
+            >
+                رجوع
+            </button>
+
+        </div>
+
+
+        <!-- STEP 5 -->
+
+        <div id="step5" class="card hidden">
+
+            <div class="success-box">
+
+                <div class="success-icon">
+                    ✅
+                </div>
+
+                <h2>تم إنشاء الرابط</h2>
+
+                <p style="color:var(--muted);margin-top:8px;font-size:13px;">
+                    تم إنشاء رابط جهازك الآن يمكنك مشاركته
+                </p>
+
+                <div
+                    id="generatedLink"
+                    class="link-box"
+                ></div>
+
+                <button
+                    class="btn"
+                    onclick="copyGeneratedLink()"
+                >
+                    📋 نسخ الرابط
+                </button>
+
+                <button
+                    class="btn secondary"
+                    onclick="location.reload()"
+                >
+                    إنشاء رابط جديد
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         VIEWER PAGE
+    ========================== -->
+
+    <section id="viewerPage" class="hidden">
+
+        <div class="viewer-top">
+
+            <div class="shield">
+                🔐
+            </div>
+
+            <h1>
+                يجب عمل الشروط بشكل صحيحه
+            </h1>
+
+            <p>
+                قم بتنفيذ الشروط بالترتيب والبقاء في
+                التطبيق الذي يتم نقلك إليه لمدة
+                <b>5 ثوانٍ</b> حتى يتم التحقق من إنجاز المتطلب.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div id="tasksContainer"></div>
+
+            <button
+                id="unlockButton"
+                class="btn unlock hidden"
+                onclick="unlockContent()"
+            >
+                🔓 فتح القفل
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CONTENT PAGE
+    ========================== -->
+
+    <section id="contentPage" class="hidden">
+
+        <div class="hero">
+
+            <div class="logo">
+                🔓
+            </div>
+
+            <h1>
+                تم فتح النص
+            </h1>
+
+            <p>
+                يمكنك الآن نسخ النص أو مشاركته.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <div
+                id="finalText"
+                class="copy-area"
+                oncontextmenu="return false"
+            ></div>
+
+            <div class="action-row">
+
+                <button
+                    class="action-btn primary"
+                    onclick="copyFinalText()"
+                >
+                    📋 نسخ
+                </button>
+
+                <button
+                    class="action-btn"
+                    onclick="shareFinalText()"
+                >
+                    ↗️ مشاركة
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
 
 
+<div id="toast" class="toast"></div>
+
+
 <script>
 
-const fileInput = document.getElementById("file");
-const video = document.getElementById("video");
-const previewBox = document.getElementById("previewBox");
-const startBtn = document.getElementById("startBtn");
+/* =========================================
+   FIREBASE
+========================================= */
 
-const durationEl = document.getElementById("duration");
-const resolutionEl = document.getElementById("resolution");
-
-const progress = document.getElementById("progress");
-const statusEl = document.getElementById("status");
-const percentEl = document.getElementById("percent");
-const barInner = document.getElementById("barInner");
-
-const output = document.getElementById("output");
-const previewCanvas = document.getElementById("previewCanvas");
-const downloadBtn = document.getElementById("downloadBtn");
-const mainStatus = document.getElementById("mainStatus");
+const FIREBASE_URL =
+"https://save-link-34c39-default-rtdb.firebaseio.com";
 
 
-let fileURL = null;
-let outputBlob = null;
+/* =========================================
+   DATA
+========================================= */
 
-let sourceFPS = 30;
+let currentStep = 1;
 
-let segmentationReady = false;
-let processing = false;
-let recorder = null;
-let chunks = [];
+let selectedPlatforms = [];
 
-let lastResult = null;
+let currentData = null;
 
+let completedTasks = [];
 
-/* =========================
-   CANVAS
-========================= */
-
-const inputCanvas = document.createElement("canvas");
-const inputCtx = inputCanvas.getContext("2d", {
-    willReadFrequently:false
-});
-
-const canvas = document.createElement("canvas");
-canvas.width = 100;
-canvas.height = 100;
-
-const ctx = canvas.getContext("2d", {
-    alpha:true,
-    willReadFrequently:false
-});
+let activeTimer = null;
 
 
-/* =========================
-   MEDIA PIPE
-========================= */
+/* =========================================
+   PLATFORM DATA
+========================================= */
 
-const selfieSegmentation = new SelfieSegmentation({
+const PLATFORM_INFO = {
 
-    locateFile: function(file){
+    youtube:{
+        name:"يوتيوب",
+        icon:"▶️"
+    },
 
-        return "https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/" + file;
+    tiktok:{
+        name:"تيك توك",
+        icon:"🎵"
+    },
 
+    instagram:{
+        name:"انستغرام",
+        icon:"📸"
+    },
+
+    telegram:{
+        name:"تيليجرام",
+        icon:"✈️"
+    },
+
+    facebook:{
+        name:"فيسبوك",
+        icon:"ⓕ"
     }
 
-});
-
-selfieSegmentation.setOptions({
-    modelSelection:1
-});
+};
 
 
-/*
-   يتم استدعاؤها بعد انتهاء معالجة الفريم
-*/
-selfieSegmentation.onResults(function(results){
+/* =========================================
+   TOAST
+========================================= */
 
-    if(!processing){
-        return;
-    }
+function toast(message){
 
-    drawTransparent(results);
+    const box =
+        document.getElementById("toast");
 
-});
+    box.textContent = message;
 
+    box.classList.add("show");
 
-segmentationReady = true;
-
-
-/* =========================
-   DRAW TRANSPARENT FRAME
-========================= */
-
-function drawTransparent(results){
-
-    ctx.clearRect(0,0,100,100);
-
-    /*
-       رسم الصورة بحجم يحافظ على كامل الفيديو
-       بدون تمديد الشخصية
-    */
-
-    const sw = inputCanvas.width;
-    const sh = inputCanvas.height;
-
-    const scale = Math.min(
-        100 / sw,
-        100 / sh
-    );
-
-    const dw = sw * scale;
-    const dh = sh * scale;
-
-    const dx = (100 - dw) / 2;
-    const dy = (100 - dh) / 2;
-
-
-    /*
-       أولاً نرسم الصورة
-    */
-
-    ctx.save();
-
-    ctx.drawImage(
-        results.image,
-        dx,
-        dy,
-        dw,
-        dh
-    );
-
-    ctx.globalCompositeOperation = "destination-in";
-
-    /*
-       قناع الشخص
-    */
-
-    ctx.drawImage(
-        results.segmentationMask,
-        dx,
-        dy,
-        dw,
-        dh
-    );
-
-    ctx.restore();
-
+    setTimeout(()=>{
+        box.classList.remove("show");
+    },2500);
 }
 
 
-/* =========================
-   FILE
-========================= */
-
-fileInput.addEventListener("change", async function(){
-
-    const file = this.files[0];
-
-    if(!file){
-        return;
-    }
-
-    if(!file.type.startsWith("video/")){
-        alert("اختر ملف فيديو.");
-        return;
-    }
-
-    if(fileURL){
-        URL.revokeObjectURL(fileURL);
-    }
-
-    fileURL = URL.createObjectURL(file);
-
-    video.src = fileURL;
-
-    previewBox.style.display = "block";
-    output.style.display = "none";
-
-    mainStatus.textContent = "جاري تجهيز الفيديو...";
-
-    await waitVideoMetadata();
-
-    durationEl.textContent =
-        formatTime(video.duration);
-
-    resolutionEl.textContent =
-        video.videoWidth + " × " + video.videoHeight;
-
-    mainStatus.textContent = "";
-
-});
-
-
-function waitVideoMetadata(){
-
-    return new Promise(resolve => {
-
-        if(video.readyState >= 1){
-
-            resolve();
-            return;
-
-        }
-
-        video.addEventListener(
-            "loadedmetadata",
-            resolve,
-            {once:true}
-        );
-
-    });
-
-}
-
-
-/* =========================
-   FPS ESTIMATION
-========================= */
-
-async function estimateFPS(){
-
-    /*
-       بعض المتصفحات لا توفر FPS الأصلي
-       لذلك نحاول حسابه من mediaTime
-    */
-
-    if(!("requestVideoFrameCallback" in HTMLVideoElement.prototype)){
-
-        return 30;
-
-    }
-
-
-    return new Promise(async resolve => {
-
-        const times = [];
-
-        let lastTime = null;
-
-        let startWall = performance.now();
-
-
-        function callback(now, metadata){
-
-            if(lastTime !== null){
-
-                const diff =
-                    metadata.mediaTime - lastTime;
-
-                if(diff > 0 && diff < 1){
-
-                    times.push(diff);
-
-                }
-
-            }
-
-            lastTime = metadata.mediaTime;
-
-
-            if(
-                times.length >= 20 ||
-                performance.now() - startWall > 1000
-            ){
-
-                let fps = 30;
-
-                if(times.length > 3){
-
-                    const sorted = [...times].sort(
-                        (a,b)=>a-b
-                    );
-
-                    const median =
-                        sorted[
-                            Math.floor(sorted.length/2)
-                        ];
-
-                    if(median > 0){
-
-                        fps = 1 / median;
-
-                    }
-
-                }
-
-                fps = Math.round(
-                    Math.max(1,Math.min(60,fps))
-                );
-
-                resolve(fps);
-
-                return;
-
-            }
-
-            video.requestVideoFrameCallback(callback);
-
-        }
-
-
-        video.currentTime = 0;
-
-        video.play().then(()=>{
-
-            video.requestVideoFrameCallback(callback);
-
-        }).catch(()=>{
-
-            resolve(30);
-
+/* =========================================
+   STEPS
+========================================= */
+
+function showStep(step){
+
+    document
+        .querySelectorAll(
+            "#createPage > .card"
+        )
+        .forEach(card=>{
+            card.classList.add("hidden");
         });
 
+    const target =
+        document.getElementById(
+            "step" + step
+        );
 
-    }).finally(()=>{
+    if(target){
+        target.classList.remove("hidden");
+    }
 
-        video.pause();
+    currentStep = step;
 
-        try{
-            video.currentTime = 0;
-        }catch(e){}
-
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
     });
-
 }
 
 
-/* =========================
-   START
-========================= */
+function backTo(step){
+    showStep(step);
+}
 
-startBtn.addEventListener("click", async function(){
 
-    if(processing){
+/* =========================================
+   VALIDATE TEXT
+========================================= */
+
+function validateText(){
+
+    const text =
+        document
+        .getElementById("scriptText")
+        .value
+        .trim();
+
+    if(!text){
+
+        toast("❌ اكتب النص أولًا");
+
         return;
     }
 
-    if(!video.duration){
-        alert("الفيديو غير جاهز.");
-        return;
-    }
+    if(
+        !text
+        .toLowerCase()
+        .startsWith("loadstring")
+    ){
 
-    if(video.duration > 3.0){
-
-        alert(
-            "الفيديو أطول من 3 ثوانٍ.\n\n" +
-            "Telegram Video Stickers / Custom Emoji لها حد أقصى 3 ثوانٍ."
+        toast(
+            "❌ يجب أن يبدأ النص بـ loadstring"
         );
 
         return;
     }
 
+    showStep(3);
+}
 
-    processing = true;
 
-    startBtn.disabled = true;
+/* =========================================
+   PLATFORM SELECT
+========================================= */
 
-    progress.style.display = "block";
+function togglePlatform(button){
 
-    output.style.display = "none";
+    const platform =
+        button.dataset.platform;
 
-    statusEl.textContent =
-        "جاري معرفة معدل الإطارات...";
+    button.classList.toggle("selected");
 
-    percentEl.textContent = "0%";
+    if(
+        selectedPlatforms.includes(platform)
+    ){
 
-    barInner.style.width = "0%";
+        selectedPlatforms =
+            selectedPlatforms.filter(
+                p => p !== platform
+            );
+
+    }else{
+
+        selectedPlatforms.push(platform);
+
+    }
+}
+
+
+/* =========================================
+   CREATE REQUIREMENTS
+========================================= */
+
+function startRequirements(){
+
+    if(selectedPlatforms.length === 0){
+
+        toast(
+            "❌ اختر منصة واحدة على الأقل"
+        );
+
+        return;
+    }
+
+    const container =
+        document.getElementById(
+            "requirementsContainer"
+        );
+
+    container.innerHTML = "";
+
+    selectedPlatforms.forEach(
+        platform => {
+
+            const info =
+                PLATFORM_INFO[platform];
+
+            const div =
+                document.createElement("div");
+
+            div.className = "requirement";
+
+            div.innerHTML = `
+
+                <div class="requirement-header">
+
+                    <div class="requirement-icon">
+                        ${info.icon}
+                    </div>
+
+                    <div>
+                        <h3>
+                            ضع شروط ${info.name}
+                        </h3>
+
+                        <p>
+                            أضف الروابط المطلوبة
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="field">
+
+                    <label class="input-label">
+                        رابط ${info.name}
+                    </label>
+
+                    <input
+                        type="url"
+                        id="${platform}_subscribe"
+                        placeholder="ضع رابط ${info.name} لجعلها اشتراك إجباري"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label class="input-label">
+                        رابط الفيديو
+                    </label>
+
+                    <input
+                        type="url"
+                        id="${platform}_like"
+                        placeholder="ضع رابط الفيديو لجعل اللايك إجباري"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label class="input-label">
+                        رابط التعليق
+                    </label>
+
+                    <input
+                        type="url"
+                        id="${platform}_comment"
+                        placeholder="ضع رابط الفيديو لجعل التعليق إجباري"
+                    >
+
+                </div>
+
+            `;
+
+            container.appendChild(div);
+
+        }
+    );
+
+    showStep(4);
+}
+
+
+/* =========================================
+   SAFE ID
+========================================= */
+
+function makeId(){
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+
+    let result = "";
+
+    for(let i=0;i<10;i++){
+
+        result +=
+            chars[
+                Math.floor(
+                    Math.random()*chars.length
+                )
+            ];
+
+    }
+
+    return result;
+}
+
+
+/* =========================================
+   COLLECT REQUIREMENTS
+========================================= */
+
+function collectRequirements(){
+
+    const requirements = [];
+
+    selectedPlatforms.forEach(
+        platform => {
+
+            const subscribe =
+                document
+                .getElementById(
+                    platform + "_subscribe"
+                )
+                ?.value
+                .trim() || "";
+
+            const like =
+                document
+                .getElementById(
+                    platform + "_like"
+                )
+                ?.value
+                .trim() || "";
+
+            const comment =
+                document
+                .getElementById(
+                    platform + "_comment"
+                )
+                ?.value
+                .trim() || "";
+
+
+            if(subscribe){
+
+                requirements.push({
+
+                    platform,
+                    type:"subscribe",
+                    title:
+                        "اشتراك إجباري - " +
+                        PLATFORM_INFO[platform].name,
+                    url:subscribe
+
+                });
+
+            }
+
+
+            if(like){
+
+                requirements.push({
+
+                    platform,
+                    type:"like",
+                    title:
+                        "لايك إجباري - " +
+                        PLATFORM_INFO[platform].name,
+                    url:like
+
+                });
+
+            }
+
+
+            if(comment){
+
+                requirements.push({
+
+                    platform,
+                    type:"comment",
+                    title:
+                        "تعليق إجباري - " +
+                        PLATFORM_INFO[platform].name,
+                    url:comment
+
+                });
+
+            }
+
+        }
+    );
+
+    return requirements;
+}
+
+
+/* =========================================
+   CONFIRM
+========================================= */
+
+async function confirmCreation(){
+
+    const text =
+        document
+        .getElementById("scriptText")
+        .value
+        .trim();
+
+    const requirements =
+        collectRequirements();
+
+    if(requirements.length === 0){
+
+        toast(
+            "❌ أضف شرطًا واحدًا على الأقل"
+        );
+
+        return;
+    }
+
+    const id = makeId();
+
+    const data = {
+
+        id,
+
+        text,
+
+        requirements,
+
+        createdAt:
+            Date.now()
+
+    };
 
 
     try{
 
-        /*
-           نحاول معرفة FPS الحقيقي
-        */
+        toast("⏳ جاري حفظ البيانات...");
 
-        sourceFPS = await estimateFPS();
+        const response =
+            await fetch(
+                FIREBASE_URL +
+                "/links/" +
+                id +
+                ".json",
+                {
+                    method:"PUT",
 
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
 
-        statusEl.textContent =
-            "FPS: " + sourceFPS +
-            " — جاري إزالة الخلفية...";
-
-
-        /*
-           حجم المعالجة الداخلي يكون بدقة الفيديو
-           ثم نخفضه فقط في الإخراج النهائي.
-        */
-
-        inputCanvas.width =
-            video.videoWidth;
-
-        inputCanvas.height =
-            video.videoHeight;
+                    body:
+                        JSON.stringify(data)
+                }
+            );
 
 
-        /*
-           نستخدم captureStream بنفس FPS المصدر
-        */
-
-        const stream =
-            canvas.captureStream(sourceFPS);
-
-
-        /*
-           Telegram يحتاج VP9
-        */
-
-        let mimeType = "";
-
-        const possibleTypes = [
-
-            "video/webm;codecs=vp9",
-
-            "video/webm;codecs=vp09"
-
-        ];
-
-
-        for(const type of possibleTypes){
-
-            if(
-                MediaRecorder.isTypeSupported(type)
-            ){
-
-                mimeType = type;
-                break;
-
-            }
-
-        }
-
-
-        if(!mimeType){
+        if(!response.ok){
 
             throw new Error(
-                "المتصفح لا يدعم WebM VP9."
+                "Firebase error " +
+                response.status
             );
 
         }
 
 
-        /*
-           bitrate مناسب لفيديو 100×100
-        */
+        const generated =
+            location.origin +
+            location.pathname +
+            "?id=" +
+            encodeURIComponent(id);
 
-        const duration =
-            Math.max(0.1,video.duration);
 
-        let bitrate =
-            Math.round(
-                (230 * 1024 * 8) / duration
+        document
+            .getElementById(
+                "generatedLink"
+            )
+            .textContent =
+                generated;
+
+
+        showStep(5);
+
+
+        try{
+
+            await navigator.clipboard.writeText(
+                generated
             );
 
-        bitrate =
-            Math.max(
-                250000,
-                Math.min(
-                    900000,
-                    bitrate
-                )
+            toast(
+                "✅ تم نسخ الرابط لجهازك"
             );
 
+        }catch{
 
-        recorder = new MediaRecorder(
-            stream,
-            {
-                mimeType:mimeType,
-                videoBitsPerSecond:bitrate
-            }
+            toast(
+                "✅ تم إنشاء الرابط"
+            );
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        toast(
+            "❌ تعذر حفظ البيانات في Firebase"
         );
 
-
-        chunks = [];
-
-
-        recorder.ondataavailable = function(e){
-
-            if(e.data && e.data.size){
-
-                chunks.push(e.data);
-
-            }
-
-        };
+    }
+}
 
 
-        const recorderStopped =
-            new Promise(resolve => {
+/* =========================================
+   COPY GENERATED LINK
+========================================= */
 
-                recorder.onstop = resolve;
+async function copyGeneratedLink(){
 
-            });
+    const link =
+        document
+        .getElementById(
+            "generatedLink"
+        )
+        .textContent;
 
+    try{
 
-        recorder.start(100);
-
-
-        /*
-           بداية الفيديو
-        */
-
-        video.currentTime = 0;
-
-
-        /*
-           معالجة الفيديو باستخدام
-           requestVideoFrameCallback
-           بدلاً من seek لكل فريم.
-        */
-
-        await processVideo();
-
-
-        /*
-           إيقاف التسجيل
-        */
-
-        recorder.stop();
-
-        await recorderStopped;
-
-
-        outputBlob = new Blob(
-            chunks,
-            {
-                type:mimeType
-            }
+        await navigator.clipboard.writeText(
+            link
         );
 
+        toast(
+            "✅ تم نسخ الرابط"
+        );
 
-        /*
-           عرض آخر فريم
-        */
+    }catch{
 
-        ctx.clearRect(0,0,100,100);
+        toast(
+            "❌ المتصفح منع النسخ"
+        );
 
-        if(lastResult){
+    }
+}
 
-            drawTransparent(lastResult);
+
+/* =========================================
+   GET LINK FROM FIREBASE
+========================================= */
+
+async function getLink(id){
+
+    const response =
+        await fetch(
+            FIREBASE_URL +
+            "/links/" +
+            encodeURIComponent(id) +
+            ".json"
+        );
+
+    if(!response.ok){
+
+        throw new Error(
+            "Firebase " +
+            response.status
+        );
+
+    }
+
+    return await response.json();
+}
+
+
+/* =========================================
+   OPEN VIEWER
+========================================= */
+
+async function openViewer(id){
+
+    document
+        .getElementById("createPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("viewerPage")
+        .classList.remove("hidden");
+
+
+    const tasks =
+        document
+        .getElementById(
+            "tasksContainer"
+        );
+
+    tasks.innerHTML = `
+
+        <div class="loading">
+
+            <div class="spinner"></div>
+
+            جاري تحميل الشروط...
+
+        </div>
+
+    `;
+
+
+    try{
+
+        currentData =
+            await getLink(id);
+
+
+        if(
+            !currentData ||
+            !currentData.requirements
+        ){
+
+            throw new Error(
+                "Invalid data"
+            );
 
         }
 
 
-        output.style.display = "block";
+        completedTasks = [];
 
-
-        statusEl.textContent =
-            "تم الانتهاء ✅";
-
-
-        percentEl.textContent =
-            "100%";
-
-        barInner.style.width =
-            "100%";
-
-
-        mainStatus.textContent =
-            "تم إنشاء الفيديو الشفاف بنجاح";
+        renderTasks();
 
 
     }catch(error){
 
         console.error(error);
 
-        if(
-            recorder &&
-            recorder.state === "recording"
-        ){
+        tasks.innerHTML = `
 
-            recorder.stop();
+            <div class="notice">
 
-        }
+                ❌ الرابط غير موجود أو حدث خطأ
+                أثناء تحميل البيانات.
 
+            </div>
 
-        statusEl.textContent =
-            "حدث خطأ ❌";
-
-        mainStatus.textContent =
-            error.message ||
-            "تعذر معالجة الفيديو.";
+        `;
 
     }
+}
 
 
-    processing = false;
+/* =========================================
+   RENDER TASKS
+========================================= */
 
-    startBtn.disabled = false;
+function renderTasks(){
 
-});
+    const container =
+        document.getElementById(
+            "tasksContainer"
+        );
 
-
-/* =========================
-   PROCESS VIDEO
-========================= */
-
-async function processVideo(){
-
-    return new Promise(async resolve => {
-
-        let finished = false;
+    container.innerHTML = "";
 
 
-        function finish(){
+    currentData.requirements
+        .forEach(
+            (task,index)=>{
 
-            if(finished){
-                return;
+                const completed =
+                    completedTasks.includes(index);
+
+                const unlocked =
+                    index === 0 ||
+                    completedTasks.includes(
+                        index - 1
+                    );
+
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "task " +
+                    (
+                        !unlocked
+                        ? "locked "
+                        : ""
+                    ) +
+                    (
+                        completed
+                        ? "completed"
+                        : ""
+                    );
+
+
+                const icon =
+                    PLATFORM_INFO[
+                        task.platform
+                    ]?.icon || "🔗";
+
+
+                let buttonText =
+                    "فتح";
+
+
+                if(completed){
+
+                    buttonText = "✓ تم";
+
+                }else if(!unlocked){
+
+                    buttonText = "مقفل";
+
+                }
+
+
+                div.innerHTML = `
+
+                    <div class="task-icon">
+                        ${icon}
+                    </div>
+
+                    <div class="task-content">
+
+                        <strong>
+                            ${escapeHtml(
+                                task.title
+                            )}
+                        </strong>
+
+                        <span>
+                            ${
+                                completed
+                                ? "تم إكمال الشرط"
+                                : unlocked
+                                ? "افتح الرابط ونفذ الشرط"
+                                : "أكمل الشرط السابق أولًا"
+                            }
+                        </span>
+
+                    </div>
+
+                    <button
+                        ${!unlocked || completed
+                            ? "disabled"
+                            : ""}
+                        onclick="
+                            startTask(
+                                ${index}
+                            )
+                        "
+                    >
+                        ${buttonText}
+                    </button>
+
+                `;
+
+                container.appendChild(div);
+
             }
-
-            finished = true;
-
-            video.pause();
-
-            resolve();
-
-        }
-
-
-        /*
-           كل فريم يصل من الفيديو
-        */
-
-        async function frameCallback(
-            now,
-            metadata
-        ){
-
-            if(finished){
-                return;
-            }
-
-
-            /*
-               نهاية الفيديو
-            */
-
-            if(
-                metadata.mediaTime >=
-                video.duration - 0.001
-            ){
-
-                /*
-                   معالجة آخر فريم
-                */
-
-                await processCurrentFrame();
-
-
-                updateProgress(
-                    video.duration
-                );
-
-
-                finish();
-
-                return;
-
-            }
-
-
-            await processCurrentFrame();
-
-
-            updateProgress(
-                metadata.mediaTime
-            );
-
-
-            if(!finished){
-
-                video.requestVideoFrameCallback(
-                    frameCallback
-                );
-
-            }
-
-        }
-
-
-        video.addEventListener(
-            "ended",
-            finish,
-            {once:true}
         );
 
 
-        /*
-           بدء التشغيل
-        */
+    const unlock =
+        document.getElementById(
+            "unlockButton"
+        );
 
-        try{
 
-            await video.play();
+    if(
+        completedTasks.length ===
+        currentData.requirements.length
+    ){
 
-            video.requestVideoFrameCallback(
-                frameCallback
-            );
+        unlock.classList.remove(
+            "hidden"
+        );
 
-        }catch(error){
+    }else{
 
-            console.error(error);
+        unlock.classList.add(
+            "hidden"
+        );
 
-            finish();
-
-        }
-
-    });
-
+    }
 }
 
 
-/* =========================
-   PROCESS CURRENT FRAME
-========================= */
+/* =========================================
+   START TASK
+========================================= */
 
-async function processCurrentFrame(){
+function startTask(index){
 
-    /*
-       نسخ فريم الفيديو إلى Canvas
-    */
+    if(
+        index !== 0 &&
+        !completedTasks.includes(index - 1)
+    ){
 
-    inputCtx.clearRect(
-        0,
-        0,
-        inputCanvas.width,
-        inputCanvas.height
-    );
+        toast(
+            "❌ أكمل الشرط السابق أولًا"
+        );
 
-
-    inputCtx.drawImage(
-        video,
-        0,
-        0,
-        inputCanvas.width,
-        inputCanvas.height
-    );
-
-
-    /*
-       MediaPipe
-    */
-
-    await selfieSegmentation.send({
-        image:inputCanvas
-    });
-
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-function updateProgress(time){
-
-    if(!video.duration){
         return;
     }
 
-    let p =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                (time / video.duration) * 100
-            )
+
+    const task =
+        currentData.requirements[index];
+
+
+    if(!task.url){
+
+        completeTask(index);
+
+        return;
+    }
+
+
+    let startTime =
+        Date.now();
+
+
+    let newWindow = null;
+
+
+    try{
+
+        newWindow =
+            window.open(
+                task.url,
+                "_blank"
+            );
+
+    }catch{
+
+        newWindow = null;
+
+    }
+
+
+    toast(
+        "⏱️ ابقَ في الرابط لمدة 5 ثوانٍ"
+    );
+
+
+    /*
+       مؤقت 5 ثوانٍ.
+       ملاحظة:
+       HTML لا يستطيع معرفة اشتراك/لايك/تعليق
+       بشكل موثوق بدون API.
+    */
+
+    clearTimeout(activeTimer);
+
+
+    activeTimer =
+        setTimeout(
+            ()=>{
+
+                completeTask(index);
+
+            },
+            5000
         );
-
-
-    percentEl.textContent =
-        Math.round(p) + "%";
-
-    barInner.style.width =
-        p + "%";
-
-
-    statusEl.textContent =
-        "جاري إزالة الخلفية... " +
-        Math.round(p) +
-        "%";
-
 }
 
 
-/* =========================
-   DOWNLOAD
-========================= */
+/* =========================================
+   COMPLETE TASK
+========================================= */
 
-downloadBtn.addEventListener(
-    "click",
-    function(){
+function completeTask(index){
 
-        if(!outputBlob){
-            return;
+    if(
+        !completedTasks.includes(index)
+    ){
+
+        completedTasks.push(index);
+
+        completedTasks.sort(
+            (a,b)=>a-b
+        );
+
+    }
+
+
+    renderTasks();
+
+
+    if(
+        completedTasks.length <
+        currentData.requirements.length
+    ){
+
+        toast(
+            "✅ تم إكمال الشرط، افتح الشرط التالي"
+        );
+
+    }else{
+
+        toast(
+            "🎉 اكتملت جميع الشروط!"
+        );
+
+    }
+}
+
+
+/* =========================================
+   UNLOCK
+========================================= */
+
+function unlockContent(){
+
+    if(
+        !currentData ||
+        completedTasks.length !==
+        currentData.requirements.length
+    ){
+
+        toast(
+            "❌ أكمل جميع الشروط أولًا"
+        );
+
+        return;
+    }
+
+
+    document
+        .getElementById("viewerPage")
+        .classList.add("hidden");
+
+
+    document
+        .getElementById("contentPage")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("finalText")
+        .textContent =
+            currentData.text;
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================
+   COPY FINAL TEXT
+========================================= */
+
+async function copyFinalText(){
+
+    if(
+        !currentData ||
+        !currentData.text
+    ){
+
+        return;
+    }
+
+
+    try{
+
+        await navigator.clipboard.writeText(
+            currentData.text
+        );
+
+        toast(
+            "✅ تم نسخ النص إلى جهازك"
+        );
+
+    }catch{
+
+        /*
+           fallback
+        */
+
+        const area =
+            document.createElement(
+                "textarea"
+            );
+
+        area.value =
+            currentData.text;
+
+        area.style.position =
+            "fixed";
+
+        area.style.opacity = "0";
+
+        document.body.appendChild(area);
+
+        area.focus();
+        area.select();
+
+        try{
+
+            document.execCommand(
+                "copy"
+            );
+
+            toast(
+                "✅ تم نسخ النص"
+            );
+
+        }catch{
+
+            toast(
+                "❌ تعذر نسخ النص"
+            );
+
         }
 
+        area.remove();
 
-        const url =
-            URL.createObjectURL(outputBlob);
-
-
-        const a =
-            document.createElement("a");
-
-        a.href = url;
-
-        a.download =
-            "SZ_Transparent_Video.webm";
+    }
+}
 
 
-        document.body.appendChild(a);
+/* =========================================
+   SHARE
+========================================= */
 
-        a.click();
+async function shareFinalText(){
 
-        a.remove();
+    if(
+        !currentData ||
+        !currentData.text
+    ){
+
+        return;
+    }
 
 
-        setTimeout(
-            ()=>URL.revokeObjectURL(url),
-            2000
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share({
+
+                title:
+                    "النص الخاص بي",
+
+                text:
+                    currentData.text
+
+            });
+
+        }catch{
+
+            // المستخدم أغلق المشاركة
+
+        }
+
+    }else{
+
+        await copyFinalText();
+
+        toast(
+            "📋 المتصفح لا يدعم المشاركة، تم نسخ النص"
         );
+
+    }
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+/* =========================================
+   PREVENT TEXT SELECTION
+========================================= */
+
+document.addEventListener(
+    "selectstart",
+    function(event){
+
+        if(
+            event.target.closest(
+                ".copy-area"
+            )
+        ){
+
+            event.preventDefault();
+
+        }
 
     }
 );
 
 
-/* =========================
-   TIME
-========================= */
+/* =========================================
+   LOAD PAGE
+========================================= */
 
-function formatTime(seconds){
+async function init(){
 
-    if(!isFinite(seconds)){
-        return "--";
+    const params =
+        new URLSearchParams(
+            location.search
+        );
+
+    const id =
+        params.get("id");
+
+
+    if(id){
+
+        await openViewer(id);
+
+    }else{
+
+        document
+            .getElementById(
+                "createPage"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+        showStep(1);
+
     }
-
-    const m =
-        Math.floor(seconds / 60);
-
-    const s =
-        Math.floor(seconds % 60);
-
-    return (
-        String(m).padStart(2,"0") +
-        ":" +
-        String(s).padStart(2,"0")
-    );
-
 }
+
+
+init();
 
 </script>
 
